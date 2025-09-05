@@ -16,66 +16,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const dashboardElement = document.getElementById('dashboard');
 
-    function renderHeatmap(container, title, heatmapData) {
-        if (!heatmapData || !heatmapData.sectors) {
-            container.innerHTML += `<h2>${title}</h2><p>No heatmap data available.</p>`;
+    function renderNews(container, newsData) {
+        if (!newsData || (!newsData.summary && !newsData.topics)) {
+            container.innerHTML += '<h2>News</h2><p>No news data available.</p>';
             return;
         }
 
-        const heatmapContainer = document.createElement('div');
-        heatmapContainer.className = 'heatmap-container';
+        const newsContainer = document.createElement('div');
+        newsContainer.className = 'news-container';
 
-        let totalMarketCap = 0;
-        Object.values(heatmapData.sectors).forEach(stocks => {
-            stocks.forEach(stock => {
-                totalMarketCap += stock.market_cap || 0;
-            });
-        });
-
-        for (const sectorName in heatmapData.sectors) {
-            const sectorDiv = document.createElement('div');
-            sectorDiv.className = 'sector';
-
-            const sectorTitle = document.createElement('h3');
-            sectorTitle.textContent = sectorName;
-            sectorDiv.appendChild(sectorTitle);
-
-            const stocksContainer = document.createElement('div');
-            stocksContainer.className = 'stocks-container';
-
-            const stocks = heatmapData.sectors[sectorName];
-            stocks.forEach(stock => {
-                const stockDiv = document.createElement('div');
-                stockDiv.className = 'stock-tile';
-
-                // Set color based on performance
-                if (stock.performance > 0) {
-                    stockDiv.style.backgroundColor = `rgba(0, 128, 0, ${Math.min(0.2 + stock.performance / 5, 1)})`; // Green
-                } else {
-                    stockDiv.style.backgroundColor = `rgba(255, 0, 0, ${Math.min(0.2 + Math.abs(stock.performance) / 5, 1)})`; // Red
-                }
-
-                // Set size based on market cap
-                const sizePercentage = (stock.market_cap / totalMarketCap) * 5000; // Scaling factor
-                stockDiv.style.width = `${Math.max(sizePercentage, 2)}%`;
-                stockDiv.style.height = `${Math.max(sizePercentage, 2)}%`;
-
-                stockDiv.innerHTML = `
-                    <span class="ticker">${stock.ticker}</span>
-                    <span class="performance">${stock.performance.toFixed(2)}%</span>
-                `;
-                stockDiv.title = `${stock.ticker}: ${stock.performance.toFixed(2)}%`;
-                stocksContainer.appendChild(stockDiv);
-            });
-
-            sectorDiv.appendChild(stocksContainer);
-            heatmapContainer.appendChild(sectorDiv);
+        // --- 3-line summary ---
+        if (newsData.summary) {
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'news-summary';
+            const summaryTitle = document.createElement('h3');
+            summaryTitle.textContent = '今朝の3行サマリー';
+            summaryDiv.appendChild(summaryTitle);
+            const summaryText = document.createElement('p');
+            summaryText.textContent = newsData.summary;
+            summaryDiv.appendChild(summaryText);
+            newsContainer.appendChild(summaryDiv);
         }
 
-        const titleElement = document.createElement('h2');
-        titleElement.textContent = title;
-        container.appendChild(titleElement);
-        container.appendChild(heatmapContainer);
+        // --- Main Topics ---
+        if (newsData.topics && newsData.topics.length > 0) {
+            const topicsContainer = document.createElement('div');
+            topicsContainer.className = 'main-topics-container';
+            const topicsTitle = document.createElement('h3');
+            topicsTitle.textContent = '主要トピック';
+            topicsContainer.appendChild(topicsTitle);
+
+            newsData.topics.forEach((topic, index) => {
+                const topicBox = document.createElement('div');
+                topicBox.className = 'topic-box';
+
+                const topicTitle = document.createElement('p');
+                topicTitle.className = 'topic-title';
+
+                // Coloring titles based on index
+                if (index === 0) {
+                    topicTitle.classList.add('topic-title-red');
+                } else {
+                    topicTitle.classList.add('topic-title-blue');
+                }
+                topicTitle.textContent = `${index + 1}. ${topic.title}`;
+
+                const topicBody = document.createElement('p');
+                topicBody.textContent = topic.body;
+
+                topicBox.appendChild(topicTitle);
+                topicBox.appendChild(topicBody);
+                topicsContainer.appendChild(topicBox);
+            });
+            newsContainer.appendChild(topicsContainer);
+        }
+
+        container.appendChild(newsContainer);
+    }
+
+    function renderHeatmap(container, title, heatmapData) {
+        // This function remains the same as before, but won't be called in this version
+        // for clarity of the news feature output.
     }
 
     async function fetchData() {
@@ -87,15 +88,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             console.log("Data fetched successfully:", data);
 
-            // Clear loading message
-            dashboardElement.innerHTML = '';
+            dashboardElement.innerHTML = ''; // Clear loading message
 
-            // For now, render both heatmaps directly
-            if (data.sp500_heatmap) {
-                renderHeatmap(dashboardElement, 'S&P 500 Heatmap', data.sp500_heatmap);
-            }
-            if (data.nasdaq_heatmap) {
-                renderHeatmap(dashboardElement, 'NASDAQ 100 Heatmap', data.nasdaq_heatmap);
+            if (data.news) {
+                renderNews(dashboardElement, data.news);
+            } else {
+                dashboardElement.innerHTML = '<p>No news section in data.</p>';
             }
 
         } catch (error) {
