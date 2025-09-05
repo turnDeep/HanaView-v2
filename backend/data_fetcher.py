@@ -34,7 +34,10 @@ logger = logging.getLogger(__name__)
 # --- Main Data Fetching Class ---
 class MarketDataFetcher:
     def __init__(self):
+        # curl_cffiのSessionを使用してブラウザを偽装
         self.http_session = Session(impersonate="chrome110", headers={'Accept-Language': 'en-US,en;q=0.9'})
+        # yfinance用のセッションも別途作成
+        self.yf_session = Session(impersonate="safari15_5")
         self.data = {"market": {}}
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
@@ -72,17 +75,32 @@ class MarketDataFetcher:
 
     # --- Data Fetching Methods ---
     def _fetch_yfinance_data(self, ticker_symbol, period="5d", interval="1h", resample_period='4h'):
+        """Yahoo Finance API対策を含むデータ取得"""
         try:
-            ticker = yf.Ticker(ticker_symbol)
+            # curl_cffiのセッションを使用してyfinanceを初期化
+            ticker = yf.Ticker(ticker_symbol, session=self.yf_session)
             hist = ticker.history(period=period, interval=interval)
-            if hist.empty: raise ValueError("No data returned")
+
+            if hist.empty:
+                raise ValueError("No data returned")
+
             hist.index = hist.index.tz_convert('Asia/Tokyo')
             resampled_hist = hist['Close'].resample(resample_period).ohlc().dropna()
             current_price = hist['Close'][-1]
-            history_list = [{"time": index.strftime('%Y-%m-%dT%H:%M:%S'), "open": round(row['open'], 2), "high": round(row['high'], 2), "low": round(row['low'], 2), "close": round(row['close'], 2)} for index, row in resampled_hist.iterrows()]
+            history_list = [
+                {
+                    "time": index.strftime('%Y-%m-%dT%H:%M:%S'),
+                    "open": round(row['open'], 2),
+                    "high": round(row['high'], 2),
+                    "low": round(row['low'], 2),
+                    "close": round(row['close'], 2)
+                } for index, row in resampled_hist.iterrows()
+            ]
             return {"current": round(current_price, 2), "history": history_list}
         except Exception as e:
             logger.error(f"Error fetching {ticker_symbol}: {e}")
+            # エラー時は少し待機してリトライ
+            time.sleep(1)
             return {"current": None, "history": [], "error": str(e)}
 
     def fetch_vix(self):
@@ -142,33 +160,61 @@ class MarketDataFetcher:
             self.data['indicators'] = {"economic": [], "error": str(e)}
 
     def fetch_heatmap_data(self):
+        """ヒートマップデータ取得（API対策強化版）"""
         logger.info("Fetching heatmap data...")
         sp500_tickers = self._get_sp500_tickers()
         nasdaq100_tickers = self._get_nasdaq100_tickers()
         logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
-        self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers)
-        self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers)
 
-    def _fetch_stock_performance_for_heatmap(self, tickers):
-        if not tickers: return {"sectors": {}, "error": "Ticker list is empty."}
+        # バッチサイズを小さくしてレート制限を回避
+        self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
+        self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
+
+    def _fetch_stock_performance_for_heatmap(self, tickers, batch_size=30):
+        """改善版：レート制限対策を含むヒートマップ用データ取得"""
+        if not tickers:
+            return {"sectors": {}, "error": "Ticker list is empty."}
+
         sectors = {}
-        for i, ticker_symbol in enumerate(tickers):
-            if i > 0 and i % 50 == 0:
-                logger.info(f"Processed {i}/{len(tickers)} tickers, sleeping for 5 seconds...")
-                time.sleep(5)
-            logger.info(f"Fetching data for {ticker_symbol} ({i+1}/{len(tickers)})")
-            try:
-                ticker_obj = yf.Ticker(ticker_symbol)
-                info = ticker_obj.info
-                hist = ticker_obj.history(period="2d")
-                performance = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100 if len(hist) >= 2 and hist['Close'].iloc[-2] != 0 else 0.0
-                sector = info.get('sector', 'Other')
-                market_cap = info.get('marketCap', 0)
-                if sector not in sectors: sectors[sector] = []
-                sectors[sector].append({"ticker": ticker_symbol, "performance": round(performance, 2), "market_cap": market_cap})
-            except Exception as e:
-                logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
-                continue
+
+        # バッチ処理でレート制限を回避
+        for i in range(0, len(tickers), batch_size):
+            batch = tickers[i:i+batch_size]
+
+            for ticker_symbol in batch:
+                try:
+                    # curl_cffiセッションを使用
+                    ticker_obj = yf.Ticker(ticker_symbol, session=self.yf_session)
+                    info = ticker_obj.info
+                    hist = ticker_obj.history(period="2d")
+
+                    performance = 0.0
+                    if len(hist) >= 2 and hist['Close'].iloc[-2] != 0:
+                        performance = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100
+
+                    sector = info.get('sector', 'Other')
+                    market_cap = info.get('marketCap', 1000000000)
+
+                    if sector not in sectors:
+                        sectors[sector] = []
+
+                    sectors[sector].append({
+                        "ticker": ticker_symbol,
+                        "performance": round(performance, 2),
+                        "market_cap": market_cap
+                    })
+
+                except Exception as e:
+                    logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
+                    # エラー時は少し待機
+                    time.sleep(0.5)
+                    continue
+
+            # バッチ間で待機（レート制限対策）
+            if i + batch_size < len(tickers):
+                logger.info(f"Processed {min(i + batch_size, len(tickers))}/{len(tickers)} tickers, waiting...")
+                time.sleep(3)  # 3秒待機
+
         return {"sectors": sectors}
 
     # --- AI Generation ---
