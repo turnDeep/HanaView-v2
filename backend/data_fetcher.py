@@ -1,8 +1,10 @@
 import json
 import logging
 import os
+import re
 import sys
 from datetime import datetime, timedelta, timezone
+import time
 import pandas as pd
 import yfinance as yf
 from bs4 import BeautifulSoup
@@ -17,6 +19,8 @@ FINAL_DATA_PATH_PREFIX = os.path.join(DATA_DIR, 'data_')
 # URLs
 CNN_FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata/"
 MINKABU_INDICATORS_URL = "https://fx.minkabu.jp/indicators"
+SP500_WIKI_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+NASDAQ100_WIKI_URL = "https://en.wikipedia.org/wiki/Nasdaq-100"
 
 # Tickers
 VIX_TICKER = "^VIX"
@@ -26,12 +30,12 @@ T_NOTE_TICKER = "ZN=F"
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 # --- Main Data Fetching Class ---
 class MarketDataFetcher:
     def __init__(self):
-        self.http_session = Session(impersonate="chrome110")
+        self.http_session = Session(impersonate="chrome110", headers={'Accept-Language': 'en-US,en;q=0.9'})
         self.data = {"market": {}}
-        # Initialize OpenAI client
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             logger.warning("OPENAI_API_KEY environment variable not set. AI functions will be skipped.")
@@ -39,17 +43,53 @@ class MarketDataFetcher:
         else:
             self.openai_client = openai.OpenAI(api_key=api_key)
 
-    # ... (rest of the fetching methods remain the same) ...
+    # --- Ticker List Fetching ---
+    def _get_sp500_tickers(self):
+        """Scrapes S&P 500 ticker list from Wikipedia."""
+        logger.info("Fetching S&P 500 ticker list from Wikipedia...")
+        try:
+            response = self.http_session.get(SP500_WIKI_URL, timeout=30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            table = soup.find('table', {'id': 'constituents'})
+            tickers = []
+            for row in table.find_all('tr')[1:]:
+                ticker = row.find_all('td')[0].text.strip()
+                tickers.append(ticker)
+            # Replace dots with dashes for yfinance compatibility (e.g., BRK.B -> BRK-B)
+            return [t.replace('.', '-') for t in tickers]
+        except Exception as e:
+            logger.error(f"Failed to get S&P 500 tickers: {e}")
+            return []
+
+    def _get_nasdaq100_tickers(self):
+        """Scrapes NASDAQ 100 ticker list from Wikipedia."""
+        logger.info("Fetching NASDAQ 100 ticker list from Wikipedia...")
+        try:
+            response = self.http_session.get(NASDAQ100_WIKI_URL, timeout=30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            table = soup.find('table', {'id': 'constituents'})
+            tickers = []
+            for row in table.find_all('tr')[1:]:
+                # Corrected: Ticker is in the first column
+                if len(row.find_all('td')) > 0:
+                    ticker = row.find_all('td')[0].text.strip()
+                    tickers.append(ticker)
+            return [t.replace('.', '-') for t in tickers]
+        except Exception as e:
+            logger.error(f"Failed to get NASDAQ 100 tickers: {e}")
+            return []
+
+    # --- Data Fetching Methods ---
     def _fetch_yfinance_data(self, ticker_symbol, period="5d", interval="1h", resample_period='4h'):
         """Fetches and processes data from yfinance."""
         try:
             ticker = yf.Ticker(ticker_symbol)
             hist = ticker.history(period=period, interval=interval)
-            if hist.empty:
-                raise ValueError("No data returned from yfinance")
+            if hist.empty: raise ValueError("No data returned from yfinance")
             hist.index = hist.index.tz_convert('Asia/Tokyo')
-            resampled_hist = hist['Close'].resample(resample_period).ohlc()
-            resampled_hist = resampled_hist.dropna()
+            resampled_hist = hist['Close'].resample(resample_period).ohlc().dropna()
             current_price = hist['Close'][-1]
             history_list = [{"time": index.strftime('%Y-%m-%dT%H:%M:%S'), "open": round(row['open'], 2), "high": round(row['high'], 2), "low": round(row['low'], 2), "close": round(row['close'], 2)} for index, row in resampled_hist.iterrows()]
             return {"current": round(current_price, 2), "history": history_list}
@@ -113,6 +153,60 @@ class MarketDataFetcher:
             logger.error(f"Error fetching economic indicators: {e}")
             self.data['indicators'] = {"economic": [], "error": str(e)}
 
+    # --- Heatmap Data Fetching (New Approach) ---
+    def fetch_heatmap_data(self):
+        """Fetches heatmap data by getting ticker lists and then fetching individual data."""
+        logger.info("Fetching heatmap data...")
+        sp500_tickers = self._get_sp500_tickers()
+        nasdaq100_tickers = self._get_nasdaq100_tickers()
+
+        logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
+
+        self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers)
+        self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers)
+
+    def _fetch_stock_performance_for_heatmap(self, tickers):
+        """Fetches performance, sector, and market cap for a list of tickers."""
+        if not tickers:
+            return {"sectors": {}, "error": "Ticker list is empty."}
+
+        sectors = {}
+        # Rate limit to avoid getting blocked by yfinance
+        for i, ticker_symbol in enumerate(tickers):
+            if i > 0 and i % 50 == 0:
+                logger.info(f"Processed {i}/{len(tickers)} tickers, sleeping for 5 seconds...")
+                time.sleep(5)
+
+            logger.info(f"Fetching data for {ticker_symbol} ({i+1}/{len(tickers)})")
+            try:
+                ticker_obj = yf.Ticker(ticker_symbol)
+                info = ticker_obj.info
+
+                # Get performance (1-day change)
+                hist = ticker_obj.history(period="2d")
+                if len(hist) < 2:
+                    performance = 0.0
+                else:
+                    change = hist['Close'].iloc[-1] - hist['Close'].iloc[-2]
+                    performance = (change / hist['Close'].iloc[-2]) * 100 if hist['Close'].iloc[-2] != 0 else 0.0
+
+                sector = info.get('sector', 'Other')
+                market_cap = info.get('marketCap', 0)
+
+                if sector not in sectors:
+                    sectors[sector] = []
+
+                sectors[sector].append({
+                    "ticker": ticker_symbol,
+                    "performance": round(performance, 2),
+                    "market_cap": market_cap
+                })
+            except Exception as e:
+                logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
+                continue
+
+        return {"sectors": sectors}
+
     def fetch_news(self):
         logger.info("Fetching news (placeholder)...")
         self.data['news'] = []
@@ -123,67 +217,35 @@ class MarketDataFetcher:
             return "OpenAI API key not configured. Skipping."
         try:
             logger.info(f"Calling OpenAI API with max_tokens={max_tokens}...")
-            response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=max_tokens,
-                temperature=0.7,
-            )
+            response = self.openai_client.chat.completions.create(model="gpt-4o-mini", messages=[{"role": "user", "content": prompt}], max_tokens=max_tokens, temperature=0.7)
             return response.choices[0].message.content.strip()
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
             return f"Error generating text: {e}"
 
     def generate_ai_commentary(self):
-        """Generates AI market commentary."""
         logger.info("Generating AI commentary...")
         vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
         t_note = self.data.get('market', {}).get('t_note_future', {}).get('current', 'N/A')
         fear_greed_data = self.data.get('market', {}).get('fear_and_greed', {})
         fear_greed_value = fear_greed_data.get('now', 'N/A')
         fear_greed_category = fear_greed_data.get('category', 'N/A')
-
-        prompt = f"""
-        以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。
-        - VIX指数: {vix}
-        - 米国10年債先物: {t_note}
-        - Fear & Greed Index: {fear_greed_value} ({fear_greed_category})
-        """
+        prompt = f"以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: {fear_greed_value} ({fear_greed_category})"
         self.data['market']['ai_commentary'] = self._call_openai_api(prompt, max_tokens=200)
 
     def generate_weekly_column(self):
-        """Generates weekly column."""
-        if datetime.now(timezone(timedelta(hours=9))).weekday() != 0: # Not Monday in JST
+        if datetime.now(timezone(timedelta(hours=9))).weekday() != 0:
             self.data['column'] = {}
             return
-
         logger.info("Generating weekly column...")
-        # For the column, we might want to use more data, but for now, we'll use the same as commentary.
         vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
         t_note = self.data.get('market', {}).get('t_note_future', {}).get('current', 'N/A')
         fear_greed = self.data.get('market', {}).get('fear_and_greed', {})
-
-        prompt = f"""
-        今週の米国市場の展望について、日本の個人投資家向けに300字程度のコラムを執筆してください。
-        先週の市場を振り返り、今週の注目点を盛り込んでください。
-
-        参考データ:
-        - VIX指数: {vix}
-        - 米国10年債先物: {t_note}
-        - Fear & Greed Index: 現在値 {fear_greed.get('now', 'N/A')}, 1週間前 {fear_greed.get('prev_week', 'N/A')}
-        - 今週の主な経済指標: {self.data.get('indicators', {}).get('economic', [])[:5]}
-        """
-
+        prompt = f"今週の米国市場の展望について、日本の個人投資家向けに300字程度のコラムを執筆してください。\n先週の市場を振り返り、今週の注目点を盛り込んでください。\n\n参考データ:\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: 現在値 {fear_greed.get('now', 'N/A')}, 1週間前 {fear_greed.get('prev_week', 'N/A')}\n- 今週の主な経済指標: {self.data.get('indicators', {}).get('economic', [])[:5]}"
         content = self._call_openai_api(prompt, max_tokens=400)
-        self.data['column'] = {
-            "weekly_report": {
-                "title": "今週の注目ポイント (AIコラム)",
-                "content": content,
-                "date": datetime.now().strftime('%Y-%m-%d')
-            }
-        }
+        self.data['column'] = {"weekly_report": {"title": "今週の注目ポイント (AIコラム)", "content": content, "date": datetime.now().strftime('%Y-%m-%d')}}
 
-    # ... (Main Execution Methods remain the same) ...
+    # --- Main Execution Methods ---
     def fetch_all_data(self):
         os.makedirs(DATA_DIR, exist_ok=True)
         logger.info("--- Starting Raw Data Fetch ---")
@@ -191,6 +253,7 @@ class MarketDataFetcher:
         self.fetch_t_note_future()
         self.fetch_fear_greed_index()
         self.fetch_economic_indicators()
+        self.fetch_heatmap_data()
         self.fetch_news()
         with open(RAW_DATA_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
@@ -216,6 +279,7 @@ class MarketDataFetcher:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Report Generation Completed. Saved to {final_path} ---")
         return self.data
+
 
 if __name__ == '__main__':
     if os.path.basename(os.getcwd()) == 'backend':

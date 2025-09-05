@@ -17,7 +17,7 @@ body {
     padding: 20px;
 }
 
-h1 {
+h1, h2 {
     color: var(--tab-text);
     text-align: center;
 }
@@ -29,4 +29,59 @@ h1 {
     background-color: var(--card-background);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Heatmap Styles */
+.heatmap-container {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.sector {
+    border: 1px solid #ccc;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.sector h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+    text-align: center;
+}
+
+.stocks-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+}
+
+.stock-tile {
+    border: 1px solid #fff;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 2px;
+    box-sizing: border-box;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.stock-tile .ticker {
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+.stock-tile .performance {
+    font-size: 0.7em;
 }
