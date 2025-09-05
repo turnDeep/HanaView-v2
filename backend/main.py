@@ -1,5 +1,6 @@
 # This file will contain the FastAPI application.
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
 import json
 from datetime import datetime
 import os
@@ -33,3 +34,7 @@ def get_market_data():
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Mount the frontend directory to serve static files
+# This should come AFTER all API routes
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")

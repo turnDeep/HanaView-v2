@@ -1,7 +1,7 @@
 {
   "market": {
     "vix": {
-      "current": 15.21,
+      "current": 15.18,
       "history": [
         {
           "time": "2025-09-02T00:00:00",
@@ -26,15 +26,15 @@
         },
         {
           "time": "2025-09-05T00:00:00",
-          "open": 15.21,
-          "high": 15.21,
-          "low": 15.21,
-          "close": 15.21
+          "open": 15.18,
+          "high": 15.18,
+          "low": 15.18,
+          "close": 15.18
         }
       ]
     },
     "t_note_future": {
-      "current": 112.94,
+      "current": 113.41,
       "history": [
         {
           "time": "2025-09-02T12:00:00",
@@ -172,19 +172,40 @@
         {
           "time": "2025-09-05T16:00:00",
           "open": 112.89,
-          "high": 112.94,
+          "high": 112.95,
           "low": 112.89,
-          "close": 112.94
+          "close": 112.95
+        },
+        {
+          "time": "2025-09-05T20:00:00",
+          "open": 112.98,
+          "high": 113.56,
+          "low": 112.98,
+          "close": 113.5
+        },
+        {
+          "time": "2025-09-06T00:00:00",
+          "open": 113.56,
+          "high": 113.56,
+          "low": 113.39,
+          "close": 113.39
+        },
+        {
+          "time": "2025-09-06T04:00:00",
+          "open": 113.33,
+          "high": 113.41,
+          "low": 113.33,
+          "close": 113.41
         }
       ]
     },
     "fear_and_greed": {
-      "now": 57,
-      "previous_close": 57,
+      "now": 53,
+      "previous_close": 53,
       "prev_week": 61,
       "prev_month": 55,
-      "prev_year": 51,
-      "category": "Greed"
+      "prev_year": 39,
+      "category": "Neutral"
     }
   },
   "indicators": {
@@ -195,2538 +216,2538 @@
       "Industrials": [
         {
           "ticker": "MMM",
-          "performance": 2.32,
-          "market_cap": 82834620416
+          "performance": -0.14,
+          "market_cap": 82717442048
         },
         {
           "ticker": "AOS",
-          "performance": 2.61,
-          "market_cap": 10179043328
+          "performance": 1.43,
+          "market_cap": 10324777984
         },
         {
           "ticker": "ALLE",
-          "performance": 1.82,
-          "market_cap": 14658289664
+          "performance": 0.65,
+          "market_cap": 14753579008
         },
         {
           "ticker": "AME",
-          "performance": 1.91,
-          "market_cap": 43389325312
+          "performance": -0.22,
+          "market_cap": 43292327936
         },
         {
           "ticker": "AXON",
-          "performance": 0.67,
-          "market_cap": 57320771584
+          "performance": -0.24,
+          "market_cap": 57183387648
         },
         {
           "ticker": "BA",
-          "performance": -0.7,
-          "market_cap": 174483456000
+          "performance": -0.49,
+          "market_cap": 173621444608
         },
         {
           "ticker": "BLDR",
-          "performance": 5.09,
-          "market_cap": 15838068736
+          "performance": 4.15,
+          "market_cap": 16494718976
         },
         {
           "ticker": "CHRW",
-          "performance": -0.74,
-          "market_cap": 15096753152
+          "performance": -1.34,
+          "market_cap": 14894817280
         },
         {
           "ticker": "CARR",
-          "performance": 1.71,
-          "market_cap": 54073999360
+          "performance": 3.1,
+          "market_cap": 55750516736
         },
         {
           "ticker": "CAT",
-          "performance": 1.23,
-          "market_cap": 196864245760
+          "performance": 0.68,
+          "market_cap": 198204096512
         },
         {
           "ticker": "CTAS",
-          "performance": 0.6,
-          "market_cap": 83351961600
+          "performance": -1.13,
+          "market_cap": 82408996864
         },
         {
           "ticker": "CPRT",
-          "performance": 3.84,
-          "market_cap": 48317792256
+          "performance": -2.8,
+          "market_cap": 46964080640
         },
         {
           "ticker": "CSX",
-          "performance": 1.18,
-          "market_cap": 60887388160
+          "performance": -0.4,
+          "market_cap": 60645027840
         },
         {
           "ticker": "CMI",
-          "performance": 2.24,
-          "market_cap": 55242539008
+          "performance": -0.27,
+          "market_cap": 55093731328
         },
         {
           "ticker": "DE",
-          "performance": 1.15,
-          "market_cap": 128379240448
+          "performance": -0.35,
+          "market_cap": 127935897600
         },
         {
           "ticker": "DAL",
-          "performance": -1.18,
-          "market_cap": 39535996928
+          "performance": 1.04,
+          "market_cap": 39947358208
         },
         {
           "ticker": "DOV",
-          "performance": 2.08,
-          "market_cap": 24459220992
+          "performance": -0.34,
+          "market_cap": 24375568384
         },
         {
           "ticker": "ETN",
-          "performance": 1.52,
-          "market_cap": 135562043392
+          "performance": 0.23,
+          "market_cap": 135877378048
+        },
+        {
+          "ticker": "EME",
+          "performance": -2.37,
+          "market_cap": 27995594752
         },
         {
           "ticker": "EMR",
-          "performance": 2.78,
-          "market_cap": 74908680192
+          "performance": -0.41,
+          "market_cap": 74599145472
         },
         {
           "ticker": "EFX",
-          "performance": 1.31,
-          "market_cap": 29641199616
+          "performance": 3.77,
+          "market_cap": 30758594560
         },
         {
           "ticker": "EXPD",
-          "performance": 1.03,
-          "market_cap": 16508860416
+          "performance": -0.6,
+          "market_cap": 16409785344
         },
         {
           "ticker": "FAST",
-          "performance": 1.51,
-          "market_cap": 57691865088
+          "performance": -4.54,
+          "market_cap": 55075250176
         },
         {
           "ticker": "FDX",
-          "performance": -0.03,
-          "market_cap": 53154365440
+          "performance": 1.08,
+          "market_cap": 53730078720
         },
         {
           "ticker": "GE",
-          "performance": 2.3,
-          "market_cap": 299330371584
+          "performance": -1.08,
+          "market_cap": 296106688512
         },
         {
           "ticker": "GEV",
-          "performance": 3.77,
-          "market_cap": 163010445312
+          "performance": -2.79,
+          "market_cap": 158456152064
         },
         {
           "ticker": "GNRC",
-          "performance": 1.74,
-          "market_cap": 10454889472
+          "performance": 1.75,
+          "market_cap": 10637959168
         },
         {
           "ticker": "GD",
-          "performance": -0.11,
-          "market_cap": 86734102528
+          "performance": 0.13,
+          "market_cap": 86847070208
         },
         {
           "ticker": "GPN",
-          "performance": 0.6,
-          "market_cap": 21174738944
+          "performance": 0.57,
+          "market_cap": 21296041984
         },
         {
           "ticker": "HON",
-          "performance": 0.54,
-          "market_cap": 136604442624
+          "performance": -0.42,
+          "market_cap": 136026685440
         },
         {
           "ticker": "HWM",
-          "performance": 2.89,
-          "market_cap": 72373215232
+          "performance": -0.74,
+          "market_cap": 71837057024
         },
         {
           "ticker": "HUBB",
-          "performance": 1.95,
-          "market_cap": 23230683136
+          "performance": -0.26,
+          "market_cap": 23171166208
         },
         {
           "ticker": "HII",
-          "performance": 0.24,
-          "market_cap": 10594178048
+          "performance": 0.43,
+          "market_cap": 10639303680
         },
         {
           "ticker": "IEX",
-          "performance": 2.19,
-          "market_cap": 12411864064
+          "performance": 0.04,
+          "market_cap": 12417133568
         },
         {
           "ticker": "ITW",
-          "performance": 1.69,
-          "market_cap": 77442809856
+          "performance": 0.21,
+          "market_cap": 77608960000
         },
         {
           "ticker": "IR",
-          "performance": 2.35,
-          "market_cap": 31478276096
+          "performance": 2.21,
+          "market_cap": 32173817856
         },
         {
           "ticker": "JBHT",
-          "performance": -0.07,
-          "market_cap": 14063001600
+          "performance": -1.07,
+          "market_cap": 13912962048
         },
         {
           "ticker": "J",
-          "performance": 0.26,
-          "market_cap": 17182105600
+          "performance": 1.17,
+          "market_cap": 17382924288
         },
         {
           "ticker": "JCI",
-          "performance": 1.66,
-          "market_cap": 70078087168
+          "performance": -0.8,
+          "market_cap": 69515321344
         },
         {
           "ticker": "LHX",
-          "performance": -0.04,
-          "market_cap": 51075063808
+          "performance": -0.22,
+          "market_cap": 50962812928
         },
         {
           "ticker": "LII",
-          "performance": 3.0,
-          "market_cap": 19717728256
+          "performance": 2.97,
+          "market_cap": 20303601664
         },
         {
           "ticker": "LMT",
-          "performance": 1.73,
-          "market_cap": 106658480128
+          "performance": 1.54,
+          "market_cap": 108304408576
         },
         {
           "ticker": "MAS",
-          "performance": 2.28,
-          "market_cap": 15488749568
+          "performance": 2.83,
+          "market_cap": 15926319104
         },
         {
           "ticker": "NDSN",
-          "performance": 1.82,
-          "market_cap": 12698664960
+          "performance": -0.43,
+          "market_cap": 12643603456
         },
         {
           "ticker": "NSC",
-          "performance": 0.56,
-          "market_cap": 62765277184
+          "performance": -0.72,
+          "market_cap": 62314323968
         },
         {
           "ticker": "NOC",
-          "performance": -0.22,
-          "market_cap": 83011780608
+          "performance": 0.18,
+          "market_cap": 83160686592
         },
         {
           "ticker": "ODFL",
-          "performance": 0.47,
-          "market_cap": 31275100160
+          "performance": 1.28,
+          "market_cap": 31674421248
         },
         {
           "ticker": "OTIS",
-          "performance": 0.97,
-          "market_cap": 33949087744
+          "performance": 0.58,
+          "market_cap": 34145325056
         },
         {
           "ticker": "PCAR",
-          "performance": 2.07,
-          "market_cap": 51570364416
+          "performance": 0.86,
+          "market_cap": 52011454464
         },
         {
           "ticker": "PH",
-          "performance": 1.13,
-          "market_cap": 95893209088
+          "performance": 0.21,
+          "market_cap": 96095895552
         },
         {
           "ticker": "PNR",
-          "performance": 3.01,
-          "market_cap": 18042247168
+          "performance": 0.53,
+          "market_cap": 18137327616
         },
         {
           "ticker": "POOL",
-          "performance": 3.63,
-          "market_cap": 11785023488
+          "performance": 5.47,
+          "market_cap": 12430252032
         },
         {
           "ticker": "PWR",
-          "performance": 0.45,
-          "market_cap": 56039665664
+          "performance": -0.95,
+          "market_cap": 55504736256
         },
         {
           "ticker": "RTX",
-          "performance": 0.36,
-          "market_cap": 212399521792
+          "performance": -0.73,
+          "market_cap": 210846826496
         },
         {
           "ticker": "RSG",
-          "performance": 0.58,
-          "market_cap": 73011716096
+          "performance": -1.76,
+          "market_cap": 71725383680
         },
         {
           "ticker": "ROK",
-          "performance": 0.94,
-          "market_cap": 38436683776
+          "performance": -0.61,
+          "market_cap": 38200578048
         },
         {
           "ticker": "SNA",
-          "performance": 2.15,
-          "market_cap": 17149760512
+          "performance": -0.02,
+          "market_cap": 17146109952
         },
         {
           "ticker": "LUV",
-          "performance": -3.74,
-          "market_cap": 16343851008
+          "performance": 0.87,
+          "market_cap": 16485651456
         },
         {
           "ticker": "SWK",
-          "performance": 2.59,
-          "market_cap": 11569154048
+          "performance": 4.92,
+          "market_cap": 12138788864
         },
         {
           "ticker": "TXT",
-          "performance": 2.05,
-          "market_cap": 14493412352
+          "performance": 0.15,
+          "market_cap": 14514796544
         },
         {
           "ticker": "TT",
-          "performance": 1.19,
-          "market_cap": 91932073984
+          "performance": 0.16,
+          "market_cap": 92083380224
         },
         {
           "ticker": "TDG",
-          "performance": 0.26,
-          "market_cap": 72230379520
+          "performance": -0.84,
+          "market_cap": 71623491584
         },
         {
           "ticker": "UNP",
-          "performance": 0.59,
-          "market_cap": 132283498496
+          "performance": -1.23,
+          "market_cap": 130652643328
         },
         {
           "ticker": "UAL",
-          "performance": -0.1,
-          "market_cap": 34331779072
+          "performance": 0.51,
+          "market_cap": 34506592256
         },
         {
           "ticker": "UPS",
-          "performance": -0.95,
-          "market_cap": 71602716672
+          "performance": 0.66,
+          "market_cap": 72077352960
         },
         {
           "ticker": "URI",
-          "performance": 2.05,
-          "market_cap": 62067380224
+          "performance": 1.1,
+          "market_cap": 62747467776
         },
         {
           "ticker": "VLTO",
-          "performance": 1.46,
-          "market_cap": 26453960704
+          "performance": -0.83,
+          "market_cap": 26233098240
         },
         {
           "ticker": "VRSK",
-          "performance": 0.6,
-          "market_cap": 37730037760
+          "performance": 0.1,
+          "market_cap": 37766365184
         },
         {
           "ticker": "GWW",
-          "performance": 0.91,
-          "market_cap": 49172938752
+          "performance": -3.36,
+          "market_cap": 47519854592
         },
         {
           "ticker": "WAB",
-          "performance": 1.32,
-          "market_cap": 33127270400
+          "performance": -0.31,
+          "market_cap": 33024698368
         },
         {
           "ticker": "WM",
-          "performance": 0.24,
-          "market_cap": 90616610816
+          "performance": -2.17,
+          "market_cap": 88646770688
         },
         {
           "ticker": "XYL",
-          "performance": 1.6,
-          "market_cap": 34549616640
+          "performance": -0.97,
+          "market_cap": 34213709824
         }
       ],
       "Healthcare": [
         {
           "ticker": "ABT",
-          "performance": 0.48,
-          "market_cap": 231150485504
+          "performance": 0.1,
+          "market_cap": 231376764928
         },
         {
           "ticker": "ABBV",
-          "performance": 0.54,
-          "market_cap": 376277270528
+          "performance": -0.21,
+          "market_cap": 375499980800
         },
         {
           "ticker": "A",
-          "performance": 2.6,
-          "market_cap": 36424077312
+          "performance": 0.21,
+          "market_cap": 36500623360
         },
         {
           "ticker": "ALGN",
-          "performance": 1.78,
-          "market_cap": 9763917824
+          "performance": 3.28,
+          "market_cap": 10084307968
         },
         {
           "ticker": "AMGN",
-          "performance": -1.32,
-          "market_cap": 150795190272
+          "performance": 1.26,
+          "market_cap": 152700993536
         },
         {
           "ticker": "BAX",
-          "performance": 0.17,
-          "market_cap": 12111182848
+          "performance": 3.56,
+          "market_cap": 12542624768
         },
         {
           "ticker": "BDX",
-          "performance": 0.87,
-          "market_cap": 54820278272
+          "performance": 0.59,
+          "market_cap": 55144169472
         },
         {
           "ticker": "TECH",
-          "performance": -0.79,
-          "market_cap": 8231705600
+          "performance": 2.82,
+          "market_cap": 8463475712
         },
         {
           "ticker": "BIIB",
-          "performance": -1.19,
-          "market_cap": 20517304320
+          "performance": 0.52,
+          "market_cap": 20624332800
         },
         {
           "ticker": "BSX",
-          "performance": -0.22,
-          "market_cap": 158976966656
+          "performance": -0.07,
+          "market_cap": 158873239552
         },
         {
           "ticker": "BMY",
-          "performance": -1.71,
-          "market_cap": 95034687488
+          "performance": 0.96,
+          "market_cap": 95950643200
         },
         {
           "ticker": "CAH",
-          "performance": -0.81,
-          "market_cap": 35661496320
+          "performance": 0.15,
+          "market_cap": 35714031616
         },
         {
           "ticker": "COR",
-          "performance": -0.83,
-          "market_cap": 56748093440
+          "performance": -0.07,
+          "market_cap": 56709316608
         },
         {
           "ticker": "CNC",
-          "performance": -4.69,
-          "market_cap": 14070960128
+          "performance": 1.15,
+          "market_cap": 14233033728
         },
         {
           "ticker": "CRL",
-          "performance": -0.01,
-          "market_cap": 7987956736
+          "performance": 1.04,
+          "market_cap": 8070637056
         },
         {
           "ticker": "CI",
-          "performance": 1.69,
-          "market_cap": 81154121728
+          "performance": 0.42,
+          "market_cap": 81495785472
         },
         {
           "ticker": "COO",
-          "performance": 1.28,
-          "market_cap": 13519011840
+          "performance": 0.13,
+          "market_cap": 13536903168
         },
         {
           "ticker": "CVS",
-          "performance": 0.5,
-          "market_cap": 93463240704
+          "performance": 0.12,
+          "market_cap": 93577388032
         },
         {
           "ticker": "DHR",
-          "performance": -0.21,
-          "market_cap": 142515814400
+          "performance": 0.59,
+          "market_cap": 143360770048
         },
         {
           "ticker": "DVA",
-          "performance": -0.3,
-          "market_cap": 9692539904
+          "performance": 1.7,
+          "market_cap": 9857704960
         },
         {
           "ticker": "DXCM",
-          "performance": 2.33,
-          "market_cap": 31670439936
+          "performance": -0.31,
+          "market_cap": 31572400128
         },
         {
           "ticker": "EW",
-          "performance": -0.32,
-          "market_cap": 47531618304
+          "performance": -0.02,
+          "market_cap": 47519879168
         },
         {
           "ticker": "ELV",
-          "performance": -4.21,
-          "market_cap": 69366079488
+          "performance": 1.81,
+          "market_cap": 70624829440
         },
         {
           "ticker": "GEHC",
-          "performance": 2.4,
-          "market_cap": 33840375808
+          "performance": 2.17,
+          "market_cap": 34575441920
         },
         {
           "ticker": "GILD",
-          "performance": -0.19,
-          "market_cap": 139926142976
+          "performance": 2.02,
+          "market_cap": 142755184640
         },
         {
           "ticker": "HCA",
-          "performance": 0.98,
-          "market_cap": 96309592064
+          "performance": 2.23,
+          "market_cap": 98457649152
         },
         {
           "ticker": "HSIC",
-          "performance": 0.97,
-          "market_cap": 8219545088
+          "performance": 2.43,
+          "market_cap": 8419637248
         },
         {
           "ticker": "HOLX",
-          "performance": 0.23,
-          "market_cap": 14766397440
+          "performance": 0.56,
+          "market_cap": 14848693248
         },
         {
           "ticker": "HUM",
-          "performance": 0.01,
-          "market_cap": 37524865024
+          "performance": -1.31,
+          "market_cap": 37034156032
         },
         {
           "ticker": "IDXX",
-          "performance": 1.02,
-          "market_cap": 51238211584
+          "performance": 0.4,
+          "market_cap": 51442225152
         },
         {
           "ticker": "INCY",
-          "performance": -1.75,
-          "market_cap": 16684382208
+          "performance": 1.4,
+          "market_cap": 16918712320
         },
         {
           "ticker": "PODD",
-          "performance": 0.86,
-          "market_cap": 24388888576
+          "performance": 0.57,
+          "market_cap": 24526856192
         },
         {
           "ticker": "ISRG",
-          "performance": 3.02,
-          "market_cap": 162934964224
+          "performance": 2.71,
+          "market_cap": 167358562304
         },
         {
           "ticker": "IQV",
-          "performance": -0.29,
-          "market_cap": 31293599744
+          "performance": 1.96,
+          "market_cap": 31905599488
         },
         {
           "ticker": "JNJ",
-          "performance": 0.43,
-          "market_cap": 430514831360
+          "performance": -0.18,
+          "market_cap": 429720076288
         },
         {
           "ticker": "LH",
-          "performance": 0.51,
-          "market_cap": 22871613440
+          "performance": 1.25,
+          "market_cap": 23157477376
         },
         {
           "ticker": "LLY",
-          "performance": 0.69,
-          "market_cap": 665986859008
+          "performance": -2.11,
+          "market_cap": 651912544256
         },
         {
           "ticker": "MCK",
-          "performance": 0.09,
-          "market_cap": 86005317632
+          "performance": -0.59,
+          "market_cap": 85501566976
         },
         {
           "ticker": "MDT",
-          "performance": 0.65,
-          "market_cap": 119097769984
+          "performance": 0.05,
+          "market_cap": 119161905152
         },
         {
           "ticker": "MRK",
-          "performance": -0.15,
-          "market_cap": 209938415616
+          "performance": 0.79,
+          "market_cap": 211586940928
         },
         {
           "ticker": "MTD",
-          "performance": 1.51,
-          "market_cap": 26527186944
+          "performance": 1.39,
+          "market_cap": 26896318464
         },
         {
           "ticker": "MRNA",
-          "performance": 0.96,
-          "market_cap": 9446862848
+          "performance": 3.54,
+          "market_cap": 9781471232
         },
         {
           "ticker": "MOH",
-          "performance": -3.51,
-          "market_cap": 9258986496
+          "performance": 2.24,
+          "market_cap": 9466030080
         },
         {
           "ticker": "PFE",
-          "performance": -1.01,
-          "market_cap": 139523407872
+          "performance": 1.39,
+          "market_cap": 141456474112
         },
         {
           "ticker": "DGX",
-          "performance": 0.33,
-          "market_cap": 20140441600
+          "performance": 1.88,
+          "market_cap": 20518402048
         },
         {
           "ticker": "REGN",
-          "performance": 0.61,
-          "market_cap": 60117942272
+          "performance": 1.09,
+          "market_cap": 60770828288
         },
         {
           "ticker": "RMD",
-          "performance": 1.71,
-          "market_cap": 40089894912
+          "performance": 1.18,
+          "market_cap": 40564277248
         },
         {
           "ticker": "RVTY",
-          "performance": 2.81,
-          "market_cap": 9947455488
+          "performance": 1.1,
+          "market_cap": 10056564736
         },
         {
           "ticker": "SOLV",
-          "performance": 1.37,
-          "market_cap": 12549822464
+          "performance": 0.47,
+          "market_cap": 12608775168
         },
         {
           "ticker": "STE",
-          "performance": 0.38,
-          "market_cap": 23971627008
+          "performance": 0.78,
+          "market_cap": 24159744000
         },
         {
           "ticker": "SYK",
-          "performance": 1.49,
-          "market_cap": 150758948864
+          "performance": -0.51,
+          "market_cap": 149982855168
         },
         {
           "ticker": "TMO",
-          "performance": 1.02,
-          "market_cap": 184837292032
+          "performance": 0.64,
+          "market_cap": 186011680768
         },
         {
           "ticker": "UNH",
-          "performance": 0.81,
-          "market_cap": 281103106048
+          "performance": 1.61,
+          "market_cap": 285640523776
         },
         {
           "ticker": "UHS",
-          "performance": 2.26,
-          "market_cap": 11816433664
+          "performance": 2.39,
+          "market_cap": 12098989056
         },
         {
           "ticker": "VRTX",
-          "performance": 0.08,
-          "market_cap": 101769281536
+          "performance": -0.2,
+          "market_cap": 101561606144
         },
         {
           "ticker": "VTRS",
-          "performance": -2.09,
-          "market_cap": 12043436032
+          "performance": 1.65,
+          "market_cap": 12241634304
         },
         {
           "ticker": "WAT",
-          "performance": 3.32,
-          "market_cap": 17838778368
+          "performance": 2.21,
+          "market_cap": 18233421824
         },
         {
           "ticker": "WST",
-          "performance": -0.57,
-          "market_cap": 17799931904
+          "performance": 1.29,
+          "market_cap": 18029316096
         },
         {
           "ticker": "ZBH",
-          "performance": -0.27,
-          "market_cap": 20752537600
+          "performance": 0.93,
+          "market_cap": 20944691200
         },
         {
           "ticker": "ZTS",
-          "performance": 0.51,
-          "market_cap": 67895635968
+          "performance": 0.08,
+          "market_cap": 67948822528
         }
       ],
       "Technology": [
         {
           "ticker": "ACN",
-          "performance": -0.48,
-          "market_cap": 157544431616
+          "performance": 0.79,
+          "market_cap": 158796365824
         },
         {
           "ticker": "ADBE",
-          "performance": -1.2,
-          "market_cap": 146056298496
+          "performance": 1.35,
+          "market_cap": 148033077248
         },
         {
           "ticker": "AMD",
-          "performance": -0.21,
-          "market_cap": 262559285248
+          "performance": -6.58,
+          "market_cap": 245276049408
         },
         {
           "ticker": "AKAM",
-          "performance": -0.48,
-          "market_cap": 11067965440
+          "performance": 1.77,
+          "market_cap": 11264403456
         },
         {
           "ticker": "APH",
-          "performance": 1.86,
-          "market_cap": 137658744832
+          "performance": -2.04,
+          "market_cap": 134850617344
         },
         {
           "ticker": "ADI",
-          "performance": 0.64,
-          "market_cap": 121075048448
+          "performance": 0.39,
+          "market_cap": 121547325440
         },
         {
           "ticker": "AAPL",
-          "performance": 0.55,
-          "market_cap": 3558430998528
+          "performance": -0.04,
+          "market_cap": 3557095374848
         },
         {
           "ticker": "AMAT",
-          "performance": 1.27,
-          "market_cap": 126060634112
+          "performance": 2.85,
+          "market_cap": 129653481472
         },
         {
           "ticker": "ANET",
-          "performance": 2.76,
-          "market_cap": 177432330240
+          "performance": 1.19,
+          "market_cap": 179543883776
         },
         {
           "ticker": "ADSK",
-          "performance": 0.76,
-          "market_cap": 68145086464
+          "performance": 2.01,
+          "market_cap": 69516812288
         },
         {
           "ticker": "ADP",
-          "performance": 0.78,
-          "market_cap": 121994903552
+          "performance": -1.73,
+          "market_cap": 119880581120
         },
         {
           "ticker": "XYZ",
-          "performance": -0.05,
-          "market_cap": 46175989760
+          "performance": -1.07,
+          "market_cap": 45682225152
         },
         {
           "ticker": "AVGO",
-          "performance": 1.23,
-          "market_cap": 1439732203520
+          "performance": 9.41,
+          "market_cap": 1575145177088
         },
         {
           "ticker": "BR",
-          "performance": 0.88,
-          "market_cap": 29518852096
+          "performance": -0.4,
+          "market_cap": 29401722880
         },
         {
           "ticker": "CDNS",
-          "performance": 0.58,
-          "market_cap": 95188926464
+          "performance": 0.48,
+          "market_cap": 95646711808
         },
         {
           "ticker": "CDW",
-          "performance": 1.76,
-          "market_cap": 21788891136
+          "performance": 2.09,
+          "market_cap": 22244982784
         },
         {
           "ticker": "CSCO",
-          "performance": 0.47,
-          "market_cap": 268778061824
+          "performance": -1.6,
+          "market_cap": 264469102592
         },
         {
           "ticker": "CTSH",
-          "performance": -0.52,
-          "market_cap": 34895892480
+          "performance": 0.52,
+          "market_cap": 35076599808
         },
         {
           "ticker": "GLW",
-          "performance": 0.55,
-          "market_cap": 59723476992
+          "performance": 2.11,
+          "market_cap": 60982710272
         },
         {
           "ticker": "CPAY",
-          "performance": 0.18,
-          "market_cap": 22592370688
+          "performance": -1.03,
+          "market_cap": 22360049664
         },
         {
           "ticker": "CRWD",
-          "performance": -0.18,
-          "market_cap": 103508901888
+          "performance": 1.25,
+          "market_cap": 104806342656
         },
         {
           "ticker": "DDOG",
-          "performance": -0.62,
-          "market_cap": 45957615616
+          "performance": 3.26,
+          "market_cap": 47457218560
         },
         {
           "ticker": "DAY",
-          "performance": 0.01,
-          "market_cap": 10975059968
+          "performance": -0.79,
+          "market_cap": 10888268800
         },
         {
           "ticker": "DELL",
-          "performance": 2.14,
-          "market_cap": 85677309952
-        },
-        {
-          "ticker": "ENPH",
-          "performance": -1.51,
-          "market_cap": 4775026688
+          "performance": -1.45,
+          "market_cap": 84432764928
         },
         {
           "ticker": "EPAM",
-          "performance": -3.42,
-          "market_cap": 9362092032
+          "performance": 0.82,
+          "market_cap": 9438397440
         },
         {
           "ticker": "FFIV",
-          "performance": 1.72,
-          "market_cap": 18058526720
+          "performance": 0.49,
+          "market_cap": 18146996224
         },
         {
           "ticker": "FICO",
-          "performance": -0.12,
-          "market_cap": 36459700224
+          "performance": 0.86,
+          "market_cap": 36773429248
         },
         {
           "ticker": "FIS",
-          "performance": 0.76,
-          "market_cap": 35892662272
+          "performance": 0.04,
+          "market_cap": 35908333568
         },
         {
           "ticker": "FSLR",
-          "performance": 0.19,
-          "market_cap": 21650153472
+          "performance": 1.62,
+          "market_cap": 22000855040
         },
         {
           "ticker": "FI",
-          "performance": -0.43,
-          "market_cap": 74026491904
+          "performance": -0.83,
+          "market_cap": 73412239360
         },
         {
           "ticker": "FTNT",
-          "performance": -0.18,
-          "market_cap": 58573373440
+          "performance": 3.13,
+          "market_cap": 60404748288
         },
         {
           "ticker": "FTV",
-          "performance": 1.17,
-          "market_cap": 16098027520
+          "performance": 0.61,
+          "market_cap": 16196144128
         },
         {
           "ticker": "GRMN",
-          "performance": 0.32,
-          "market_cap": 45748125696
+          "performance": -0.11,
+          "market_cap": 45696151552
         },
         {
           "ticker": "IT",
-          "performance": -4.38,
-          "market_cap": 17928935424
+          "performance": 3.88,
+          "market_cap": 18624190464
         },
         {
           "ticker": "GEN",
-          "performance": -0.44,
-          "market_cap": 18186612736
+          "performance": -0.1,
+          "market_cap": 18168135680
         },
         {
           "ticker": "GDDY",
-          "performance": 1.0,
-          "market_cap": 20064028672
+          "performance": 0.22,
+          "market_cap": 20108333056
         },
         {
           "ticker": "HPE",
-          "performance": 1.49,
-          "market_cap": 30558461952
+          "performance": 1.55,
+          "market_cap": 31033464832
         },
         {
           "ticker": "HPQ",
-          "performance": 0.77,
-          "market_cap": 27031582720
+          "performance": 1.45,
+          "market_cap": 27424157696
         },
         {
           "ticker": "IBM",
-          "performance": 1.26,
-          "market_cap": 230252855296
+          "performance": 0.55,
+          "market_cap": 231510409216
         },
         {
           "ticker": "INTC",
-          "performance": 2.54,
-          "market_cap": 107717476352
+          "performance": -0.49,
+          "market_cap": 107192238080
         },
         {
           "ticker": "INTU",
-          "performance": -0.06,
-          "market_cap": 186322583552
+          "performance": 0.68,
+          "market_cap": 187585576960
         },
         {
           "ticker": "JBL",
-          "performance": 2.35,
-          "market_cap": 22319132672
+          "performance": 1.02,
+          "market_cap": 22547722240
         },
         {
           "ticker": "JKHY",
-          "performance": 0.17,
-          "market_cap": 11795693568
+          "performance": 0.23,
+          "market_cap": 11822656512
         },
         {
           "ticker": "KEYS",
-          "performance": 0.99,
-          "market_cap": 28691357696
+          "performance": 0.57,
+          "market_cap": 28854622208
         },
         {
           "ticker": "KLAC",
-          "performance": 3.48,
-          "market_cap": 115240222720
+          "performance": 3.64,
+          "market_cap": 119436582912
         },
         {
           "ticker": "LRCX",
-          "performance": 2.74,
-          "market_cap": 127093555200
+          "performance": 2.52,
+          "market_cap": 130295570432
         },
         {
           "ticker": "LDOS",
-          "performance": 0.49,
-          "market_cap": 22911279104
+          "performance": 0.24,
+          "market_cap": 22965161984
         },
         {
           "ticker": "MCHP",
-          "performance": 1.82,
-          "market_cap": 34771582976
+          "performance": 2.31,
+          "market_cap": 35575705600
         },
         {
           "ticker": "MU",
-          "performance": 4.62,
-          "market_cap": 139007131648
+          "performance": 5.76,
+          "market_cap": 147020103680
         },
         {
           "ticker": "MSFT",
-          "performance": 0.52,
-          "market_cap": 3775827279872
+          "performance": -2.55,
+          "market_cap": 3679419105280
         },
         {
           "ticker": "MPWR",
-          "performance": 2.48,
-          "market_cap": 40617684992
+          "performance": 2.09,
+          "market_cap": 41467764736
         },
         {
           "ticker": "MSI",
-          "performance": 0.94,
-          "market_cap": 79740002304
+          "performance": 0.08,
+          "market_cap": 79799984128
         },
         {
           "ticker": "NTAP",
-          "performance": 2.03,
-          "market_cap": 23720607744
+          "performance": -0.07,
+          "market_cap": 23704637440
         },
         {
           "ticker": "NVDA",
-          "performance": 0.61,
-          "market_cap": 4179406356480
+          "performance": -2.7,
+          "market_cap": 4066436186112
         },
         {
           "ticker": "NXPI",
-          "performance": -1.23,
-          "market_cap": 56824201216
+          "performance": 0.6,
+          "market_cap": 57164558336
         },
         {
           "ticker": "ON",
-          "performance": 0.56,
-          "market_cap": 19655290880
+          "performance": 2.17,
+          "market_cap": 20082669568
         },
         {
           "ticker": "ORCL",
-          "performance": -0.2,
-          "market_cap": 626369101824
+          "performance": 4.39,
+          "market_cap": 653895598080
         },
         {
           "ticker": "PLTR",
-          "performance": 0.8,
-          "market_cap": 370417172480
+          "performance": -1.94,
+          "market_cap": 363228987392
         },
         {
           "ticker": "PANW",
-          "performance": 0.43,
-          "market_cap": 128662913024
+          "performance": 1.1,
+          "market_cap": 130074296320
         },
         {
           "ticker": "PAYX",
-          "performance": 1.25,
-          "market_cap": 49381511168
+          "performance": -1.37,
+          "market_cap": 48705441792
         },
         {
           "ticker": "PAYC",
-          "performance": 1.42,
-          "market_cap": 12629606400
+          "performance": -0.17,
+          "market_cap": 12608229376
         },
         {
           "ticker": "PTC",
-          "performance": 0.48,
-          "market_cap": 25545857024
+          "performance": 0.3,
+          "market_cap": 25623721984
         },
         {
           "ticker": "QCOM",
-          "performance": 2.12,
-          "market_cap": 172327108608
+          "performance": 0.08,
+          "market_cap": 172467372032
         },
         {
           "ticker": "ROP",
-          "performance": 0.57,
-          "market_cap": 56725491712
+          "performance": -1.65,
+          "market_cap": 55791403008
         },
         {
           "ticker": "CRM",
-          "performance": -4.85,
-          "market_cap": 232297512960
+          "performance": 2.77,
+          "market_cap": 238723514368
         },
         {
           "ticker": "STX",
-          "performance": 4.34,
-          "market_cap": 39128313856
+          "performance": 2.27,
+          "market_cap": 40017305600
         },
         {
           "ticker": "NOW",
-          "performance": -2.26,
-          "market_cap": 186468286464
+          "performance": 1.7,
+          "market_cap": 189630873600
         },
         {
           "ticker": "SWKS",
-          "performance": 1.47,
-          "market_cap": 11078666240
+          "performance": 0.75,
+          "market_cap": 11161785344
         },
         {
           "ticker": "SMCI",
-          "performance": 1.5,
-          "market_cap": 24186912768
+          "performance": -0.71,
+          "market_cap": 24014573568
         },
         {
           "ticker": "SNPS",
-          "performance": 1.66,
-          "market_cap": 111389089792
+          "performance": -0.63,
+          "market_cap": 110682218496
         },
         {
           "ticker": "TEL",
-          "performance": 1.24,
-          "market_cap": 61619810304
+          "performance": 0.1,
+          "market_cap": 61678911488
         },
         {
           "ticker": "TDY",
-          "performance": 0.43,
-          "market_cap": 25648009216
+          "performance": 0.37,
+          "market_cap": 25743194112
         },
         {
           "ticker": "TER",
-          "performance": -0.2,
-          "market_cap": 18991845376
+          "performance": 0.68,
+          "market_cap": 19120695296
         },
         {
           "ticker": "TXN",
-          "performance": -4.32,
-          "market_cap": 170272260096
+          "performance": 0.34,
+          "market_cap": 170854121472
         },
         {
           "ticker": "TRMB",
-          "performance": 1.41,
-          "market_cap": 18968508416
+          "performance": 1.29,
+          "market_cap": 19213615104
         },
         {
           "ticker": "TYL",
-          "performance": 0.07,
-          "market_cap": 23976986624
+          "performance": 1.03,
+          "market_cap": 24224878592
         },
         {
           "ticker": "UBER",
-          "performance": -1.03,
-          "market_cap": 191816941568
+          "performance": -1.08,
+          "market_cap": 189752360960
         },
         {
           "ticker": "VRSN",
-          "performance": 1.08,
-          "market_cap": 25881653248
+          "performance": 1.09,
+          "market_cap": 26162814976
         },
         {
           "ticker": "WDC",
-          "performance": 5.34,
-          "market_cap": 31392968704
+          "performance": 1.71,
+          "market_cap": 31930699776
         },
         {
           "ticker": "WDAY",
-          "performance": -0.99,
-          "market_cap": 61711712256
+          "performance": -0.02,
+          "market_cap": 61698359296
         },
         {
           "ticker": "ZBRA",
-          "performance": 1.81,
-          "market_cap": 15825568768
+          "performance": 0.82,
+          "market_cap": 15955223552
         }
       ],
       "Utilities": [
         {
           "ticker": "AES",
-          "performance": -3.17,
-          "market_cap": 9121360896
+          "performance": 0.94,
+          "market_cap": 9206806528
         },
         {
           "ticker": "LNT",
-          "performance": 0.31,
-          "market_cap": 16631033856
+          "performance": -0.15,
+          "market_cap": 16605336576
         },
         {
           "ticker": "AEE",
-          "performance": 0.96,
-          "market_cap": 27278958592
+          "performance": -0.25,
+          "market_cap": 27211356160
         },
         {
           "ticker": "AEP",
-          "performance": -1.26,
-          "market_cap": 58100129792
+          "performance": -0.49,
+          "market_cap": 57816690688
         },
         {
           "ticker": "AWK",
-          "performance": 0.62,
-          "market_cap": 27620167680
+          "performance": 1.43,
+          "market_cap": 28016218112
         },
         {
           "ticker": "ATO",
-          "performance": -0.26,
-          "market_cap": 26452748288
+          "performance": 1.03,
+          "market_cap": 26724034560
         },
         {
           "ticker": "CNP",
-          "performance": -0.43,
-          "market_cap": 24456323072
+          "performance": 0.85,
+          "market_cap": 24665239552
         },
         {
           "ticker": "CMS",
-          "performance": 0.03,
-          "market_cap": 21414426624
+          "performance": 0.01,
+          "market_cap": 21417420800
         },
         {
           "ticker": "ED",
-          "performance": -0.05,
-          "market_cap": 35271766016
+          "performance": 0.26,
+          "market_cap": 35361931264
         },
         {
           "ticker": "CEG",
-          "performance": 0.19,
-          "market_cap": 96552206336
+          "performance": -2.42,
+          "market_cap": 94215405568
         },
         {
           "ticker": "D",
-          "performance": -0.22,
-          "market_cap": 50173382656
+          "performance": -1.02,
+          "market_cap": 49661321216
         },
         {
           "ticker": "DTE",
-          "performance": 0.68,
-          "market_cap": 28317079552
+          "performance": 0.14,
+          "market_cap": 28356521984
         },
         {
           "ticker": "DUK",
-          "performance": -0.52,
-          "market_cap": 93991411712
+          "performance": -0.22,
+          "market_cap": 93789233152
         },
         {
           "ticker": "EIX",
-          "performance": -1.23,
-          "market_cap": 21038872576
+          "performance": -0.4,
+          "market_cap": 20954210304
         },
         {
           "ticker": "ETR",
-          "performance": 1.12,
-          "market_cap": 39364345856
+          "performance": -0.49,
+          "market_cap": 39172390912
         },
         {
           "ticker": "EVRG",
-          "performance": 0.27,
-          "market_cap": 16474496000
+          "performance": 0.03,
+          "market_cap": 16479097856
         },
         {
           "ticker": "ES",
-          "performance": 0.19,
-          "market_cap": 23536113664
+          "performance": 0.17,
+          "market_cap": 23576936448
         },
         {
           "ticker": "EXC",
-          "performance": -0.09,
-          "market_cap": 43772968960
+          "performance": 0.21,
+          "market_cap": 43863867392
         },
         {
           "ticker": "FE",
-          "performance": 0.16,
-          "market_cap": 25099753472
+          "performance": 0.02,
+          "market_cap": 25105526784
         },
         {
           "ticker": "NEE",
-          "performance": -1.06,
-          "market_cap": 145941889024
+          "performance": 0.04,
+          "market_cap": 146003656704
         },
         {
           "ticker": "NI",
-          "performance": -4.71,
-          "market_cap": 18754156544
+          "performance": 1.26,
+          "market_cap": 18989582336
         },
         {
           "ticker": "NRG",
-          "performance": 0.71,
-          "market_cap": 28618117120
+          "performance": -0.2,
+          "market_cap": 28562022400
         },
         {
           "ticker": "PCG",
-          "performance": -0.78,
-          "market_cap": 33473099776
+          "performance": -0.92,
+          "market_cap": 33165404160
         },
         {
           "ticker": "PNW",
-          "performance": 0.62,
-          "market_cap": 10662441984
+          "performance": -0.31,
+          "market_cap": 10629003264
         },
         {
           "ticker": "PPL",
-          "performance": 0.77,
-          "market_cap": 26992297984
+          "performance": -1.48,
+          "market_cap": 26592958464
         },
         {
           "ticker": "PEG",
-          "performance": 0.47,
-          "market_cap": 40789811200
+          "performance": -0.75,
+          "market_cap": 40485371904
         },
         {
           "ticker": "SRE",
-          "performance": -0.13,
-          "market_cap": 53581000704
+          "performance": -1.23,
+          "market_cap": 52922003456
         },
         {
           "ticker": "SO",
-          "performance": 0.23,
-          "market_cap": 101061599232
+          "performance": -0.1,
+          "market_cap": 100962590720
         },
         {
           "ticker": "VST",
-          "performance": 0.86,
-          "market_cap": 64284315648
+          "performance": -0.91,
+          "market_cap": 63698161664
         },
         {
           "ticker": "WEC",
-          "performance": 0.55,
-          "market_cap": 34594156544
+          "performance": 0.29,
+          "market_cap": 34693935104
         },
         {
           "ticker": "XEL",
-          "performance": -0.26,
-          "market_cap": 42724610048
+          "performance": 0.61,
+          "market_cap": 42984841216
         }
       ],
       "Financial Services": [
         {
           "ticker": "AFL",
-          "performance": 1.7,
-          "market_cap": 58055909376
+          "performance": -1.49,
+          "market_cap": 57189478400
         },
         {
           "ticker": "ALL",
-          "performance": 1.84,
-          "market_cap": 54895996928
+          "performance": -3.26,
+          "market_cap": 53104160768
         },
         {
           "ticker": "AXP",
-          "performance": 2.14,
-          "market_cap": 230093373440
+          "performance": -1.34,
+          "market_cap": 227010625536
         },
         {
           "ticker": "AIG",
-          "performance": 0.48,
-          "market_cap": 45278744576
+          "performance": -3.08,
+          "market_cap": 43882655744
         },
         {
           "ticker": "AMP",
-          "performance": 0.93,
-          "market_cap": 48257630208
+          "performance": -4.42,
+          "market_cap": 46125207552
         },
         {
           "ticker": "AON",
-          "performance": -0.14,
-          "market_cap": 80534528000
+          "performance": -0.79,
+          "market_cap": 79898435584
         },
         {
           "ticker": "APO",
-          "performance": 1.61,
-          "market_cap": 77086359552
+          "performance": -2.38,
+          "market_cap": 77086334976
         },
         {
           "ticker": "ACGL",
-          "performance": -0.73,
-          "market_cap": 34418348032
+          "performance": -1.01,
+          "market_cap": 34418339840
         },
         {
           "ticker": "AJG",
-          "performance": -1.15,
-          "market_cap": 76965306368
+          "performance": -0.35,
+          "market_cap": 76698681344
         },
         {
           "ticker": "AIZ",
-          "performance": 0.75,
-          "market_cap": 10924920832
+          "performance": -2.47,
+          "market_cap": 10655469568
         },
         {
           "ticker": "BAC",
-          "performance": 1.12,
-          "market_cap": 374939779072
+          "performance": -1.68,
+          "market_cap": 368643899392
         },
         {
           "ticker": "BRK-B",
-          "performance": 1.08,
-          "market_cap": 1093278171136
+          "performance": -1.41,
+          "market_cap": 1077878980608
         },
         {
           "ticker": "BLK",
-          "performance": 0.84,
-          "market_cap": 171694800896
+          "performance": -0.87,
+          "market_cap": 170206674944
         },
         {
           "ticker": "BX",
-          "performance": 1.53,
-          "market_cap": 208667770880
+          "performance": 0.05,
+          "market_cap": 208778313728
         },
         {
           "ticker": "BK",
-          "performance": 0.84,
-          "market_cap": 74445242368
+          "performance": -1.77,
+          "market_cap": 73126445056
         },
         {
           "ticker": "BRO",
-          "performance": 0.21,
-          "market_cap": 31496708096
+          "performance": -0.73,
+          "market_cap": 31265818624
         },
         {
           "ticker": "COF",
-          "performance": 2.25,
-          "market_cap": 144735485952
+          "performance": -2.12,
+          "market_cap": 141672202240
         },
         {
           "ticker": "CBOE",
-          "performance": -0.53,
-          "market_cap": 24491839488
+          "performance": -0.68,
+          "market_cap": 24325541888
         },
         {
           "ticker": "SCHW",
-          "performance": 1.47,
-          "market_cap": 177219928064
+          "performance": -5.72,
+          "market_cap": 167091011584
         },
         {
           "ticker": "CB",
-          "performance": 0.6,
-          "market_cap": 111585353728
+          "performance": -0.89,
+          "market_cap": 110588633088
         },
         {
           "ticker": "CINF",
-          "performance": 1.34,
-          "market_cap": 24330541056
+          "performance": -1.43,
+          "market_cap": 23981824000
         },
         {
           "ticker": "C",
-          "performance": 2.16,
-          "market_cap": 178714574848
+          "performance": -1.73,
+          "market_cap": 175621865472
         },
         {
           "ticker": "CFG",
-          "performance": 1.63,
-          "market_cap": 22650134528
+          "performance": -1.52,
+          "market_cap": 22305056768
         },
         {
           "ticker": "CME",
-          "performance": -0.71,
-          "market_cap": 96376422400
+          "performance": -2.05,
+          "market_cap": 94397939712
         },
         {
           "ticker": "COIN",
-          "performance": 1.49,
-          "market_cap": 78828576768
+          "performance": -2.52,
+          "market_cap": 76842450944
         },
         {
           "ticker": "ERIE",
-          "performance": 2.52,
-          "market_cap": 17591889920
+          "performance": -0.4,
+          "market_cap": 17520777216
         },
         {
           "ticker": "EG",
-          "performance": -0.94,
-          "market_cap": 14481344512
+          "performance": -1.52,
+          "market_cap": 14260721664
         },
         {
           "ticker": "FDS",
-          "performance": -0.36,
-          "market_cap": 13968857088
+          "performance": 0.41,
+          "market_cap": 14026700800
         },
         {
           "ticker": "FITB",
-          "performance": 1.49,
-          "market_cap": 30618890240
+          "performance": -1.38,
+          "market_cap": 30195283968
         },
         {
           "ticker": "BEN",
-          "performance": 0.82,
-          "market_cap": 13364079616
+          "performance": -2.99,
+          "market_cap": 12964298752
         },
         {
           "ticker": "GL",
-          "performance": 0.63,
-          "market_cap": 11457945600
+          "performance": -1.16,
+          "market_cap": 11325100032
         },
         {
           "ticker": "GS",
-          "performance": 2.51,
-          "market_cap": 226707750912
+          "performance": -1.43,
+          "market_cap": 223471665152
         },
         {
           "ticker": "HIG",
-          "performance": 1.16,
-          "market_cap": 37873868800
+          "performance": -2.25,
+          "market_cap": 37021917184
         },
         {
           "ticker": "HBAN",
-          "performance": 1.53,
-          "market_cap": 26085308416
+          "performance": -1.4,
+          "market_cap": 25720582144
         },
         {
           "ticker": "IBKR",
-          "performance": 0.52,
-          "market_cap": 109264429056
+          "performance": -6.41,
+          "market_cap": 102261170176
         },
         {
           "ticker": "ICE",
-          "performance": -0.35,
-          "market_cap": 99899260928
+          "performance": -0.14,
+          "market_cap": 99756154880
         },
         {
           "ticker": "IVZ",
-          "performance": 1.2,
-          "market_cap": 9793369088
+          "performance": 0.14,
+          "market_cap": 9806748672
         },
         {
           "ticker": "JPM",
-          "performance": 1.44,
-          "market_cap": 835429072896
+          "performance": -3.11,
+          "market_cap": 809471442944
         },
         {
           "ticker": "KEY",
-          "performance": 1.21,
-          "market_cap": 21031251968
+          "performance": -1.25,
+          "market_cap": 20768088064
         },
         {
           "ticker": "KKR",
-          "performance": 1.87,
-          "market_cap": 127119761408
+          "performance": -1.33,
+          "market_cap": 125435314176
         },
         {
           "ticker": "L",
-          "performance": 0.67,
-          "market_cap": 20230256640
+          "performance": -0.91,
+          "market_cap": 20045647872
         },
         {
           "ticker": "MTB",
-          "performance": 1.91,
-          "market_cap": 31622592512
-        },
-        {
-          "ticker": "MKTX",
-          "performance": -0.8,
-          "market_cap": 6730341376
+          "performance": -1.38,
+          "market_cap": 31186604032
         },
         {
           "ticker": "MMC",
-          "performance": 0.41,
-          "market_cap": 101328625664
+          "performance": -1.15,
+          "market_cap": 100163477504
         },
         {
           "ticker": "MA",
-          "performance": 0.4,
-          "market_cap": 538465730560
+          "performance": -1.92,
+          "market_cap": 528141877248
         },
         {
           "ticker": "MET",
-          "performance": 1.46,
-          "market_cap": 54365876224
+          "performance": -2.74,
+          "market_cap": 52876218368
         },
         {
           "ticker": "MCO",
-          "performance": 0.67,
-          "market_cap": 89636462592
+          "performance": -0.15,
+          "market_cap": 89505521664
         },
         {
           "ticker": "MS",
-          "performance": 1.35,
-          "market_cap": 240297050112
+          "performance": -1.62,
+          "market_cap": 236401983488
         },
         {
           "ticker": "MSCI",
-          "performance": 1.01,
-          "market_cap": 43107115008
+          "performance": -0.37,
+          "market_cap": 42949292032
         },
         {
           "ticker": "NDAQ",
-          "performance": 0.57,
-          "market_cap": 54108872704
+          "performance": -0.87,
+          "market_cap": 53638361088
         },
         {
           "ticker": "NTRS",
-          "performance": -0.16,
-          "market_cap": 24688693248
+          "performance": -1.71,
+          "market_cap": 24265422848
         },
         {
           "ticker": "PYPL",
-          "performance": -1.69,
-          "market_cap": 65405177856
+          "performance": -0.29,
+          "market_cap": 65214103552
         },
         {
           "ticker": "PNC",
-          "performance": 1.15,
-          "market_cap": 81659822080
+          "performance": -1.43,
+          "market_cap": 80494149632
         },
         {
           "ticker": "PFG",
-          "performance": 2.39,
-          "market_cap": 18111039488
+          "performance": -1.62,
+          "market_cap": 17816985600
         },
         {
           "ticker": "PGR",
-          "performance": 0.93,
-          "market_cap": 146019467264
+          "performance": -2.07,
+          "market_cap": 142999502848
         },
         {
           "ticker": "PRU",
-          "performance": 1.31,
-          "market_cap": 38305476608
+          "performance": -2.88,
+          "market_cap": 37203894272
         },
         {
           "ticker": "RJF",
-          "performance": 2.72,
-          "market_cap": 34112608256
+          "performance": -3.27,
+          "market_cap": 32998051840
         },
         {
           "ticker": "RF",
-          "performance": 1.56,
-          "market_cap": 24413546496
+          "performance": -1.21,
+          "market_cap": 24119085056
+        },
+        {
+          "ticker": "HOOD",
+          "performance": -1.61,
+          "market_cap": 89978347520
         },
         {
           "ticker": "SPGI",
-          "performance": 0.19,
-          "market_cap": 164941381632
+          "performance": -0.41,
+          "market_cap": 164269719552
         },
         {
           "ticker": "STT",
-          "performance": 0.94,
-          "market_cap": 32358252544
+          "performance": -0.97,
+          "market_cap": 32043350016
         },
         {
           "ticker": "SYF",
-          "performance": 1.81,
-          "market_cap": 28596377600
+          "performance": -1.63,
+          "market_cap": 28131303424
         },
         {
           "ticker": "TROW",
-          "performance": 5.84,
-          "market_cap": 24502616064
+          "performance": -3.01,
+          "market_cap": 23764375552
         },
         {
           "ticker": "TRV",
-          "performance": 1.04,
-          "market_cap": 62909190144
+          "performance": -1.51,
+          "market_cap": 61961379840
         },
         {
           "ticker": "TFC",
-          "performance": 1.42,
-          "market_cap": 60693942272
+          "performance": -1.17,
+          "market_cap": 59984748544
         },
         {
           "ticker": "USB",
-          "performance": 1.3,
-          "market_cap": 76517859328
+          "performance": -0.75,
+          "market_cap": 75942068224
         },
         {
           "ticker": "V",
-          "performance": 0.03,
-          "market_cap": 681250521088
+          "performance": -2.21,
+          "market_cap": 666169442304
         },
         {
           "ticker": "WRB",
-          "performance": 0.89,
-          "market_cap": 27658043392
+          "performance": -1.32,
+          "market_cap": 27293923328
         },
         {
           "ticker": "WFC",
-          "performance": 1.64,
-          "market_cap": 262137511936
+          "performance": -3.51,
+          "market_cap": 252943630336
         },
         {
           "ticker": "WTW",
-          "performance": 0.81,
-          "market_cap": 32175230976
+          "performance": -0.17,
+          "market_cap": 32119629824
         }
       ],
       "Basic Materials": [
         {
           "ticker": "APD",
-          "performance": -0.45,
-          "market_cap": 64533983232
+          "performance": -0.04,
+          "market_cap": 64509497344
         },
         {
           "ticker": "ALB",
-          "performance": -1.05,
-          "market_cap": 9328731136
+          "performance": 2.86,
+          "market_cap": 9595872256
         },
         {
           "ticker": "CF",
-          "performance": -0.7,
-          "market_cap": 13634886656
+          "performance": 0.36,
+          "market_cap": 13683478528
         },
         {
           "ticker": "CTVA",
-          "performance": 0.36,
-          "market_cap": 49336619008
+          "performance": -0.48,
+          "market_cap": 49098936320
         },
         {
           "ticker": "DOW",
-          "performance": -0.08,
-          "market_cap": 16948460544
+          "performance": 2.47,
+          "market_cap": 17366679552
         },
         {
           "ticker": "DD",
-          "performance": 2.09,
-          "market_cap": 32304017408
+          "performance": 0.87,
+          "market_cap": 32584556544
         },
         {
           "ticker": "EMN",
-          "performance": 1.52,
-          "market_cap": 7877474816
+          "performance": 0.67,
+          "market_cap": 7930297856
         },
         {
           "ticker": "ECL",
-          "performance": 0.63,
-          "market_cap": 77979852800
+          "performance": -0.5,
+          "market_cap": 77588455424
         },
         {
           "ticker": "FCX",
-          "performance": -0.3,
-          "market_cap": 66145923072
+          "performance": 0.59,
+          "market_cap": 66533580800
         },
         {
           "ticker": "IFF",
-          "performance": -0.27,
-          "market_cap": 16794487808
+          "performance": 0.76,
+          "market_cap": 16922631168
         },
         {
           "ticker": "LIN",
-          "performance": 0.45,
-          "market_cap": 221508403200
+          "performance": -0.61,
+          "market_cap": 220162621440
         },
         {
           "ticker": "LYB",
-          "performance": 0.2,
-          "market_cap": 17465485312
+          "performance": 1.44,
+          "market_cap": 17716371456
         },
         {
           "ticker": "MLM",
-          "performance": 1.27,
-          "market_cap": 37327601664
+          "performance": 0.59,
+          "market_cap": 37548929024
         },
         {
           "ticker": "MOS",
-          "performance": -0.21,
-          "market_cap": 10352869376
+          "performance": -0.52,
+          "market_cap": 10298915840
         },
         {
           "ticker": "NEM",
-          "performance": -0.39,
-          "market_cap": 82251939840
+          "performance": 1.72,
+          "market_cap": 83668934656
         },
         {
           "ticker": "NUE",
-          "performance": -0.19,
-          "market_cap": 33268805632
+          "performance": 1.6,
+          "market_cap": 33801324544
         },
         {
           "ticker": "PPG",
-          "performance": 0.41,
-          "market_cap": 24745748480
+          "performance": 0.31,
+          "market_cap": 24822487040
         },
         {
           "ticker": "SHW",
-          "performance": 0.76,
-          "market_cap": 91201019904
+          "performance": 1.82,
+          "market_cap": 92859080704
         },
         {
           "ticker": "STLD",
-          "performance": 0.98,
-          "market_cap": 19263246336
+          "performance": 2.88,
+          "market_cap": 19818209280
         },
         {
           "ticker": "VMC",
-          "performance": 1.49,
-          "market_cap": 38623805440
+          "performance": 0.85,
+          "market_cap": 38951477248
         }
       ],
       "Consumer Cyclical": [
         {
           "ticker": "ABNB",
-          "performance": 0.38,
-          "market_cap": 76756033536
+          "performance": -1.24,
+          "market_cap": 75800944640
         },
         {
           "ticker": "AMZN",
-          "performance": 4.29,
-          "market_cap": 2513503518720
+          "performance": -1.42,
+          "market_cap": 2477776175104
         },
         {
           "ticker": "AMCR",
-          "performance": 0.0,
-          "market_cap": 19245580288
+          "performance": -0.6,
+          "market_cap": 19245541376
         },
         {
           "ticker": "APTV",
-          "performance": 1.03,
-          "market_cap": 17518790656
+          "performance": -0.01,
+          "market_cap": 17516615680
         },
         {
           "ticker": "AZO",
-          "performance": 1.04,
-          "market_cap": 70811918336
+          "performance": -0.32,
+          "market_cap": 70585245696
         },
         {
           "ticker": "AVY",
-          "performance": 0.14,
-          "market_cap": 13025266688
+          "performance": 0.62,
+          "market_cap": 13105587200
         },
         {
           "ticker": "BALL",
-          "performance": 0.54,
-          "market_cap": 13721751552
+          "performance": 1.03,
+          "market_cap": 13863269376
         },
         {
           "ticker": "BBY",
-          "performance": 2.88,
-          "market_cap": 16284288000
+          "performance": -1.14,
+          "market_cap": 16098300928
         },
         {
           "ticker": "BKNG",
-          "performance": 0.05,
-          "market_cap": 181037154304
-        },
-        {
-          "ticker": "CZR",
-          "performance": 3.46,
-          "market_cap": 5355793920
+          "performance": -1.43,
+          "market_cap": 178442420224
         },
         {
           "ticker": "KMX",
-          "performance": 1.23,
-          "market_cap": 9146888192
+          "performance": -0.41,
+          "market_cap": 9109370880
         },
         {
           "ticker": "CCL",
-          "performance": 1.37,
-          "market_cap": 43062747136
+          "performance": -0.6,
+          "market_cap": 42805129216
         },
         {
           "ticker": "CMG",
-          "performance": -0.91,
-          "market_cap": 55525838848
+          "performance": -0.85,
+          "market_cap": 55056535552
         },
         {
           "ticker": "DRI",
-          "performance": 0.92,
-          "market_cap": 24507103232
+          "performance": -0.02,
+          "market_cap": 24501272576
         },
         {
           "ticker": "DECK",
-          "performance": 0.19,
-          "market_cap": 18381182976
+          "performance": -2.83,
+          "market_cap": 17860497408
         },
         {
           "ticker": "DPZ",
-          "performance": -0.86,
-          "market_cap": 15704761344
+          "performance": 0.27,
+          "market_cap": 15746518016
         },
         {
           "ticker": "DASH",
-          "performance": -0.02,
-          "market_cap": 106277576704
+          "performance": -0.78,
+          "market_cap": 105453092864
         },
         {
           "ticker": "DHI",
-          "performance": 2.63,
-          "market_cap": 52675530752
+          "performance": 2.89,
+          "market_cap": 54198943744
         },
         {
           "ticker": "EBAY",
-          "performance": 3.18,
-          "market_cap": 42514710528
+          "performance": -0.4,
+          "market_cap": 42345623552
         },
         {
           "ticker": "EXPE",
-          "performance": 1.87,
-          "market_cap": 26786988032
+          "performance": -0.73,
+          "market_cap": 26592753664
         },
         {
           "ticker": "F",
-          "performance": 0.52,
-          "market_cap": 46484766720
+          "performance": 0.51,
+          "market_cap": 46723555328
         },
         {
           "ticker": "GM",
-          "performance": 0.69,
-          "market_cap": 55363338240
+          "performance": 0.21,
+          "market_cap": 55477587968
         },
         {
           "ticker": "GPC",
-          "performance": 3.65,
-          "market_cap": 19646744576
+          "performance": -1.24,
+          "market_cap": 19403333632
         },
         {
           "ticker": "HAS",
-          "performance": 1.73,
-          "market_cap": 11274732544
+          "performance": -0.83,
+          "market_cap": 11180776448
         },
         {
           "ticker": "HLT",
-          "performance": 1.11,
-          "market_cap": 65398042624
+          "performance": -2.07,
+          "market_cap": 64043323392
         },
         {
           "ticker": "HD",
-          "performance": 1.55,
-          "market_cap": 409790873600
+          "performance": 1.76,
+          "market_cap": 417017397248
         },
         {
           "ticker": "IP",
-          "performance": 0.29,
-          "market_cap": 25506811904
+          "performance": 0.79,
+          "market_cap": 25707444224
         },
         {
           "ticker": "LVS",
-          "performance": -0.47,
-          "market_cap": 37830479872
+          "performance": -2.56,
+          "market_cap": 36862582784
         },
         {
           "ticker": "LEN",
-          "performance": 2.98,
-          "market_cap": 35572355072
+          "performance": 2.76,
+          "market_cap": 36553965568
         },
         {
           "ticker": "LKQ",
-          "performance": 1.0,
-          "market_cap": 8310563328
+          "performance": 0.25,
+          "market_cap": 8331147264
         },
         {
           "ticker": "LOW",
-          "performance": 1.49,
-          "market_cap": 148377485312
+          "performance": 2.04,
+          "market_cap": 151405936640
         },
         {
           "ticker": "LULU",
-          "performance": 3.81,
-          "market_cap": 24700092416
+          "performance": -18.58,
+          "market_cap": 20110997504
         },
         {
           "ticker": "MAR",
-          "performance": 1.43,
-          "market_cap": 72981479424
+          "performance": -1.54,
+          "market_cap": 71854931968
         },
         {
           "ticker": "MCD",
-          "performance": 0.19,
-          "market_cap": 226205319168
+          "performance": -0.82,
+          "market_cap": 224342818816
         },
         {
           "ticker": "MGM",
-          "performance": -2.83,
-          "market_cap": 10079233024
+          "performance": -0.95,
+          "market_cap": 9983966208
         },
         {
           "ticker": "MHK",
-          "performance": 3.71,
-          "market_cap": 8413901824
+          "performance": 2.86,
+          "market_cap": 8654352384
         },
         {
           "ticker": "NKE",
-          "performance": 0.82,
-          "market_cap": 111284412416
+          "performance": -1.91,
+          "market_cap": 109157679104
         },
         {
           "ticker": "NCLH",
-          "performance": 0.99,
-          "market_cap": 11565067264
+          "performance": 0.27,
+          "market_cap": 11596702720
         },
         {
           "ticker": "NVR",
-          "performance": 2.66,
-          "market_cap": 23231508480
+          "performance": 1.12,
+          "market_cap": 23491876864
         },
         {
           "ticker": "ORLY",
-          "performance": 1.16,
-          "market_cap": 89126125568
+          "performance": -0.19,
+          "market_cap": 88956428288
         },
         {
           "ticker": "PKG",
-          "performance": 1.78,
-          "market_cap": 19500206080
+          "performance": 1.63,
+          "market_cap": 19817830400
         },
         {
           "ticker": "PHM",
-          "performance": 3.23,
-          "market_cap": 27150178304
+          "performance": 2.15,
+          "market_cap": 27734181888
         },
         {
           "ticker": "RL",
-          "performance": 2.36,
-          "market_cap": 19429206016
+          "performance": -2.72,
+          "market_cap": 18900391936
         },
         {
           "ticker": "ROL",
-          "performance": 0.99,
-          "market_cap": 27556630528
+          "performance": -0.6,
+          "market_cap": 27391852544
         },
         {
           "ticker": "ROST",
-          "performance": 1.38,
-          "market_cap": 49979719680
+          "performance": -1.22,
+          "market_cap": 49371369472
         },
         {
           "ticker": "RCL",
-          "performance": 1.43,
-          "market_cap": 97802379264
+          "performance": -2.16,
+          "market_cap": 95686393856
         },
         {
           "ticker": "SW",
-          "performance": -1.66,
-          "market_cap": 24106510336
+          "performance": 1.6,
+          "market_cap": 24492883968
         },
         {
           "ticker": "SBUX",
-          "performance": -0.28,
-          "market_cap": 98904268800
+          "performance": -1.82,
+          "market_cap": 97108287488
         },
         {
           "ticker": "TPR",
-          "performance": 1.33,
-          "market_cap": 22023682048
+          "performance": -1.55,
+          "market_cap": 21682358272
         },
         {
           "ticker": "TSLA",
-          "performance": 1.33,
-          "market_cap": 1091911548928
+          "performance": 3.64,
+          "market_cap": 1131616796672
         },
         {
           "ticker": "TJX",
-          "performance": 1.11,
-          "market_cap": 156946808832
+          "performance": -1.25,
+          "market_cap": 154988019712
         },
         {
           "ticker": "TSCO",
-          "performance": 0.83,
-          "market_cap": 32136288256
+          "performance": -0.2,
+          "market_cap": 32072695808
         },
         {
           "ticker": "ULTA",
-          "performance": -0.3,
-          "market_cap": 23741933568
+          "performance": -2.76,
+          "market_cap": 23085498368
         },
         {
           "ticker": "WSM",
-          "performance": 5.61,
-          "market_cap": 24712409088
+          "performance": -0.24,
+          "market_cap": 24652732416
         },
         {
           "ticker": "WYNN",
-          "performance": -2.1,
-          "market_cap": 12777733120
+          "performance": -1.62,
+          "market_cap": 12570819584
         },
         {
           "ticker": "YUM",
-          "performance": -0.61,
-          "market_cap": 39873597440
+          "performance": 0.63,
+          "market_cap": 40126156800
         }
       ],
       "Real Estate": [
         {
           "ticker": "ARE",
-          "performance": 1.63,
-          "market_cap": 14151062528
+          "performance": 2.18,
+          "market_cap": 14460067840
         },
         {
           "ticker": "AMT",
-          "performance": -0.6,
-          "market_cap": 91351089152
+          "performance": 1.66,
+          "market_cap": 92863545344
         },
         {
           "ticker": "AVB",
-          "performance": 0.86,
-          "market_cap": 27440054272
+          "performance": 1.4,
+          "market_cap": 27823065088
         },
         {
           "ticker": "BXP",
           "performance": 2.05,
-          "market_cap": 13311498240
+          "market_cap": 13583775744
         },
         {
           "ticker": "CPT",
-          "performance": 0.85,
-          "market_cap": 11790159872
+          "performance": 0.92,
+          "market_cap": 11899150336
         },
         {
           "ticker": "CBRE",
-          "performance": 1.61,
-          "market_cap": 48111505408
+          "performance": 1.66,
+          "market_cap": 48911925248
         },
         {
           "ticker": "CSGP",
-          "performance": 1.41,
-          "market_cap": 37747212288
+          "performance": 0.4,
+          "market_cap": 37899726848
         },
         {
           "ticker": "CCI",
-          "performance": -1.66,
-          "market_cap": 41569968128
+          "performance": 0.72,
+          "market_cap": 41870442496
         },
         {
           "ticker": "DLR",
-          "performance": 0.83,
-          "market_cap": 56557912064
+          "performance": 0.25,
+          "market_cap": 56696844288
         },
         {
           "ticker": "EQIX",
           "performance": 0.75,
-          "market_cap": 75152703488
+          "market_cap": 75715420160
         },
         {
           "ticker": "EQR",
-          "performance": 1.42,
-          "market_cap": 25813729280
+          "performance": 1.86,
+          "market_cap": 26293874688
         },
         {
           "ticker": "ESS",
-          "performance": 1.14,
-          "market_cap": 18268616704
+          "performance": 1.37,
+          "market_cap": 18518644736
         },
         {
           "ticker": "EXR",
-          "performance": 0.45,
-          "market_cap": 31875086336
+          "performance": 2.39,
+          "market_cap": 32637392896
         },
         {
           "ticker": "FRT",
-          "performance": 0.92,
-          "market_cap": 8765456384
+          "performance": 1.66,
+          "market_cap": 8911272960
         },
         {
           "ticker": "DOC",
-          "performance": 1.52,
-          "market_cap": 12508614656
+          "performance": 2.17,
+          "market_cap": 12779633664
         },
         {
           "ticker": "HST",
-          "performance": 2.33,
-          "market_cap": 12250204160
+          "performance": -0.91,
+          "market_cap": 12138775552
         },
         {
           "ticker": "INVH",
-          "performance": 0.4,
-          "market_cap": 18604793856
+          "performance": -0.33,
+          "market_cap": 18543491072
         },
         {
           "ticker": "IRM",
-          "performance": 1.41,
-          "market_cap": 26900295680
+          "performance": 1.21,
+          "market_cap": 27225178112
         },
         {
           "ticker": "KIM",
-          "performance": 1.38,
-          "market_cap": 15433389056
+          "performance": -0.13,
+          "market_cap": 15413071872
         },
         {
           "ticker": "MAA",
-          "performance": 0.41,
-          "market_cap": 17283024896
+          "performance": 0.97,
+          "market_cap": 17451053056
         },
         {
           "ticker": "PLD",
-          "performance": 1.5,
-          "market_cap": 104509169664
+          "performance": 0.92,
+          "market_cap": 105474359296
         },
         {
           "ticker": "PSA",
-          "performance": 0.16,
-          "market_cap": 51270873088
+          "performance": 1.91,
+          "market_cap": 52249899008
         },
         {
           "ticker": "O",
-          "performance": 0.57,
-          "market_cap": 53285752832
+          "performance": 1.73,
+          "market_cap": 54209204224
         },
         {
           "ticker": "REG",
-          "performance": 1.84,
-          "market_cap": 13435734016
+          "performance": 0.16,
+          "market_cap": 13457651712
         },
         {
           "ticker": "SBAC",
-          "performance": -2.08,
-          "market_cap": 20957159424
+          "performance": 1.32,
+          "market_cap": 21233123328
         },
         {
           "ticker": "SPG",
-          "performance": 0.92,
-          "market_cap": 68470616064
+          "performance": 0.4,
+          "market_cap": 68745977856
         },
         {
           "ticker": "UDR",
-          "performance": 1.12,
-          "market_cap": 14648610816
+          "performance": 0.7,
+          "market_cap": 14750494720
         },
         {
           "ticker": "VTR",
-          "performance": 0.4,
-          "market_cap": 30776776704
+          "performance": 0.28,
+          "market_cap": 30863128576
         },
         {
           "ticker": "VICI",
           "performance": 0.3,
-          "market_cap": 35723395072
+          "market_cap": 35830030336
         },
         {
           "ticker": "WELL",
-          "performance": 0.15,
-          "market_cap": 112148733952
+          "performance": 0.08,
+          "market_cap": 112242384896
         },
         {
           "ticker": "WY",
-          "performance": 2.94,
-          "market_cap": 18434605056
+          "performance": 2.35,
+          "market_cap": 18867511296
         }
       ],
       "Communication Services": [
         {
           "ticker": "GOOGL",
-          "performance": 0.71,
-          "market_cap": 2811387445248
+          "performance": 1.16,
+          "market_cap": 2844063956992
         },
         {
           "ticker": "GOOG",
-          "performance": 0.68,
-          "market_cap": 2811393736704
+          "performance": 1.08,
+          "market_cap": 2841723535360
+        },
+        {
+          "ticker": "APP",
+          "performance": -1.95,
+          "market_cap": 165823676416
         },
         {
           "ticker": "T",
-          "performance": 1.86,
-          "market_cap": 211508527104
+          "performance": 0.03,
+          "market_cap": 211580026880
         },
         {
           "ticker": "CHTR",
-          "performance": -0.65,
-          "market_cap": 35446734848
+          "performance": 0.77,
+          "market_cap": 35718549504
         },
         {
           "ticker": "CMCSA",
-          "performance": 0.18,
-          "market_cap": 125350526976
+          "performance": -0.12,
+          "market_cap": 125202841600
         },
         {
           "ticker": "EA",
-          "performance": 0.1,
-          "market_cap": 42042281984
+          "performance": 0.35,
+          "market_cap": 42189905920
         },
         {
           "ticker": "FOXA",
-          "performance": 1.22,
-          "market_cap": 25799677952
+          "performance": 1.13,
+          "market_cap": 26092421120
         },
         {
           "ticker": "FOX",
-          "performance": 0.82,
-          "market_cap": 25799698432
+          "performance": 1.17,
+          "market_cap": 26102841344
         },
         {
           "ticker": "IPG",
-          "performance": 1.44,
-          "market_cap": 9830579200
+          "performance": 1.15,
+          "market_cap": 9944121344
         },
         {
           "ticker": "LYV",
-          "performance": 0.62,
-          "market_cap": 37803208704
+          "performance": 0.27,
+          "market_cap": 37905268736
         },
         {
           "ticker": "MTCH",
-          "performance": -0.53,
-          "market_cap": 8996856832
+          "performance": 2.09,
+          "market_cap": 9184541696
         },
         {
           "ticker": "META",
-          "performance": 1.57,
-          "market_cap": 1880713723904
+          "performance": 0.51,
+          "market_cap": 1890259828736
         },
         {
           "ticker": "NFLX",
-          "performance": 2.55,
-          "market_cap": 534335946752
+          "performance": -1.09,
+          "market_cap": 528531456000
         },
         {
           "ticker": "NWSA",
-          "performance": 1.24,
-          "market_cap": 17238978560
+          "performance": 0.48,
+          "market_cap": 17321349120
         },
         {
           "ticker": "NWS",
-          "performance": 0.85,
-          "market_cap": 17238978560
+          "performance": 0.69,
+          "market_cap": 17358514176
         },
         {
           "ticker": "OMC",
-          "performance": 1.3,
-          "market_cap": 15215005696
+          "performance": 1.13,
+          "market_cap": 15387418624
         },
         {
           "ticker": "PSKY",
-          "performance": -2.12,
-          "market_cap": 16157250560
+          "performance": 1.76,
+          "market_cap": 16442250240
         },
         {
           "ticker": "TMUS",
-          "performance": -0.21,
-          "market_cap": 283740897280
+          "performance": 0.25,
+          "market_cap": 284461170688
         },
         {
           "ticker": "TTWO",
-          "performance": 0.75,
-          "market_cap": 44392706048
+          "performance": -0.4,
+          "market_cap": 44213768192
         },
         {
           "ticker": "TKO",
-          "performance": 1.86,
-          "market_cap": 15612580864
+          "performance": 2.06,
+          "market_cap": 15934558208
         },
         {
           "ticker": "TTD",
-          "performance": -3.44,
-          "market_cap": 25385920512
+          "performance": 0.29,
+          "market_cap": 25459261440
         },
         {
           "ticker": "VZ",
-          "performance": 1.01,
-          "market_cap": 186277019648
+          "performance": 0.45,
+          "market_cap": 187120287744
         },
         {
           "ticker": "DIS",
-          "performance": 1.22,
-          "market_cap": 213612052480
+          "performance": -0.76,
+          "market_cap": 211993935872
         },
         {
           "ticker": "WBD",
-          "performance": -1.26,
-          "market_cap": 29139814400
+          "performance": 2.89,
+          "market_cap": 29981575168
         }
       ],
       "Consumer Defensive": [
         {
           "ticker": "MO",
           "performance": -0.06,
-          "market_cap": 111863873536
+          "market_cap": 111796690944
         },
         {
           "ticker": "ADM",
-          "performance": 0.36,
-          "market_cap": 29759938560
+          "performance": 1.61,
+          "market_cap": 30240403456
         },
         {
           "ticker": "BF-B",
-          "performance": 0.0,
-          "market_cap": 13380674560
+          "performance": 2.52,
+          "market_cap": 13717563392
         },
         {
           "ticker": "BG",
-          "performance": -0.12,
-          "market_cap": 16231029760
+          "performance": 3.94,
+          "market_cap": 16871228416
         },
         {
           "ticker": "CPB",
-          "performance": -3.17,
-          "market_cap": 9736925184
+          "performance": 4.19,
+          "market_cap": 10145362944
         },
         {
           "ticker": "CHD",
-          "performance": 2.09,
-          "market_cap": 23198885888
+          "performance": 0.6,
+          "market_cap": 23337742336
         },
         {
           "ticker": "CLX",
-          "performance": 1.4,
-          "market_cap": 15243370496
+          "performance": 1.93,
+          "market_cap": 15536912384
         },
         {
           "ticker": "KO",
-          "performance": -1.07,
-          "market_cap": 293725470720
+          "performance": -0.42,
+          "market_cap": 292477403136
         },
         {
           "ticker": "CL",
-          "performance": -0.17,
-          "market_cap": 67623849984
+          "performance": 1.74,
+          "market_cap": 68803854336
         },
         {
           "ticker": "CAG",
-          "performance": -1.35,
-          "market_cap": 9066465280
+          "performance": 1.8,
+          "market_cap": 9229220864
         },
         {
           "ticker": "STZ",
-          "performance": -0.42,
-          "market_cap": 25721706496
+          "performance": 1.75,
+          "market_cap": 26171324416
         },
         {
           "ticker": "COST",
-          "performance": 0.64,
-          "market_cap": 423919681536
+          "performance": 0.79,
+          "market_cap": 427281219584
         },
         {
           "ticker": "DG",
-          "performance": -1.14,
-          "market_cap": 23868295168
+          "performance": 0.77,
+          "market_cap": 24053182464
         },
         {
           "ticker": "DLTR",
-          "performance": -1.74,
-          "market_cap": 20447791104
+          "performance": 0.87,
+          "market_cap": 20625244160
         },
         {
           "ticker": "EL",
-          "performance": -4.86,
-          "market_cap": 31475890176
+          "performance": 1.99,
+          "market_cap": 32102096896
         },
         {
           "ticker": "GIS",
-          "performance": -0.28,
-          "market_cap": 26525773824
+          "performance": 1.96,
+          "market_cap": 27044419584
         },
         {
           "ticker": "HSY",
-          "performance": 0.33,
-          "market_cap": 37564755968
+          "performance": 0.1,
+          "market_cap": 37601247232
         },
         {
           "ticker": "HRL",
-          "performance": -0.43,
-          "market_cap": 13881950208
+          "performance": 1.66,
+          "market_cap": 14112949248
         },
         {
           "ticker": "K",
-          "performance": 0.56,
-          "market_cap": 27632732160
+          "performance": 0.49,
+          "market_cap": 27768324096
         },
         {
           "ticker": "KVUE",
-          "performance": 0.44,
-          "market_cap": 39417700352
+          "performance": -9.35,
+          "market_cap": 35733082112
         },
         {
           "ticker": "KDP",
-          "performance": 0.55,
-          "market_cap": 39734366208
+          "performance": -2.05,
+          "market_cap": 38919303168
         },
         {
           "ticker": "KMB",
-          "performance": 0.91,
-          "market_cap": 42856022016
+          "performance": 0.56,
+          "market_cap": 43094904832
         },
         {
           "ticker": "KHC",
-          "performance": 0.11,
-          "market_cap": 31909855232
+          "performance": 1.22,
+          "market_cap": 32300445696
         },
         {
           "ticker": "KR",
-          "performance": -0.53,
-          "market_cap": 44852817920
+          "performance": -0.13,
+          "market_cap": 44793315328
         },
         {
           "ticker": "LW",
-          "performance": -1.38,
-          "market_cap": 7771828736
+          "performance": 4.0,
+          "market_cap": 8082590720
         },
         {
           "ticker": "MKC",
-          "performance": 0.42,
-          "market_cap": 18818543616
+          "performance": 1.11,
+          "market_cap": 19027849216
         },
         {
           "ticker": "TAP",
-          "performance": 0.2,
-          "market_cap": 9879434240
+          "performance": 0.96,
+          "market_cap": 9974448128
         },
         {
           "ticker": "MDLZ",
-          "performance": -0.65,
-          "market_cap": 78801551360
+          "performance": 1.38,
+          "market_cap": 79888474112
         },
         {
           "ticker": "MNST",
-          "performance": -0.09,
-          "market_cap": 61954359296
+          "performance": -1.56,
+          "market_cap": 60987695104
         },
         {
           "ticker": "PEP",
-          "performance": -1.18,
-          "market_cap": 201104162816
+          "performance": -0.34,
+          "market_cap": 200419622912
         },
         {
           "ticker": "PM",
-          "performance": -1.27,
-          "market_cap": 250844463104
+          "performance": 0.25,
+          "market_cap": 251467104256
         },
         {
           "ticker": "PG",
-          "performance": 0.64,
-          "market_cap": 372881883136
+          "performance": 0.52,
+          "market_cap": 374826074112
         },
         {
           "ticker": "SJM",
-          "performance": 0.26,
-          "market_cap": 11984992256
+          "performance": 0.15,
+          "market_cap": 12003129344
         },
         {
           "ticker": "SYY",
-          "performance": 1.81,
-          "market_cap": 39457271808
+          "performance": -0.07,
+          "market_cap": 39428579328
         },
         {
           "ticker": "TGT",
-          "performance": 0.39,
-          "market_cap": 42127331328
+          "performance": 0.5,
+          "market_cap": 42336354304
         },
         {
           "ticker": "TSN",
-          "performance": -0.3,
-          "market_cap": 19987101696
+          "performance": 0.04,
+          "market_cap": 19994218496
         },
         {
           "ticker": "WMT",
-          "performance": 1.5,
-          "market_cap": 804699766784
+          "performance": -0.42,
+          "market_cap": 801351204864
         }
       ],
       "Energy": [
         {
           "ticker": "APA",
-          "performance": 3.35,
-          "market_cap": 8386503680
+          "performance": -2.94,
+          "market_cap": 8139631104
         },
         {
           "ticker": "BKR",
-          "performance": 2.93,
-          "market_cap": 45665914880
+          "performance": -1.6,
+          "market_cap": 44936364032
         },
         {
           "ticker": "CVX",
-          "performance": -0.23,
-          "market_cap": 317716955136
+          "performance": -2.56,
+          "market_cap": 309597241344
         },
         {
           "ticker": "COP",
-          "performance": 1.18,
-          "market_cap": 119610982400
+          "performance": -2.94,
+          "market_cap": 116088971264
         },
         {
           "ticker": "CTRA",
-          "performance": 1.33,
-          "market_cap": 18612983808
+          "performance": -1.68,
+          "market_cap": 18300096512
         },
         {
           "ticker": "DVN",
-          "performance": 1.43,
-          "market_cap": 22586185728
+          "performance": -2.3,
+          "market_cap": 22065647616
         },
         {
           "ticker": "FANG",
-          "performance": 0.32,
-          "market_cap": 41321234432
+          "performance": -2.82,
+          "market_cap": 40154607616
         },
         {
           "ticker": "EOG",
-          "performance": 0.85,
-          "market_cap": 66392752128
+          "performance": -3.02,
+          "market_cap": 64388956160
         },
         {
           "ticker": "EQT",
-          "performance": 0.48,
-          "market_cap": 32326461440
+          "performance": -0.39,
+          "market_cap": 32201648128
         },
         {
           "ticker": "EXE",
-          "performance": -0.43,
-          "market_cap": 23019192320
+          "performance": -1.19,
+          "market_cap": 22745325568
         },
         {
           "ticker": "XOM",
-          "performance": 0.44,
-          "market_cap": 479189303296
+          "performance": -2.82,
+          "market_cap": 465674797056
         },
         {
           "ticker": "HAL",
-          "performance": 4.08,
-          "market_cap": 19157966848
+          "performance": -1.65,
+          "market_cap": 18842503168
         },
         {
           "ticker": "KMI",
-          "performance": -0.07,
-          "market_cap": 59351756800
+          "performance": -0.45,
+          "market_cap": 59085107200
         },
         {
           "ticker": "MPC",
-          "performance": -0.01,
-          "market_cap": 54413496320
+          "performance": 0.73,
+          "market_cap": 54808723456
         },
         {
           "ticker": "OXY",
-          "performance": 0.67,
-          "market_cap": 45884747776
+          "performance": -1.5,
+          "market_cap": 45195640832
         },
         {
           "ticker": "OKE",
-          "performance": 0.69,
-          "market_cap": 46841253888
+          "performance": -2.35,
+          "market_cap": 45739180032
         },
         {
           "ticker": "PSX",
-          "performance": 0.8,
-          "market_cap": 53174636544
+          "performance": -0.02,
+          "market_cap": 53162512384
         },
         {
           "ticker": "SLB",
-          "performance": 2.89,
-          "market_cap": 53715034112
+          "performance": -0.53,
+          "market_cap": 53431619584
         },
         {
           "ticker": "TRGP",
-          "performance": 1.83,
-          "market_cap": 35838074880
+          "performance": -2.52,
+          "market_cap": 34936422400
         },
         {
           "ticker": "TPL",
-          "performance": 2.14,
-          "market_cap": 21353592832
+          "performance": -4.28,
+          "market_cap": 20440078336
         },
         {
           "ticker": "VLO",
-          "performance": 0.01,
-          "market_cap": 48272216064
+          "performance": 0.89,
+          "market_cap": 48700915712
         },
         {
           "ticker": "WMB",
-          "performance": -0.26,
-          "market_cap": 70315548672
+          "performance": -0.66,
+          "market_cap": 69851496448
         }
       ]
     }
@@ -2736,531 +2757,530 @@
       "Technology": [
         {
           "ticker": "ADBE",
-          "performance": -1.2,
-          "market_cap": 146056298496
+          "performance": 1.35,
+          "market_cap": 148033077248
         },
         {
           "ticker": "AMD",
-          "performance": -0.21,
-          "market_cap": 262559285248
+          "performance": -6.58,
+          "market_cap": 245276049408
         },
         {
           "ticker": "ADI",
-          "performance": 0.64,
-          "market_cap": 121075048448
+          "performance": 0.39,
+          "market_cap": 121547325440
         },
         {
           "ticker": "AAPL",
-          "performance": 0.55,
-          "market_cap": 3558430998528
+          "performance": -0.04,
+          "market_cap": 3557095374848
         },
         {
           "ticker": "AMAT",
-          "performance": 1.27,
-          "market_cap": 126060634112
+          "performance": 2.85,
+          "market_cap": 129653481472
         },
         {
           "ticker": "ARM",
-          "performance": 3.09,
-          "market_cap": 143508537344
+          "performance": 1.99,
+          "market_cap": 146357960704
         },
         {
           "ticker": "ASML",
-          "performance": 2.25,
-          "market_cap": 296248672256
+          "performance": 3.75,
+          "market_cap": 307364429824
         },
         {
           "ticker": "TEAM",
-          "performance": -1.52,
-          "market_cap": 44093267968
+          "performance": 2.59,
+          "market_cap": 45234421760
         },
         {
           "ticker": "ADSK",
-          "performance": 0.76,
-          "market_cap": 68145086464
+          "performance": 2.01,
+          "market_cap": 69516812288
         },
         {
           "ticker": "ADP",
-          "performance": 0.78,
-          "market_cap": 121994903552
+          "performance": -1.73,
+          "market_cap": 119880581120
         },
         {
           "ticker": "AVGO",
-          "performance": 1.23,
-          "market_cap": 1439732203520
+          "performance": 9.41,
+          "market_cap": 1575145177088
         },
         {
           "ticker": "CDNS",
-          "performance": 0.58,
-          "market_cap": 95188926464
+          "performance": 0.48,
+          "market_cap": 95646711808
         },
         {
           "ticker": "CDW",
-          "performance": 1.76,
-          "market_cap": 21788891136
+          "performance": 2.09,
+          "market_cap": 22244982784
         },
         {
           "ticker": "CSCO",
-          "performance": 0.47,
-          "market_cap": 268778061824
+          "performance": -1.6,
+          "market_cap": 264469102592
         },
         {
           "ticker": "CTSH",
-          "performance": -0.52,
-          "market_cap": 34895892480
+          "performance": 0.52,
+          "market_cap": 35076599808
         },
         {
           "ticker": "CRWD",
-          "performance": -0.18,
-          "market_cap": 103508901888
+          "performance": 1.25,
+          "market_cap": 104806342656
         },
         {
           "ticker": "DDOG",
-          "performance": -0.62,
-          "market_cap": 45957615616
+          "performance": 3.26,
+          "market_cap": 47457218560
         },
         {
           "ticker": "FTNT",
-          "performance": -0.18,
-          "market_cap": 58573373440
+          "performance": 3.13,
+          "market_cap": 60404748288
         },
         {
           "ticker": "GFS",
-          "performance": 0.33,
-          "market_cap": 18497218560
+          "performance": -0.12,
+          "market_cap": 18475020288
         },
         {
           "ticker": "INTC",
-          "performance": 2.54,
-          "market_cap": 107717476352
+          "performance": -0.49,
+          "market_cap": 107192238080
         },
         {
           "ticker": "INTU",
-          "performance": -0.06,
-          "market_cap": 186322583552
+          "performance": 0.68,
+          "market_cap": 187585576960
         },
         {
           "ticker": "KLAC",
-          "performance": 3.48,
-          "market_cap": 115240222720
+          "performance": 3.64,
+          "market_cap": 119436582912
         },
         {
           "ticker": "LRCX",
-          "performance": 2.74,
-          "market_cap": 127093555200
+          "performance": 2.52,
+          "market_cap": 130295570432
         },
         {
           "ticker": "MRVL",
-          "performance": 2.87,
-          "market_cap": 55260606464
+          "performance": -1.2,
+          "market_cap": 54596792320
         },
         {
           "ticker": "MCHP",
-          "performance": 1.82,
-          "market_cap": 34771582976
+          "performance": 2.31,
+          "market_cap": 35575705600
         },
         {
           "ticker": "MU",
-          "performance": 4.62,
-          "market_cap": 139007131648
+          "performance": 5.76,
+          "market_cap": 147020103680
         },
         {
           "ticker": "MSFT",
-          "performance": 0.52,
-          "market_cap": 3775827279872
+          "performance": -2.55,
+          "market_cap": 3679419105280
         },
         {
           "ticker": "MSTR",
-          "performance": -0.81,
-          "market_cap": 92889120768
+          "performance": 2.53,
+          "market_cap": 95236939776
         },
         {
           "ticker": "NVDA",
-          "performance": 0.61,
-          "market_cap": 4179406356480
+          "performance": -2.7,
+          "market_cap": 4066436186112
         },
         {
           "ticker": "NXPI",
-          "performance": -1.23,
-          "market_cap": 56824201216
+          "performance": 0.6,
+          "market_cap": 57164558336
         },
         {
           "ticker": "ON",
-          "performance": 0.56,
-          "market_cap": 19655290880
+          "performance": 2.17,
+          "market_cap": 20082669568
         },
         {
           "ticker": "PLTR",
-          "performance": 0.8,
-          "market_cap": 370417172480
+          "performance": -1.94,
+          "market_cap": 363228987392
         },
         {
           "ticker": "PANW",
-          "performance": 0.43,
-          "market_cap": 128662913024
+          "performance": 1.1,
+          "market_cap": 130074296320
         },
         {
           "ticker": "PAYX",
-          "performance": 1.25,
-          "market_cap": 49381511168
+          "performance": -1.37,
+          "market_cap": 48705441792
         },
         {
           "ticker": "QCOM",
-          "performance": 2.12,
-          "market_cap": 172327108608
+          "performance": 0.08,
+          "market_cap": 172467372032
         },
         {
           "ticker": "ROP",
-          "performance": 0.57,
-          "market_cap": 56725491712
+          "performance": -1.65,
+          "market_cap": 55791403008
         },
         {
           "ticker": "SHOP",
-          "performance": 3.52,
-          "market_cap": 189168189440
+          "performance": 1.15,
+          "market_cap": 191344640000
         },
         {
           "ticker": "SNPS",
-          "performance": 1.66,
-          "market_cap": 111389089792
+          "performance": -0.63,
+          "market_cap": 110682218496
         },
         {
           "ticker": "TXN",
-          "performance": -4.32,
-          "market_cap": 170272260096
+          "performance": 0.34,
+          "market_cap": 170854121472
         },
         {
           "ticker": "WDAY",
-          "performance": -0.99,
-          "market_cap": 61711712256
+          "performance": -0.02,
+          "market_cap": 61698359296
         },
         {
           "ticker": "ZS",
-          "performance": -0.86,
-          "market_cap": 41765453824
+          "performance": 2.22,
+          "market_cap": 42691846144
         }
       ],
       "Consumer Cyclical": [
         {
           "ticker": "ABNB",
-          "performance": 0.38,
-          "market_cap": 76756033536
+          "performance": -1.24,
+          "market_cap": 75800944640
         },
         {
           "ticker": "AMZN",
-          "performance": 4.29,
-          "market_cap": 2513503518720
+          "performance": -1.42,
+          "market_cap": 2477776175104
         },
         {
           "ticker": "BKNG",
-          "performance": 0.05,
-          "market_cap": 181037154304
+          "performance": -1.43,
+          "market_cap": 178442420224
         },
         {
           "ticker": "DASH",
-          "performance": -0.02,
-          "market_cap": 106277576704
+          "performance": -0.78,
+          "market_cap": 105453092864
         },
         {
           "ticker": "LULU",
-          "performance": 3.81,
-          "market_cap": 24700092416
+          "performance": -18.58,
+          "market_cap": 20110997504
         },
         {
           "ticker": "MAR",
-          "performance": 1.43,
-          "market_cap": 72981479424
+          "performance": -1.54,
+          "market_cap": 71854931968
         },
         {
           "ticker": "MELI",
-          "performance": 1.88,
-          "market_cap": 122576175104
+          "performance": -0.01,
+          "market_cap": 122560454656
         },
         {
           "ticker": "ORLY",
-          "performance": 1.16,
-          "market_cap": 89126125568
+          "performance": -0.19,
+          "market_cap": 88956428288
         },
         {
           "ticker": "PDD",
-          "performance": -0.42,
-          "market_cap": 175852060672
+          "performance": 0.65,
+          "market_cap": 177001971712
         },
         {
           "ticker": "ROST",
-          "performance": 1.38,
-          "market_cap": 49979719680
+          "performance": -1.22,
+          "market_cap": 49371369472
         },
         {
           "ticker": "SBUX",
-          "performance": -0.28,
-          "market_cap": 98904268800
+          "performance": -1.82,
+          "market_cap": 97108287488
         },
         {
           "ticker": "TSLA",
-          "performance": 1.33,
-          "market_cap": 1091911548928
+          "performance": 3.64,
+          "market_cap": 1131616796672
         }
       ],
       "Communication Services": [
         {
           "ticker": "GOOGL",
-          "performance": 0.71,
-          "market_cap": 2811387445248
+          "performance": 1.16,
+          "market_cap": 2844063956992
         },
         {
           "ticker": "GOOG",
-          "performance": 0.68,
-          "market_cap": 2811393736704
+          "performance": 1.08,
+          "market_cap": 2841723535360
         },
         {
           "ticker": "APP",
-          "performance": 2.59,
-          "market_cap": 169114845184
+          "performance": -1.95,
+          "market_cap": 165823676416
         },
         {
           "ticker": "CHTR",
-          "performance": -0.65,
-          "market_cap": 35446734848
+          "performance": 0.77,
+          "market_cap": 35718549504
         },
         {
           "ticker": "CMCSA",
-          "performance": 0.18,
-          "market_cap": 125350526976
+          "performance": -0.12,
+          "market_cap": 125202841600
         },
         {
           "ticker": "EA",
-          "performance": 0.1,
-          "market_cap": 42042281984
+          "performance": 0.35,
+          "market_cap": 42189905920
         },
         {
           "ticker": "META",
-          "performance": 1.57,
-          "market_cap": 1880713723904
+          "performance": 0.51,
+          "market_cap": 1890259828736
         },
         {
           "ticker": "NFLX",
-          "performance": 2.55,
-          "market_cap": 534335946752
+          "performance": -1.09,
+          "market_cap": 528531456000
         },
         {
           "ticker": "TMUS",
-          "performance": -0.21,
-          "market_cap": 283740897280
+          "performance": 0.25,
+          "market_cap": 284461170688
         },
         {
           "ticker": "TTWO",
-          "performance": 0.75,
-          "market_cap": 44392706048
+          "performance": -0.4,
+          "market_cap": 44213768192
         },
         {
           "ticker": "TTD",
-          "performance": -3.44,
-          "market_cap": 25385920512
+          "performance": 0.29,
+          "market_cap": 25459261440
         },
         {
           "ticker": "WBD",
-          "performance": -1.26,
-          "market_cap": 29139814400
+          "performance": 2.89,
+          "market_cap": 29981575168
         }
       ],
       "Utilities": [
         {
           "ticker": "AEP",
-          "performance": -1.26,
-          "market_cap": 58100129792
+          "performance": -0.49,
+          "market_cap": 57816690688
         },
         {
           "ticker": "CEG",
-          "performance": 0.19,
-          "market_cap": 96552206336
+          "performance": -2.42,
+          "market_cap": 94215405568
         },
         {
           "ticker": "EXC",
-          "performance": -0.09,
-          "market_cap": 43772968960
+          "performance": 0.21,
+          "market_cap": 43863867392
         },
         {
           "ticker": "XEL",
-          "performance": -0.26,
-          "market_cap": 42724610048
+          "performance": 0.61,
+          "market_cap": 42984841216
         }
       ],
       "Healthcare": [
         {
           "ticker": "AMGN",
-          "performance": -1.32,
-          "market_cap": 150795190272
+          "performance": 1.26,
+          "market_cap": 152700993536
         },
         {
           "ticker": "AZN",
-          "performance": -0.4,
-          "market_cap": 253558882304
+          "performance": -0.1,
+          "market_cap": 253310844928
         },
         {
           "ticker": "BIIB",
-          "performance": -1.19,
-          "market_cap": 20517304320
+          "performance": 0.52,
+          "market_cap": 20624332800
         },
         {
           "ticker": "DXCM",
-          "performance": 2.33,
-          "market_cap": 31670439936
+          "performance": -0.31,
+          "market_cap": 31572400128
         },
         {
           "ticker": "GEHC",
-          "performance": 2.4,
-          "market_cap": 33840375808
+          "performance": 2.17,
+          "market_cap": 34575441920
         },
         {
           "ticker": "GILD",
-          "performance": -0.19,
-          "market_cap": 139926142976
+          "performance": 2.02,
+          "market_cap": 142755184640
         },
         {
           "ticker": "IDXX",
-          "performance": 1.02,
-          "market_cap": 51238211584
+          "performance": 0.4,
+          "market_cap": 51442225152
         },
         {
           "ticker": "ISRG",
-          "performance": 3.02,
-          "market_cap": 162934964224
+          "performance": 2.71,
+          "market_cap": 167358562304
         },
         {
           "ticker": "REGN",
-          "performance": 0.61,
-          "market_cap": 60117942272
+          "performance": 1.09,
+          "market_cap": 60770828288
         },
         {
           "ticker": "VRTX",
-          "performance": 0.08,
-          "market_cap": 101769281536
+          "performance": -0.2,
+          "market_cap": 101561606144
         }
       ],
       "Industrials": [
         {
           "ticker": "AXON",
-          "performance": 0.67,
-          "market_cap": 57320771584
+          "performance": -0.24,
+          "market_cap": 57183387648
         },
         {
           "ticker": "CTAS",
-          "performance": 0.6,
-          "market_cap": 83351961600
+          "performance": -1.13,
+          "market_cap": 82408996864
         },
         {
           "ticker": "CPRT",
-          "performance": 3.84,
-          "market_cap": 48317792256
+          "performance": -2.8,
+          "market_cap": 46964080640
         },
         {
           "ticker": "CSX",
-          "performance": 1.18,
-          "market_cap": 60887388160
+          "performance": -0.4,
+          "market_cap": 60645027840
         },
         {
           "ticker": "FAST",
-          "performance": 1.51,
-          "market_cap": 57691865088
+          "performance": -4.54,
+          "market_cap": 55075250176
         },
         {
           "ticker": "HON",
-          "performance": 0.54,
-          "market_cap": 136604442624
+          "performance": -0.42,
+          "market_cap": 136026685440
         },
         {
           "ticker": "ODFL",
-          "performance": 0.47,
-          "market_cap": 31275100160
+          "performance": 1.28,
+          "market_cap": 31674421248
         },
         {
           "ticker": "PCAR",
-          "performance": 2.07,
-          "market_cap": 51570364416
+          "performance": 0.86,
+          "market_cap": 52011454464
         },
         {
           "ticker": "TRI",
-          "performance": 0.72,
-          "market_cap": 80758095872
+          "performance": -2.31,
+          "market_cap": 78892400640
         },
         {
           "ticker": "VRSK",
-          "performance": 0.6,
-          "market_cap": 37730037760
+          "performance": 0.1,
+          "market_cap": 37766365184
         }
       ],
       "Energy": [
         {
           "ticker": "BKR",
-          "performance": 2.93,
-          "market_cap": 45665914880
+          "performance": -1.6,
+          "market_cap": 44936364032
         },
         {
           "ticker": "FANG",
-          "performance": 0.32,
-          "market_cap": 41321234432
+          "performance": -2.82,
+          "market_cap": 40154607616
         }
       ],
       "Consumer Defensive": [
         {
           "ticker": "CCEP",
-          "performance": 0.87,
-          "market_cap": 39727841280
+          "performance": 1.67,
+          "market_cap": 40391335936
         },
         {
           "ticker": "COST",
-          "performance": 0.64,
-          "market_cap": 423919681536
+          "performance": 0.79,
+          "market_cap": 427281219584
         },
         {
           "ticker": "KDP",
-          "performance": 0.55,
-          "market_cap": 39734366208
+          "performance": -2.05,
+          "market_cap": 38919303168
         },
         {
           "ticker": "KHC",
-          "performance": 0.11,
-          "market_cap": 31909855232
+          "performance": 1.22,
+          "market_cap": 32300445696
         },
         {
           "ticker": "MDLZ",
-          "performance": -0.65,
-          "market_cap": 78801551360
+          "performance": 1.38,
+          "market_cap": 79888474112
         },
         {
           "ticker": "MNST",
-          "performance": -0.09,
-          "market_cap": 61954359296
+          "performance": -1.56,
+          "market_cap": 60987695104
         },
         {
           "ticker": "PEP",
-          "performance": -1.18,
-          "market_cap": 201104162816
+          "performance": -0.34,
+          "market_cap": 200419622912
         }
       ],
       "Real Estate": [
         {
           "ticker": "CSGP",
-          "performance": 1.41,
-          "market_cap": 37747212288
+          "performance": 0.4,
+          "market_cap": 37899726848
         }
       ],
       "Basic Materials": [
         {
           "ticker": "LIN",
-          "performance": 0.45,
-          "market_cap": 221508403200
+          "performance": -0.61,
+          "market_cap": 220162621440
         }
       ],
       "Financial Services": [
         {
           "ticker": "PYPL",
-          "performance": -1.69,
-          "market_cap": 65405177856
+          "performance": -0.29,
+          "market_cap": 65214103552
         }
       ]
     }
-  },
-  "news": []
+  }
 }

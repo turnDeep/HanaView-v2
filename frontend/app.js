@@ -324,9 +324,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            // Use actual data if available, otherwise use mock data
-            const sp500HeatmapData = data.sp500_heatmap || mockSP500Data;
-            const nasdaqHeatmapData = data.nasdaq_heatmap || mockSP500Data; // Use same mock for testing
+            // Adapt backend data to the structure the frontend expects (day, week, month)
+            let sp500HeatmapData;
+            if (data.sp500_heatmap && data.sp500_heatmap.sectors) {
+                // The backend only provides one set of data, which we'll treat as 'day'
+                sp500HeatmapData = { day: data.sp500_heatmap };
+            } else {
+                // Fallback to mock data if the fetched data is missing or invalid
+                sp500HeatmapData = mockSP500Data;
+            }
+
+            let nasdaqHeatmapData;
+            if (data.nasdaq_heatmap && data.nasdaq_heatmap.sectors) {
+                nasdaqHeatmapData = { day: data.nasdaq_heatmap };
+            } else {
+                nasdaqHeatmapData = mockSP500Data; // Using same mock for simplicity
+            }
             
             renderAllHeatmaps(heatmapsContainer, sp500HeatmapData, nasdaqHeatmapData);
             dashboardElement.appendChild(heatmapsContainer);
