@@ -139,13 +139,15 @@ class MarketDataFetcher:
         logger.info("Generating AI commentary...")
         vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
         t_note = self.data.get('market', {}).get('t_note_future', {}).get('current', 'N/A')
-        fear_greed = self.data.get('market', {}).get('fear_and_greed', {}).get('now', 'N/A')
+        fear_greed_data = self.data.get('market', {}).get('fear_and_greed', {})
+        fear_greed_value = fear_greed_data.get('now', 'N/A')
+        fear_greed_category = fear_greed_data.get('category', 'N/A')
 
         prompt = f"""
         以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。
         - VIX指数: {vix}
         - 米国10年債先物: {t_note}
-        - Fear & Greed Index: {fear_greed}
+        - Fear & Greed Index: {fear_greed_value} ({fear_greed_category})
         """
         self.data['market']['ai_commentary'] = self._call_openai_api(prompt, max_tokens=200)
 
