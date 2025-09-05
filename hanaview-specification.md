@@ -35,7 +35,6 @@
 | beautifulsoup4 | 4.12.2 | HTML解析 |
 | openai | 1.6.1 | AI機能 |
 | pandas | 2.1.4 | データ処理 |
-| playwright | 1.40.0 | ブラウザ自動化 |
 | Pillow | 10.1.0 | 画像処理 |
 
 #### 1.2.2 Frontend
@@ -75,20 +74,15 @@
       "current": 109.50,
       "history": []
     },
-    "ai_commentary": "市況解説テキスト"
-  },
-  "screenshots": {
-    "fear_greed": "base64_encoded_image",
-    "nasdaq100": {
-      "day": "base64_encoded_image",
-      "week": "base64_encoded_image",
-      "month": "base64_encoded_image"
+    "fear_and_greed": {
+      "now": 48,
+      "previous_close": 47,
+      "prev_week": 45,
+      "prev_month": 55,
+      "prev_year": 70,
+      "category": "Fear"
     },
-    "sp500": {
-      "day": "base64_encoded_image",
-      "week": "base64_encoded_image",
-      "month": "base64_encoded_image"
-    }
+    "ai_commentary": "市況解説テキスト"
   },
   "news": [
     {
@@ -172,7 +166,6 @@ GET /api/data
     },
     "ai_commentary": "string"
   },
-  "screenshots": "object",
   "news": "array",
   "indicators": "object",
   "column": "object"
@@ -248,13 +241,93 @@ hist = ticker.history(period="5d", interval="1h")
    - HTMLパース
    - 重要度3以上の指標を抽出
 
-4. **ニュース取得**
+4. **Fear & Greed Index取得**
+   - CNN Fear & Greed APIから過去1年分のデータを取得
+   - 現在、前日、1週間前、1ヶ月前、1年前のデータを抽出
+   - JSONフォーマットに変換
+
+5. **ニュース取得**
    - 主要指数のニュースを取得
    - 重複除去
    - 上位5件を選択
 
-5. **中間データ保存**
+6. **中間データ保存**
    - data_raw.jsonに保存
+
+#### 4.1.2 Fear & Greed Index取得 実装例
+```python
+def fetch_fear_greed_index(self):
+    """Fear & Greed Indexを取得"""
+    try:
+        # CNN Fear & Greed APIから取得
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        start_date = (datetime.now() - timedelta(days=365)).strftime('%Y-%m-%d')
+        url = f"{CNN_FEAR_GREED_URL}{start_date}"
+
+        response = requests.get(url, impersonate="chrome110", timeout=30)
+        data = response.json()
+
+        # 最新データと履歴データを整理
+        fear_greed_data = data.get('fear_and_greed_historical', {}).get('data', [])
+
+        if fear_greed_data:
+            # 現在の値
+            current = fear_greed_data[-1]
+            current_value = current['y']
+
+            # 過去の値を計算
+            now = datetime.now()
+            prev_close = self._get_historical_value(fear_greed_data, 1)
+            week_ago = self._get_historical_value(fear_greed_data, 7)
+            month_ago = self._get_historical_value(fear_greed_data, 30)
+            year_ago = self._get_historical_value(fear_greed_data, 365)
+
+            self.data['market']['fear_and_greed'] = {
+                'now': round(current_value),
+                'previous_close': round(prev_close) if prev_close else None,
+                'prev_week': round(week_ago) if week_ago else None,
+                'prev_month': round(month_ago) if month_ago else None,
+                'prev_year': round(year_ago) if year_ago else None,
+                'category': self._get_fear_greed_category(current_value)
+            }
+            logger.info(f"Fear & Greed Index fetched: {current_value}")
+
+    except Exception as e:
+        logger.error(f"Error fetching Fear & Greed Index: {e}")
+        self.data['market']['fear_and_greed'] = {
+            'now': None,
+            'error': str(e)
+        }
+
+def _get_historical_value(self, data, days_ago):
+    """指定日前のデータを取得"""
+    target_timestamp = (datetime.now() - timedelta(days=days_ago)).timestamp() * 1000
+
+    # 最も近いタイムスタンプのデータを探す
+    closest_data = None
+    min_diff = float('inf')
+
+    for item in data:
+        diff = abs(item['x'] - target_timestamp)
+        if diff < min_diff:
+            min_diff = diff
+            closest_data = item
+
+    return closest_data['y'] if closest_data else None
+
+def _get_fear_greed_category(self, value):
+    """Fear & Greedのカテゴリを判定"""
+    if value <= 25:
+        return "Extreme Fear"
+    elif value <= 45:
+        return "Fear"
+    elif value <= 55:
+        return "Neutral"
+    elif value <= 75:
+        return "Greed"
+    else:
+        return "Extreme Greed"
+```
 
 ### 4.2 レポート生成処理（7:00実行）
 
@@ -262,13 +335,7 @@ hist = ticker.history(period="5d", interval="1h")
 1. **中間データ読み込み**
    - data_raw.jsonを読み込み
 
-2. **スクリーンショット取得**
-   - Fear & Greed Index
-   - NASDAQ100ヒートマップ（日次/週次/月次）
-   - S&P500ヒートマップ（日次/週次/月次）
-   - Base64エンコード
-
-3. **AI市況解説生成**
+2. **AI市況解説生成**
    ```python
    prompt = f"""
    以下の市場データを基に、日本の個人投資家向けに
@@ -385,7 +452,6 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
-      - ./screenshots:/app/screenshots
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - TZ=Asia/Tokyo
@@ -405,9 +471,6 @@ RUN apt-get update && apt-get install -y \
 # Pythonパッケージインストール
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Playwrightブラウザインストール
-RUN playwright install --with-deps chromium
 
 # アプリケーションファイルコピー
 COPY backend /app/backend

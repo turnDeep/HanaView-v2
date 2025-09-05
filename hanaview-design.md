@@ -43,7 +43,6 @@
   - yfinance: 金融データ取得
   - curl-cffi: HTTPリクエスト処理
   - beautifulsoup4: HTML解析
-  - playwright: スクリーンショット取得
   - openai: AI機能
 - **責務：**
   - APIエンドポイント提供
@@ -80,7 +79,8 @@ MarketDataFetcher.fetch_raw_data()
 │ 1. VIXデータ取得（yfinance）  │
 │ 2. 10年債データ取得           │
 │ 3. 経済指標取得（みんかぶ）    │
-│ 4. ニュース取得（Yahoo）      │
+│ 4. Fear & Greed Index取得(CNN API)│
+│ 5. ニュース取得（Yahoo）      │
 └──────────────────────────────┘
     ↓
 data_raw.json保存
@@ -90,9 +90,8 @@ data_raw.json保存
 MarketDataFetcher.generate_report_async()
     ↓
 ┌──────────────────────────────┐
-│ 1. スクリーンショット取得     │
-│ 2. AI解説生成                │
-│ 3. 週次コラム生成（月曜のみ）  │
+│ 1. AI解説生成                │
+│ 2. 週次コラム生成（月曜のみ）  │
 └──────────────────────────────┘
     ↓
 data_YYYY-MM-DD.json保存
@@ -132,9 +131,16 @@ Frontend でレンダリング
         "history": []
       },
       "t_note_future": {},
+      "fear_and_greed": {
+        "now": "number",
+        "previous_close": "number",
+        "prev_week": "number",
+        "prev_month": "number",
+        "prev_year": "number",
+        "category": "string"
+      },
       "ai_commentary": "string"
     },
-    "screenshots": {},
     "news": [],
     "indicators": {},
     "column": {}
@@ -159,10 +165,14 @@ Frontend でレンダリング
 
 #### 3.2.3 Webスクレイピング
 - **対象サイト：**
-  - CNN (Fear & Greed Index)
   - Finviz (ヒートマップ)
   - みんかぶFX (経済指標)
 - **技術：** Playwright + Stealth Mode
+
+#### 3.2.4 CNN Fear & Greed API
+- **用途：** Fear & Greed Indexの時系列データ取得
+- **エンドポイント：** `https://production.dataviz.cnn.io/index/fearandgreed/graphdata`
+- **エラー処理：** リトライ、失敗時はエラー情報を格納
 
 ## 4. UI/UX設計
 
@@ -212,11 +222,10 @@ Frontend でレンダリング
 - **トランジション**: 0.3秒のスムーズな切り替え
 
 ### 4.4 Fear & Greed Indexデザイン
-- **CNNの完全再現CSS**:
-  - 半円形のゲージメーター
-  - 5段階のカラーグラデーション（赤→オレンジ→黄→黄緑→緑）
-  - 各指標のプログレスバー
-  - アニメーション効果付き針の動き
+- **APIデータに基づく表示**:
+  - APIから取得した現在のインデックス値を半円形のゲージメーターで表示
+  - 5段階のカテゴリ（Extreme Fear, Fear, Neutral, Greed, Extreme Greed）に応じて色と針の位置を決定
+  - 前日比、週次、月次、年次のデータをテキストで表示
 
 ### 4.5 ヒートマップデザイン
 - **Finvizスタイルの再現**:
@@ -253,7 +262,7 @@ Frontend でレンダリング
 ### 6.2 フォールバック戦略
 1. **データ取得失敗時：** 前回のデータを使用
 2. **API制限時：** 待機後リトライ（最大3回）
-3. **スクリーンショット失敗：** スキップして継続
+3. **Fear & Greedデータ取得失敗：** スキップして継続
 
 ## 7. パフォーマンス設計
 
