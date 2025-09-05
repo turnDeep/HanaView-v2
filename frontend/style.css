@@ -1,69 +1,119 @@
 :root {
-    --background: #E6F3F7;
-    --card-background: #FFFFFF;
-    --tab-text: #006B6B;
-    --tab-active-bg: #006B6B;
+    --background: #1a1a1a;
+    --card-background: #2a2a2a;
+    --tab-text: #00c853;
+    --tab-active-bg: #00c853;
     --tab-active-text: #000000;
-    --text-primary: #212121;
-    --text-secondary: #757575;
-    --border-color: #e0e0e0;
+    --text-primary: #e0e0e0;
+    --text-secondary: #9e9e9e;
+    --border-color: #3a3a3a;
+    --sector-bg: #1e1e1e;
+    --sector-border: #444;
 }
 
 body {
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background-color: var(--background);
     color: var(--text-primary);
     margin: 0;
-    padding: 20px;
+    padding: 10px;
+    font-size: 14px;
 }
 
 h1, h2 {
     color: var(--tab-text);
     text-align: center;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+h3 {
+    font-size: 1.2em;
+    margin: 10px 0;
 }
 
 #dashboard {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
     background-color: var(--card-background);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* Heatmap Styles */
+/* Heatmap Styles - Finviz風 */
+.heatmaps-main-container {
+    margin-top: 20px;
+}
+
+.heatmap-section {
+    margin-bottom: 30px;
+}
+
+.heatmap-main-title {
+    color: var(--tab-text);
+    font-size: 1.3em;
+    text-align: left;
+    margin: 20px 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.heatmap-wrapper {
+    margin-bottom: 20px;
+    background-color: var(--sector-bg);
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.heatmap-header {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.heatmap-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
 .heatmap-container {
     display: flex;
-    flex-wrap: wrap;
-    border: 1px solid var(--border-color);
-    padding: 10px;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 8px;
+    padding: 5px;
+    background-color: #0a0a0a;
+    border-radius: 4px;
 }
 
 .sector {
-    border: 1px solid #ccc;
-    margin: 5px;
-    padding: 5px;
+    background-color: var(--sector-bg);
+    border: 1px solid var(--sector-border);
     border-radius: 4px;
-    flex-grow: 1;
+    padding: 8px;
 }
 
-.sector h3 {
-    margin: 0 0 10px 0;
-    font-size: 1em;
-    text-align: center;
+.sector-title {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .stocks-container {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    min-width: 200px;
+    gap: 2px;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .stock-tile {
-    border: 1px solid #fff;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     color: white;
     text-align: center;
     display: flex;
@@ -73,27 +123,83 @@ h1, h2 {
     overflow: hidden;
     padding: 2px;
     box-sizing: border-box;
-    min-width: 40px;
-    min-height: 40px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.stock-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    z-index: 10;
 }
 
 .stock-tile .ticker {
     font-weight: bold;
-    font-size: 0.8em;
+    font-size: 0.7em;
+    line-height: 1;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .stock-tile .performance {
-    font-size: 0.7em;
+    font-size: 0.6em;
+    line-height: 1;
+    font-weight: 500;
+}
+
+/* パフォーマンスによる色分け（Finviz風） */
+.stock-tile[data-perf-extreme-positive] {
+    background-color: #00c853 !important;
+}
+
+.stock-tile[data-perf-high-positive] {
+    background-color: #2e7d32 !important;
+}
+
+.stock-tile[data-perf-moderate-positive] {
+    background-color: #66bb6a !important;
+}
+
+.stock-tile[data-perf-low-positive] {
+    background-color: #81c784 !important;
+}
+
+.stock-tile[data-perf-low-negative] {
+    background-color: #ffcdd2 !important;
+}
+
+.stock-tile[data-perf-moderate-negative] {
+    background-color: #ef5350 !important;
+}
+
+.stock-tile[data-perf-high-negative] {
+    background-color: #e53935 !important;
+}
+
+.stock-tile[data-perf-extreme-negative] {
+    background-color: #c62828 !important;
+}
+
+.heatmap-error {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 20px;
+    font-style: italic;
 }
 
 /* News Styles */
 .news-container {
     padding: 10px;
+    margin-bottom: 20px;
 }
 
 .news-summary {
-    background-color: #FFFFFF;
-    color: #000000;
+    background-color: var(--sector-bg);
+    color: var(--text-primary);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -103,6 +209,7 @@ h1, h2 {
 .news-summary h3, .main-topics-container h3 {
     margin-top: 0;
     color: var(--tab-text);
+    font-size: 1.1em;
 }
 
 .main-topics-container {
@@ -110,22 +217,96 @@ h1, h2 {
 }
 
 .topic-box {
-    background-color: #FFFFFF;
+    background-color: var(--sector-bg);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 12px;
+    margin-bottom: 12px;
 }
 
 .topic-title {
     font-weight: bold;
     margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 0.95em;
 }
 
 .topic-title-red {
-    color: #D32F2F; /* Red */
+    color: #ef5350;
 }
 
 .topic-title-blue {
-    color: #1976D2; /* Blue */
+    color: #42a5f5;
+}
+
+.topic-box p {
+    margin: 5px 0;
+    line-height: 1.4;
+    font-size: 0.9em;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    body {
+        padding: 5px;
+    }
+    
+    #dashboard {
+        padding: 8px;
+        border-radius: 4px;
+    }
+    
+    .heatmap-wrapper {
+        padding: 8px;
+    }
+    
+    .stock-tile {
+        min-width: 35px !important;
+        min-height: 35px !important;
+        max-width: 60px !important;
+        max-height: 60px !important;
+    }
+    
+    .stock-tile .ticker {
+        font-size: 0.65em;
+    }
+    
+    .stock-tile .performance {
+        font-size: 0.55em;
+    }
+    
+    .sector-title {
+        font-size: 0.8em;
+    }
+    
+    h1 {
+        font-size: 1.3em;
+    }
+    
+    h2 {
+        font-size: 1.2em;
+    }
+    
+    h3 {
+        font-size: 1em;
+    }
+}
+
+/* スクロールバーのスタイリング */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
