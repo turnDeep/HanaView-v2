@@ -186,7 +186,7 @@
       "prev_year": 51,
       "category": "Greed"
     },
-    "ai_commentary": "【AI解説】本日のVIXは15.23、10年債は112.92です。市場は様子見ムードが広がっています。(これはモックテキストです)"
+    "ai_commentary": "OpenAI API key not configured. Skipping."
   },
   "indicators": {
     "economic": []
@@ -194,5 +194,5 @@
   "news": [],
   "column": {},
   "date": "2025-09-05",
-  "last_updated": "2025-09-05T18:26:10.568707+09:00"
+  "last_updated": "2025-09-05T19:01:46.114069+09:00"
 }
