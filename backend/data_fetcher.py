@@ -45,37 +45,26 @@ class MarketDataFetcher:
 
     # --- Ticker List Fetching ---
     def _get_sp500_tickers(self):
-        """Scrapes S&P 500 ticker list from Wikipedia."""
         logger.info("Fetching S&P 500 ticker list from Wikipedia...")
         try:
             response = self.http_session.get(SP500_WIKI_URL, timeout=30)
             response.raise_for_status()
             soup = BeautifulSoup(response.content, 'html.parser')
             table = soup.find('table', {'id': 'constituents'})
-            tickers = []
-            for row in table.find_all('tr')[1:]:
-                ticker = row.find_all('td')[0].text.strip()
-                tickers.append(ticker)
-            # Replace dots with dashes for yfinance compatibility (e.g., BRK.B -> BRK-B)
+            tickers = [row.find_all('td')[0].text.strip() for row in table.find_all('tr')[1:]]
             return [t.replace('.', '-') for t in tickers]
         except Exception as e:
             logger.error(f"Failed to get S&P 500 tickers: {e}")
             return []
 
     def _get_nasdaq100_tickers(self):
-        """Scrapes NASDAQ 100 ticker list from Wikipedia."""
         logger.info("Fetching NASDAQ 100 ticker list from Wikipedia...")
         try:
             response = self.http_session.get(NASDAQ100_WIKI_URL, timeout=30)
             response.raise_for_status()
             soup = BeautifulSoup(response.content, 'html.parser')
             table = soup.find('table', {'id': 'constituents'})
-            tickers = []
-            for row in table.find_all('tr')[1:]:
-                # Corrected: Ticker is in the first column
-                if len(row.find_all('td')) > 0:
-                    ticker = row.find_all('td')[0].text.strip()
-                    tickers.append(ticker)
+            tickers = [row.find_all('td')[0].text.strip() for row in table.find_all('tr')[1:] if len(row.find_all('td')) > 0]
             return [t.replace('.', '-') for t in tickers]
         except Exception as e:
             logger.error(f"Failed to get NASDAQ 100 tickers: {e}")
@@ -83,11 +72,10 @@ class MarketDataFetcher:
 
     # --- Data Fetching Methods ---
     def _fetch_yfinance_data(self, ticker_symbol, period="5d", interval="1h", resample_period='4h'):
-        """Fetches and processes data from yfinance."""
         try:
             ticker = yf.Ticker(ticker_symbol)
             hist = ticker.history(period=period, interval=interval)
-            if hist.empty: raise ValueError("No data returned from yfinance")
+            if hist.empty: raise ValueError("No data returned")
             hist.index = hist.index.tz_convert('Asia/Tokyo')
             resampled_hist = hist['Close'].resample(resample_period).ohlc().dropna()
             current_price = hist['Close'][-1]
@@ -112,10 +100,10 @@ class MarketDataFetcher:
 
     def _get_fear_greed_category(self, value):
         if value is None: return "Unknown"
-        if value <= 25: return "Extreme Fear"
-        if value <= 45: return "Fear"
-        if value <= 55: return "Neutral"
-        if value <= 75: return "Greed"
+        if value <= 25: return "Extreme Fear";
+        if value <= 45: return "Fear";
+        if value <= 55: return "Neutral";
+        if value <= 75: return "Greed";
         return "Extreme Greed"
 
     def fetch_fear_greed_index(self):
@@ -153,75 +141,57 @@ class MarketDataFetcher:
             logger.error(f"Error fetching economic indicators: {e}")
             self.data['indicators'] = {"economic": [], "error": str(e)}
 
-    # --- Heatmap Data Fetching (New Approach) ---
     def fetch_heatmap_data(self):
-        """Fetches heatmap data by getting ticker lists and then fetching individual data."""
         logger.info("Fetching heatmap data...")
         sp500_tickers = self._get_sp500_tickers()
         nasdaq100_tickers = self._get_nasdaq100_tickers()
-
         logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
-
         self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers)
         self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers)
 
     def _fetch_stock_performance_for_heatmap(self, tickers):
-        """Fetches performance, sector, and market cap for a list of tickers."""
-        if not tickers:
-            return {"sectors": {}, "error": "Ticker list is empty."}
-
+        if not tickers: return {"sectors": {}, "error": "Ticker list is empty."}
         sectors = {}
-        # Rate limit to avoid getting blocked by yfinance
         for i, ticker_symbol in enumerate(tickers):
             if i > 0 and i % 50 == 0:
                 logger.info(f"Processed {i}/{len(tickers)} tickers, sleeping for 5 seconds...")
                 time.sleep(5)
-
             logger.info(f"Fetching data for {ticker_symbol} ({i+1}/{len(tickers)})")
             try:
                 ticker_obj = yf.Ticker(ticker_symbol)
                 info = ticker_obj.info
-
-                # Get performance (1-day change)
                 hist = ticker_obj.history(period="2d")
-                if len(hist) < 2:
-                    performance = 0.0
-                else:
-                    change = hist['Close'].iloc[-1] - hist['Close'].iloc[-2]
-                    performance = (change / hist['Close'].iloc[-2]) * 100 if hist['Close'].iloc[-2] != 0 else 0.0
-
+                performance = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100 if len(hist) >= 2 and hist['Close'].iloc[-2] != 0 else 0.0
                 sector = info.get('sector', 'Other')
                 market_cap = info.get('marketCap', 0)
-
-                if sector not in sectors:
-                    sectors[sector] = []
-
-                sectors[sector].append({
-                    "ticker": ticker_symbol,
-                    "performance": round(performance, 2),
-                    "market_cap": market_cap
-                })
+                if sector not in sectors: sectors[sector] = []
+                sectors[sector].append({"ticker": ticker_symbol, "performance": round(performance, 2), "market_cap": market_cap})
             except Exception as e:
                 logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
                 continue
-
         return {"sectors": sectors}
 
-    def fetch_news(self):
-        logger.info("Fetching news (placeholder)...")
-        self.data['news'] = []
-
     # --- AI Generation ---
-    def _call_openai_api(self, prompt, max_tokens=150):
+    def _call_openai_api(self, prompt, json_mode=False, max_tokens=150):
         if not self.openai_client:
             return "OpenAI API key not configured. Skipping."
         try:
-            logger.info(f"Calling OpenAI API with max_tokens={max_tokens}...")
-            response = self.openai_client.chat.completions.create(model="gpt-4o-mini", messages=[{"role": "user", "content": prompt}], max_tokens=max_tokens, temperature=0.7)
-            return response.choices[0].message.content.strip()
+            logger.info(f"Calling OpenAI API (json_mode={json_mode}, max_tokens={max_tokens})...")
+            messages = [{"role": "user", "content": prompt}]
+            response_format = {"type": "json_object"} if json_mode else {"type": "text"}
+
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+                max_tokens=max_tokens,
+                temperature=0.7,
+                response_format=response_format
+            )
+            content = response.choices[0].message.content.strip()
+            return json.loads(content) if json_mode else content
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
-            return f"Error generating text: {e}"
+            return {"error": f"Error generating text: {e}"} if json_mode else f"Error generating text: {e}"
 
     def generate_ai_commentary(self):
         logger.info("Generating AI commentary...")
@@ -232,6 +202,40 @@ class MarketDataFetcher:
         fear_greed_category = fear_greed_data.get('category', 'N/A')
         prompt = f"以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: {fear_greed_value} ({fear_greed_category})"
         self.data['market']['ai_commentary'] = self._call_openai_api(prompt, max_tokens=200)
+
+    def generate_ai_news(self):
+        """Generates AI news summary and topics."""
+        logger.info("Generating AI news...")
+        # Simple prompt using key market data
+        vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
+        fear_greed_value = self.data.get('market', {}).get('fear_and_greed', {}).get('now', 'N/A')
+
+        prompt = f"""
+        現在の市場データ（VIX: {vix}, Fear & Greed Index: {fear_greed_value}）を基に、日本の個人投資家向けのニュースを作成してください。
+        以下のJSON形式で、厳密に出力してください。
+        - summary: 市場全体の雰囲気を伝える3行程度のサマリー
+        - topics: 主要なトピックを3つ。各トピックはtitle(15字以内)とbody(100字以内)を持つこと。
+
+        {{
+          "summary": "...",
+          "topics": [
+            {{"title": "...", "body": "..."}},
+            {{"title": "...", "body": "..."}},
+            {{"title": "...", "body": "..."}}
+          ]
+        }}
+        """
+        news_data = self._call_openai_api(prompt, json_mode=True, max_tokens=500)
+
+        # Add a fallback in case of error
+        if isinstance(news_data, str) or 'error' in news_data:
+            self.data['news'] = {
+                "summary": "ニュースの生成に失敗しました。",
+                "topics": [],
+                "error": str(news_data)
+            }
+        else:
+            self.data['news'] = news_data
 
     def generate_weekly_column(self):
         if datetime.now(timezone(timedelta(hours=9))).weekday() != 0:
@@ -254,7 +258,6 @@ class MarketDataFetcher:
         self.fetch_fear_greed_index()
         self.fetch_economic_indicators()
         self.fetch_heatmap_data()
-        self.fetch_news()
         with open(RAW_DATA_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Raw Data Fetch Completed. Saved to {RAW_DATA_PATH} ---")
@@ -268,6 +271,7 @@ class MarketDataFetcher:
         with open(RAW_DATA_PATH, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
         self.generate_ai_commentary()
+        self.generate_ai_news()
         self.generate_weekly_column()
         jst = timezone(timedelta(hours=9))
         self.data['date'] = datetime.now(jst).strftime('%Y-%m-%d')
