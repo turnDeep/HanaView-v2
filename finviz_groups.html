@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en" class=" dark">
+<head>
+<title>Group Screener - Sector, Industry, Country, Capitalization</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=1024"><meta name="description" content="Stock screener for investors and traders, financial visualizations.">
+
+            <link rel="preload" href="/fonts/lato-v17-latin-ext_latin-regular.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/lato-v17-latin-ext_latin-700.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/lato-v17-latin-ext_latin-900.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/finviz-sans-415-normal-latin.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/finviz-sans-450-normal-latin.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/finviz-sans-500-normal-latin.woff2" as="font" crossorigin>
+            <link rel="preload" href="/fonts/finviz-sans-700-normal-latin.woff2" as="font" crossorigin>
+
+            <script>
+                window.notificationsArray = [];
+                window.renderScriptNotLoaded = function () {};
+                window.handleScriptNotLoaded = function (element) {
+                    window.notificationsArray.push(element);
+                    window.sentryDisabled = true;
+                    window.handleScriptNotLoaded = function () {};
+                };
+            </script>
+        <link rel="stylesheet" href="/assets/dist/redesign.fbd02549.css" type="text/css" onerror="window.handleScriptNotLoaded(this)">
+<link rel="stylesheet" href="/assets/dist/main.6a5fb1b5.css" type="text/css" onerror="window.handleScriptNotLoaded(this)">
+<link rel="icon" type="image/png" href="/favicon_2x.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="16x16">
+<script async=true>
+    !(function(q,_name){q[_name]=q[_name]||function k(){(k.q=k.q||[]).push(arguments)},q[_name].v=q[_name].v||2,q[_name].s="1";!(function(q,k,F,H){function m(F,H){try{m=q.localStorage,(F=JSON.parse(m[decodeURI(decodeURI('%67%25%365%25%37%34I%257%34e%6d'))]("_aQS01OUU2MkU1RURCQzRDMzUyMTIwQkM4ODYtMTE0")).lgk||[])&&(H=q[k].pubads())&&F.forEach((function(q){q&&q[0]&&H.setTargeting(q[0],q[1]||"")}))}catch(N){}var m}try{(H=q[k]=q[k]||{}).cmd=H.cmd||[],typeof H.pubads===F?m():typeof H.cmd.unshift===F?H.cmd.unshift(m):H.cmd.push(m)}catch(N){}})(window,decodeURI(decodeURI('%25%367o%25%36fg%256c%25%36%35%2574%256%31%25%36%37')),"function");;!(function(q){q.__admiral_getConsentForGTM=function(k){function F(q,F){k((function(q,k){const F=q&&q.purpose&&q.purpose.consents||{};return{adConsentGranted:k||!!F[1],adUserData:k||!!F[7],adPersonalization:k||!!F[3],analyticsConsentGranted:k||!!F[1],personalizationConsentGranted:k||!!F[5],functionalityConsentGranted:k||!1,securityConsentGranted:k||!0}})(q,!F))}q[_name]("after","cmp.loaded",(function(k){k&&k.tcData&&k.tcData.gdprApplies?(k.consentKnown&&F(k.tcData,!0),q[_name]("after","cmp.updated",(function(q){F(q.tcData,!0)}))):F({},!1)}))}})(window);})(window,decodeURI(decodeURI('a%256%34m%25%369%25%37%32%256%31l')));!(function(q,k,F,H){F=q.createElement(k),q=q.getElementsByTagName(k)[0],F.async=1,F.src="https://urbanlaurel.com/assets/js/q2o3um29vhadcznq.vendor.js",(H=0)&&H(F),q.parentNode.insertBefore(F,q)})(document,"script");;;!(function(q,k,F,H,m){function N(){for(var q=[],F=0;F<arguments.length;F++)q.push(arguments[F]);if(!q.length)return m;"ping"===q[0]?q[2]({gdprAppliesGlobally:!!k[decodeURI(decodeURI('_%25%35%66c%6d%25%37%30%254%37%25%364%25%370%257%32A%2570%25%370%256%63%2569%65%73%2547%256%63o%25%36%32%25%361%25%36%63%6c%79'))],cmpLoaded:!1,cmpStatus:"stub"}):q.length>0&&m.push(q)}function L(q){if(q&&q.data&&q.source){var H,m=q.source,N="__tcfapiCall",L="string"==typeof q.data&&q.data.indexOf(N)>=0;(H=L?((function(q){try{return JSON.parse(q)}catch(k){}})(q.data)||{})[N]:(q.data||{})[N])&&k[F](H.command,H.version,(function(q,k){var F={__tcfapiReturn:{returnValue:q,success:k,callId:H.callId}};m&&m.postMessage(L?JSON.stringify(F):F,"*")}),H.parameter)}}!(function t(){if(!k.frames[H]){var F=q.body;if(F){var m=q.createElement("iframe");m.style.display="none",m.name=H,F.appendChild(m)}else setTimeout(t,5)}})(),N.v=1,"function"!=typeof k[F]&&(k[F]=k[F]||N,k.addEventListener?k.addEventListener("message",L,!1):k.attachEvent&&k.attachEvent("onmessage",L))})(document,window,"__tcfapi","__tcfapiLocator",[]);;;!(function(q,k,F,H,m,N,L,t,A,K,R){function Y(){for(var q=[],k=arguments.length,F=0;F<k;F++)q.push(arguments[F]);var H,m=q[1],N=typeof m===L,t=q[2],Y={gppVersion:"1.1",cmpStatus:"stub",cmpDisplayStatus:"hidden",signalStatus:"not ready",supportedAPIs:["7:usnat"].reduce((function(q,k){return k&&q.push(k),q}),[]),cmpId:9,sectionList:[],applicableSections:[0],gppString:"",parsedSections:{}};function v(q){N&&m(q,!0)}switch(q[0]){case"ping":return v(Y);case"queue":return A;case"events":return K;case"addEventListener":return N&&(H=++R,K.push({id:H,callback:m,parameter:t})),v({eventName:"listenerRegistered",listenerId:H,data:!0,pingData:Y});case"removeEventListener":for(H=!1,F=0;F<K.length;F++)if(K[F].id===t){K.splice(F,1),H=!0;break}return v(H);case"hasSection":case"getSection":case"getField":return v(null);default:return void A.push(q)}}Y.v=2,typeof k[F]!==L&&(k[F]=k[F]||Y,k[t]&&k[t]("message",(function(q,H){var L="string"==typeof q.data;(H=L?((function(q){try{return JSON.parse(q)}catch(k){}})(q.data)||{})[m]:(q.data||{})[m])&&k[F](H.command,(function(k,F){var m={__gppReturn:{returnValue:k,success:F,callId:H.callId}};q.source.postMessage(L?JSON.stringify(m):m,"*")}),N in H?H[N]:null,H.version||1)}),!1),(function v(){if(!k.frames[H]){var F=q.body;if(F){var m=q.createElement("iframe");m.style.display="none",m.name=H,F.appendChild(m)}else setTimeout(v,5)}})())})(document,window,"__gpp","__gppLocator","__gppCall","parameter","function","addEventListener",[],[],0);
+    ;(function () {
+        window.ic_privacySelectorLoaded = false;
+
+        window.admiral("after", "candidate.dismissed", function () {
+            if (window.checkBannersLoaded) checkBannersLoaded();
+        });
+
+        window.admiral("after", "cmp.loaded", function (eventArg) {
+            console.log("Admiral CMP Loaded ", eventArg);
+            if (eventArg.euVisitor) return;
+            try {
+                __gpp("addEventListener", function (tcData) {
+                    window.ic_privacySelectorLoaded = true;
+                });
+            } catch (e) {
+                console.error(e)
+            }
+        });
+    })();
+</script><script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+</script><script>
+            FinvizSettings = {
+                versionImages: 29,
+                hasUserPremium: false,
+                name: "",
+                email: "",
+                nodeChartsDomain: "https://charts2-node.finviz.com",
+                hasUserStickyHeader: false,
+                adsProvider: 1,
+                hasRedesignEnabled: true,
+                hasRedesignPortfolio: false,
+                hasDarkTheme: true,
+                quoteSearchExt: '',
+                isJoinBannerVisible: false,
+                hasKnowledgeBase: false,
+                hasNewComparePerf: false,
+            };
+        </script><script src="/assets/dist/script/browser_check.v1.7d9dede5.js"></script><script src="/assets/dist/script/notice.v1.1dd6403c.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/script/vendor/boxover.v1.202b25a7.js" defer></script>
+<script src="/assets/dist/runtime.v1.315315c4.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/libs_init.v1.49f4d431.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/1150.v1.377e510b.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/7470.v1.f477739c.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/1545.v1.4d850b71.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/877.v1.16225bfd.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/1213.v1.3606939b.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/7052.v1.0a6c5898.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/2698.v1.0d07713f.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/header.v1.e56e6d0b.js" onerror="window.handleScriptNotLoaded(this)"></script></head>
+<body class="m-0 yellow-tooltip is-groups min-w-[1000px] chart-tooltip">
+            <script>
+                window.adLayoutVersion = 'control';
+                window.adLoggedIn = 'NotLoggedIn';
+
+                var cookieName = 'fv_block';
+                var selector = '[data-google-query-id]';
+                var selectorFrame = selector + ' iframe, ' + selector + ' [id*=aax]';
+                var cookieExpiry = 5 * 60 * 1000; // 5min
+                var checkTimeout = 20 * 1000; // 20sec
+
+                function getCookie(value) {
+                    var expiration = +new Date() + cookieExpiry;
+                    return cookieName + '=' + value + '; expires=' + (new Date(expiration)).toUTCString() + '; path=/';
+                }
+
+                var finvizBannersLoaded = false;
+                function loadFinvizBanners(setCookie) {
+
+                    if (setCookie) document.cookie = getCookie('block');
+                    finvizBannersLoaded = true;
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = '/assets/dist/script/finviz_b.v1.d6c84ef3.js';
+                    document.head.appendChild(s);
+                }
+
+                function checkBannersLoaded() {
+                    var checkEnd = +new Date() + checkTimeout;
+                    function asyncCheckIfExists(selector, resolve) {
+                        var now = +new Date();
+                        var container = document.querySelector(selector);
+                        if (!container && checkEnd > now) return setTimeout(function () { asyncCheckIfExists(selector, resolve) }, 1000)
+                        resolve(!!container);
+                    }
+
+                    asyncCheckIfExists(selector, function (exists) {
+                        if (!exists) return loadFinvizBanners(true);
+
+                        asyncCheckIfExists(selectorFrame, function (hasIframe) {
+                            if (!hasIframe) return loadFinvizBanners(true);
+                        })
+                    })
+                }
+
+                if (document.cookie.indexOf(cookieName) >= 0) {
+                    loadFinvizBanners(false);
+                } else {
+                    var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.onerror = loadFinvizBanners;
+                    s.src = 'https://u5.investingchannel.com/static/uat.js';
+                    document.head.appendChild(s);
+
+                    InvestingChannelQueue = window.InvestingChannelQueue || [];
+                    var ic_page;
+
+                    function refreshAd(container, refreshes) {
+                        var placementTag, adslot;
+                        window.InvestingChannelQueue.push(function () {
+                            var pubTags = ic_page.getPubTag.call(ic_page, container.id);
+                            if (!pubTags) return;
+                            var pubTag = pubTags[0];
+                            placementTag = pubTag.mPlacements[0].mTagToRender;
+                            adslot = pubTag.mPlacements[0].mPublisherKval.adslot[0];
+                            // Update div ID
+                            var id = container.id.split('_');
+                            var numberOfDivs = document.querySelectorAll('[id*=' + id.slice(0, id.length - 1).join('_') + ']').length;
+                            var newDivNumber = Number(id.pop()) + numberOfDivs * refreshes;
+                            container.setAttribute('id', id.join('_') + '_' + newDivNumber);
+                            // Destroy previous pubtag & reset container html (loading span)
+                            pubTag.destroy();
+                            container.innerHTML = '';
+                        });
+                        window.InvestingChannelQueue.push(function () {
+                            if (!placementTag || !adslot) return
+                            // Create new pub tag
+                            var newTag;
+                            var layoutId = placementTag.mNativeLayout ? placementTag.mNativeLayout.nativelayoutid : null;
+                            if (layoutId) {
+                                newTag = ic_page.defineNativeTag('finviz/' + placementTag.mTarget.dfpkeyname, placementTag.mAdSize, container.id, layoutId);
+                                var nativeLayout, layoutData
+
+                                try {
+                                  nativeLayout = newTag.mPlacements[0].mTags[0].mNativeLayout;
+                                } catch (e) {
+                                    console.log(e.message)
+                                }
+
+                                try {
+                                  layoutData = newTag.mTemplate.mNativeLayout[layoutId].Data
+                                  if (layoutData && nativeLayout && !nativeLayout.layout) {
+                                    newTag.mPlacements[0].mTags[0].mNativeLayout = layoutData
+                                  }
+                                } catch (e) {
+                                    console.log(e.message)
+                                }
+                            } else {
+                                newTag = ic_page.defineTag('finviz/' + placementTag.mTarget.dfpkeyname, placementTag.mAdSize, container.id);
+                            }
+                            // Set adslot param
+                            newTag.setKval({ adslot: adslot });
+                            newTag.setKval({ kw: 'ajax' });
+                            newTag.render();
+                        });
+                    }
+
+                    var refreshCount = 1;
+                    function refreshAds(selectors) {
+                        if (window.ic_page) {
+                            document.querySelectorAll(selectors).forEach(function (element) {
+                                try {
+                                    refreshAd(element, refreshCount);
+                                } catch (e) {
+                                    console.log('Ad refresh error for:', element, e);
+                                }
+                            });
+                            window.ic_page.loadMore();
+                            refreshCount++;
+                        }
+                    }
+
+
+                    InvestingChannelQueue.push(function() {
+                        var icConfig = window['FINVIZ_IC_UAT_CONFIG'] = {};
+
+                        ic_page = InvestingChannel.UAT.Run('df0d0d52-cc7f-11e8-82a5-0abbb61c4a6a', icConfig);
+                    });
+
+                    var hash = null;
+                    if (typeof hash === 'string') {
+                      InvestingChannelQueue.push(function() {
+                          if (ic_page) {
+                              ic_page.setUserId('email', hash, true);
+                          }
+                      });
+                    }
+                }
+            </script>
+            <script>
+                (function () {
+                    var detectionEl = document.createElement('div');
+                    detectionEl.style.position='absolute';
+                    detectionEl.style.overflow='scroll';
+                    document.body.appendChild(detectionEl);
+                    document.documentElement.style.setProperty('--fv-scrollbar-width', `${detectionEl.offsetWidth}px`);
+                    document.body.removeChild(detectionEl);
+                })()
+            </script>
+        <div id="notifications-container"></div><table class="header">
+    <tr class="align-top">
+        <td>
+            <table class="header-container">
+                <tr>
+                    <td class="w-[30%]">
+                        <table class="w-full">
+                            <tr>
+                                <td class="h-[50px] align-middle">
+                                    <a href="/" class="logo"><svg width="225" height="32" class="block">
+  <use href="/img/logo.svg#free" class="dark:hidden" />
+  <use href="/img/logo.svg#free-dark" class="hidden dark:block" />
+</svg></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="search" style="padding-top: 7px">
+                                    <div class="navbar-search-placeholder">
+    <span class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24">
+            <path d="M16.9 15.5l4 4c.2.2.1.5 0 .7l-.7.7a.5.5 0 01-.8 0l-4-4c0-.2-.2-.3-.3-.4l-.7-1a7 7 0 01-11.2-4 7 7 0 1112.2 3l1 .6.5.4zM5 10a5 5 0 1010 0 5 5 0 00-10 0z" />
+        </svg>
+    </span>
+    <input placeholder="Search ticker, company or profile" class="search-input is-free"/>
+</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="align-bottom pb-1">
+                        <div id="microbar_position" class="hidden xl:flex items-center h-[37px] pl-2"><div>
+                        <div id="IC_D_88x31_1"class="relative overflow-hidden flex items-center justify-center w-full mx-auto" style="width:88px;height:31px;max-height:31px"></div>
+                        </div></div>
+                    </td>
+                    <td class="relative w-[730px] text-right">
+                        <div id="banner_position" class="overflow-hidden absolute top-0 right-0 w-full h-[96px]">
+                        <div id="IC_D_728x90_1"class="relative overflow-hidden flex items-center justify-center w-full mx-auto" style="width:728px;height:90px;max-height:90px"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="w-[994px] leading-none" style="font-size:0">
+            <img src="/gfx/nic2x2.gif" class="w-[994px] h-px" alt="">
+        </td>
+    </tr>
+</table>
+            <table class="navbar">
+                <tr>
+                    <td class="h-[30px]">
+                        <table class="header-container">
+                            <tr><td><a class="nav-link is-first" href="/">Home</a></td><td><a class="nav-link" href="/news.ashx">News</a></td><td><a class="nav-link" href="/screener.ashx">Screener</a></td><td><a class="nav-link" href="/map.ashx">Maps</a></td><td><a class="nav-link is-active" href="/groups.ashx">Groups</a></td><td><a class="nav-link" href="/portfolio.ashx">Portfolio</a></td><td><a class="nav-link" href="/insidertrading.ashx">Insider</a></td><td><a class="nav-link" href="/futures.ashx">Futures</a></td><td><a class="nav-link" href="/forex.ashx">Forex</a></td><td><a class="nav-link" href="/crypto.ashx">Crypto</a></td><td><a class="nav-link" href="/elite?utm_source=finviz&utm_medium=banner&utm_campaign=main-navbar-backtests">Backtests</a></td><td><a class="nav-link is-elite" href="/elite">Pricing</a></td><td class="w-full relative"><div class="absolute bottom-0 left-0 right-0 top-0"><div id="time" class="pr-1"></div></div></td>
+                    <td class="nav relative">
+        <a data-testid="chart-layout-theme" href="#" class="!flex !bg-transparent !border-b-0 mt-1 !py-0 !px-1" style='border-left: 1px solid #444a57' title="Toggle Light/Dark mode" onclick="setChartThemeCookie('light', true)">
+            <div class='relative box-content flex rounded-full w-10 h-5 border border-gray-750 bg-gray-800 text-white justify-end'>
+                <div class='box-border w-1/2 rounded-full p-px border border-gray-800 bg-[#4c5261] flex justify-center items-center'>
+                    <svg width="16" height="16" class="fill-current text-white inline-block -ml-px">
+    <use href="/assets/dist-icons/icons.svg?rev=29#moonOutlined"/>
+</svg>
+                </div>
+            </div>
+            <span class='ml-1 select-none font-medium text-xs text-white'>Theme</span>
+        </a>
+    </td>
+
+                <td>
+                    <a href="/help/groups.ashx" class="nav-link is-help border-l border-[#444a57]"><span class="fa fa-question-circle"></span>Help</a>
+                </td>
+                <td><a href="/login" class="nav-link sign-in">Log in</a></td>
+                <td>
+                    <a href="/register" class="nav-link sign-up">
+                        <span class="hidden [@media(min-width:1150px)]:inline">Start Free 7-Day Trial</span>
+                        <span class="inline [@media(min-width:1150px)]:hidden">Sign up</span>
+                    </a>
+                </td>
+
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+          <script>
+            function reloadPage () { location.reload() }
+            function setChartThemeCookie(chartsTheme) {
+              fetch('/api/set_cookie.ashx?cookie=chartsTheme&value=' + chartsTheme ).catch(function(){}).then(function(){
+                window.gtag && window.gtag('event', 'click', { event_category: 'theme', event_label: 'toggle', value: chartsTheme, event_callback: reloadPage });
+                setTimeout(reloadPage,1000);
+              })
+            }
+          </script>    <div class="w-full flex justify-center dark:bg-violet-800 bg-violet-600 font-sans" data-fv-notice="promo-futures-map" data-nosnippet>
+        <div class="h-10 relative flex gap-2.5 items-center dark:text-violet-200 text-white">
+            <div class="py-3 text-sm font-medium dark:text-violet-200 text-violet-100">
+                    <p>
+        <span class="text-white">New:</span>
+        Introducing the Finviz Futures Map
+    </p>
+            </div>
+            <a title="Learn more" href="/blog/introducing-the-finviz-futures-map" class="inline-flex items-center justify-center rounded-md border-none outline-none ring-gray-200 font-medium focus-visible:ring-2 dark:ring-gray-500 bg-violet-500 hover:bg-gray-200/50 dark:bg-gray-500/30 dark:text-gray-50 text-white dark:hover:bg-gray-500/50 h-7 min-w-8 px-2.5 text-2xs" onclick="window.FinvizCloseNoticeRedirect(event, 'promo-futures-map', this.href)">Learn More</a>
+            <a title="Close" class="flex h-6 w-6 items-center justify-center" style="filter: drop-shadow(0.5px 0.5px 0px rgba(34, 38, 47, 0.8));" href="javascript:void(0)" onclick="window.FinvizCloseNotice('promo-futures-map');">
+                <svg width="20" height="20" class="shrink-0">
+    <use href="/assets/dist-icons/icons.svg?rev=29#clear"/>
+</svg>
+            </a>
+        </div>
+    </div><div class="content "><div class="fv-container is-tight"><tr>
+<td>
+<table id="filter-table-top" class="screener-groups_table-filter" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="screener-groups_filter-label text-right" width="6%">
+<span class="body-combo-title" style="cursor:pointer;" data-boxover="cssbody=[tooltip_bdy] cssheader=[tooltip_hdr] header=[Group] body=[<table width=300><tr><td class='tooltip_tab'>Select group - stocks organized by <b>sector</b>, <b>industry</b>, <b>country</b> or market <b>capitalization</b>.</td></tr></table>] delay=[500]">Group</span></td>
+<td class="pl-1" align="left">
+<select id="groupSelect" style="width:100%;" class="body-combo-text fv-select" onchange='window.location=document.getElementById("groupSelect").value'>
+<option selected="selected" value="groups.ashx?g=sector&v=210&o=name">Sector</option><option value="groups.ashx?g=industry&v=210&o=name">Industry</option><option value="groups.ashx?g=industry&sg=basicmaterials&v=210&o=name">Industry (Basic Materials)</option><option value="groups.ashx?g=industry&sg=communicationservices&v=210&o=name">Industry (Communication Services)</option><option value="groups.ashx?g=industry&sg=consumercyclical&v=210&o=name">Industry (Consumer Cyclical)</option><option value="groups.ashx?g=industry&sg=consumerdefensive&v=210&o=name">Industry (Consumer Defensive)</option><option value="groups.ashx?g=industry&sg=energy&v=210&o=name">Industry (Energy)</option><option value="groups.ashx?g=industry&sg=financial&v=210&o=name">Industry (Financial)</option><option value="groups.ashx?g=industry&sg=healthcare&v=210&o=name">Industry (Healthcare)</option><option value="groups.ashx?g=industry&sg=industrials&v=210&o=name">Industry (Industrials)</option><option value="groups.ashx?g=industry&sg=realestate&v=210&o=name">Industry (Real Estate)</option><option value="groups.ashx?g=industry&sg=technology&v=210&o=name">Industry (Technology)</option><option value="groups.ashx?g=industry&sg=utilities&v=210&o=name">Industry (Utilities)</option><option value="groups.ashx?g=country&v=210&o=name">Country (U.S. listed stocks only)</option><option value="groups.ashx?g=capitalization&v=210&o=name">Capitalization</option></select>
+</td>
+<td class="screener-groups_filter-label text-right" width="7%">
+<span class="body-combo-title" style="cursor:pointer;" data-boxover="cssbody=[tooltip_bdy] cssheader=[tooltip_hdr] header=[Order By] body=[<table width=300><tr><td class='tooltip_tab'>Select the criteria by which the output information will be sorted. Use the <b>ascending</b> and <b>descending</b> option to invert the current order.<br><br> TIP: In table views you can click on top of a column to sort the table by the underlying values.</td></tr></table>] delay=[500]">Order By</span></td>
+<td class="pl-1" align="left">
+<select id="orderSelect" style="width:100%;" class="body-combo-text fv-select" onchange='window.location=document.getElementById("orderSelect").value'>
+<option selected="selected" value="groups.ashx?g=sector&v=210&o=name">Name</option><option value="groups.ashx?g=sector&v=210&o=marketcap">Market Capitalization</option><option value="groups.ashx?g=sector&v=210&o=pe">Price/Earnings</option><option value="groups.ashx?g=sector&v=210&o=forwardpe">Forward Price/Earnings</option><option value="groups.ashx?g=sector&v=210&o=peg">PEG (Price/Earnings/Growth)</option><option value="groups.ashx?g=sector&v=210&o=ps">Price/Sales</option><option value="groups.ashx?g=sector&v=210&o=pb">Price/Book</option><option value="groups.ashx?g=sector&v=210&o=pc">Price/Cash</option><option value="groups.ashx?g=sector&v=210&o=pfcf">Price/Free Cash Flow</option><option value="groups.ashx?g=sector&v=210&o=dividendyield">Dividend Yield</option><option value="groups.ashx?g=sector&v=210&o=eps5years">EPS growth past 5 years</option><option value="groups.ashx?g=sector&v=210&o=estltgrowth">EPS growth next 5 years</option><option value="groups.ashx?g=sector&v=210&o=sales5years">Sales growth past 5 years</option><option value="groups.ashx?g=sector&v=210&o=shortinterestshare">Short Interest Share</option><option value="groups.ashx?g=sector&v=210&o=recom">Analyst Recommendation</option><option value="groups.ashx?g=sector&v=210&o=perf1w">Performance (Week)</option><option value="groups.ashx?g=sector&v=210&o=perf4w">Performance (Month)</option><option value="groups.ashx?g=sector&v=210&o=perf13w">Performance (Quarter)</option><option value="groups.ashx?g=sector&v=210&o=perf26w">Performance (Half Year)</option><option value="groups.ashx?g=sector&v=210&o=perf52w">Performance (Year)</option><option value="groups.ashx?g=sector&v=210&o=perfytd">Performance (Year To Date)</option><option value="groups.ashx?g=sector&v=210&o=averagevolume">Average Volume (3 Month)</option><option value="groups.ashx?g=sector&v=210&o=relativevolume">Relative Volume</option><option value="groups.ashx?g=sector&v=210&o=change">Change</option><option value="groups.ashx?g=sector&v=210&o=volume">Volume</option><option value="groups.ashx?g=sector&v=210&o=count">Number of Stocks</option></select>
+</td>
+<td class="pl-1" align="left">
+<select id="orderDirSelect" style="width: 100%;" class="body-combo-text fv-select" onchange='window.location=document.getElementById("orderDirSelect").value'>
+<option selected="selected" value="groups.ashx?g=sector&v=210&o=name">Ascending</option><option value="groups.ashx?g=sector&v=210&o=-name">Descending</option></select>
+</td>
+<td align="right" width="42%" valign="top">
+<img src="gfx/nic2x2.gif" style="width:83px;height:22px" alt="" border="0"></td>
+<td width="1%">
+<img src="gfx/nic2x2.gif" style="width:1px;height:22px" alt="" border="0"></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td width="100%">
+<table width="100%" cellpadding="3" cellspacing="0" class="screener-view-table screener-view-switch">
+<tr>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=110&o=name">Overview</a></td>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=120&o=name">Valuation</a></td>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=140&o=name">Performance</a></td>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=150&o=name">Custom</a></td>
+<td width="12%" align="center"  class="screener-view-button is-active" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=210&o=name">Bar Chart</a></td>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=310&o=name">Spectrum</a></td>
+<td width="12%" align="center"  class="screener-view-button" style="cursor:pointer;"><a href="groups.ashx?g=sector&v=410&o=name">Charts</a></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr><td width="100%"><img src="gfx/nic2x2.gif" style="display:block;width:2px;height:16px" alt="" border="0"></td></tr>
+<tr>
+<td align="center">
+<div id="groups"></div><script type="text/javascript">
+        var groupsElement = document.currentScript.previousSibling
+        groupsElement.style.minHeight = 1862 + 'px'
+
+        window.addEventListener('resize', () => {
+            groupsElement.style = null
+        }, { once: true })
+</script></td>
+</tr>
+<script src="/assets/dist/9215.v1.0e49ce71.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/6405.v1.14cc6c5b.js" onerror="window.handleScriptNotLoaded(this)"></script><script src="/assets/dist/groups.v1.df9cb118.js" onerror="window.handleScriptNotLoaded(this)"></script>
+            <script type="text/javascript">
+                (function() {
+                    function ready(fn) {
+                        if (document.readyState != 'loading') {
+                            fn();
+                        } else {
+                            document.addEventListener('DOMContentLoaded', fn);
+                        }
+                    }
+
+                    ready(function() {
+                        var rows = [{"ticker":"basicmaterials","label":"Basic Materials","group":"","screenerUrl":"screener.ashx?f=sec_basicmaterials&v=211","perfT":0.02,"perfW":0.39,"perfM":6.04,"perfQ":9.9,"perfH":12.88,"perfY":8.34,"perfYtd":20.48},{"ticker":"communicationservices","label":"Communication Services","group":"","screenerUrl":"screener.ashx?f=sec_communicationservices&v=211","perfT":0.96,"perfW":4.54,"perfM":8.4,"perfQ":16.44,"perfH":20.21,"perfY":39.55,"perfYtd":22.92},{"ticker":"consumercyclical","label":"Consumer Cyclical","group":"","screenerUrl":"screener.ashx?f=sec_consumercyclical&v=211","perfT":1.82,"perfW":0.93,"perfM":7.74,"perfQ":9.36,"perfH":10.24,"perfY":23.79,"perfYtd":5.88},{"ticker":"consumerdefensive","label":"Consumer Defensive","group":"","screenerUrl":"screener.ashx?f=sec_consumerdefensive&v=211","perfT":0.33,"perfW":0.45,"perfM":1.15,"perfQ":-1.85,"perfH":-0.08,"perfY":3.42,"perfYtd":6.02},{"ticker":"energy","label":"Energy","group":"","screenerUrl":"screener.ashx?f=sec_energy&v=211","perfT":0.37,"perfW":-0.29,"perfM":2.28,"perfQ":7.58,"perfH":5.64,"perfY":-0.7,"perfYtd":4.7},{"ticker":"financial","label":"Financial","group":"","screenerUrl":"screener.ashx?f=sec_financial,ind_stocksonly&v=211","perfT":1.03,"perfW":0.54,"perfM":4.73,"perfQ":7.94,"perfH":11.4,"perfY":21.98,"perfYtd":16.19},{"ticker":"healthcare","label":"Healthcare","group":"","screenerUrl":"screener.ashx?f=sec_healthcare&v=211","perfT":0.18,"perfW":0.27,"perfM":5.0,"perfQ":2.4,"perfH":-7.49,"perfY":-12.63,"perfYtd":-0.57},{"ticker":"industrials","label":"Industrials","group":"","screenerUrl":"screener.ashx?f=sec_industrials&v=211","perfT":1.18,"perfW":-0.98,"perfM":0.28,"perfQ":6.24,"perfH":14.01,"perfY":14.26,"perfYtd":13.13},{"ticker":"realestate","label":"Real Estate","group":"","screenerUrl":"screener.ashx?f=sec_realestate&v=211","perfT":0.84,"perfW":-0.34,"perfM":1.62,"perfQ":2.65,"perfH":-3.01,"perfY":-3.64,"perfYtd":2.58},{"ticker":"technology","label":"Technology","group":"","screenerUrl":"screener.ashx?f=sec_technology&v=211","perfT":0.63,"perfW":-0.74,"perfM":1.52,"perfQ":11.4,"perfH":19.06,"perfY":22.22,"perfYtd":13.14},{"ticker":"utilities","label":"Utilities","group":"","screenerUrl":"screener.ashx?f=sec_utilities&v=211","perfT":-0.01,"perfW":-1.79,"perfM":-2.82,"perfQ":3.74,"perfH":9.43,"perfY":10.87,"perfYtd":11.62}];
+                        FinvizInitGroupsPerformance(rows);
+                    });
+                })();
+            </script><div class="my-3"><div id="IC_D_3x3_1"class="relative overflow-hidden flex items-center justify-center w-full mx-auto" style="width:970px;height:250px;max-height:250px"></div></div></div></div>
+            <div class="footer" style="margin-top: 20px;padding-bottom: 115px">
+                <div class="footer_links">
+                    <a class="tab-link" href="/affiliate.ashx">Affiliate</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/advertise.ashx">Advertise</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/careers">Careers</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/contact.ashx">Contact</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/blog">Blog</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/help/screener.ashx">Help</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="/privacy.ashx">Privacy</a>
+                    <span class="footer_dot"> • </span>
+                    <a class="tab-link" href="https://x.com/finviz_com" target="_blank">Follow us on X</a><span class="footer_dot"> • </span> <a id="ic_us_privacy" class="tab-link relative overflow-hidden [&>a]:absolute [&>a]:inset-0 [&>a]:-indent-[9999em]" href="#">Do Not Sell My Personal Information</a>    </div>
+    Quotes delayed 15 minutes for NASDAQ, NYSE and AMEX.
+    <br>
+    Copyright © 2007-2025 FINVIZ.com. All Rights Reserved.
+
+</div>
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-537M973G');</script>
+            <script>
+              function getSystemTheme() {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                  return 'Dark';
+                }
+                else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                  return 'Light';
+                }
+                return 'No Preference';
+              }
+
+              var systemTheme = getSystemTheme()
+
+              const headlessChrome = navigator.userAgent.includes('HeadlessChrome')
+              const webdriver = navigator.webdriver
+
+              let cdp = false
+              try {
+                let accessed = false
+                const e = new window.Error('ignore')
+                window.Object.defineProperty(e, 'stack', {
+                  configurable: false,
+                  enumerable: false,
+                  get: function () {
+                    accessed = true
+                    return ''
+                  },
+                })
+                // This is part of the detection and shouldn't be deleted
+                window.console.debug(e)
+                cdp = accessed
+              } catch {}
+
+              gtag('js', new Date());
+
+              var fGaM = {
+                'dimension1': 'NotLoggedIn',
+                'dimension3': window.devicePixelRatio,
+                'layoutTheme': 'dark',
+                'systemTheme': systemTheme,
+                'bundle': 'modern',
+                'prefTheme': 'dark',
+                'themeFlag': 'modern',
+                innerWidth: window.innerWidth,
+                innerHeight: window.innerHeight,
+                webdriver: webdriver,
+                cdp: cdp,
+                isBot: headlessChrome || webdriver || cdp,
+                icAdsVariant: 'control',
+              };
+
+              gtag('config', 'G-ZT9VQEWD4N', fGaM);
+
+            </script>
+            <script type="text/javascript">
+        window._qevents = window._qevents || [];
+
+        (function() {
+            var elem = document.createElement('script');
+            elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+            elem.async = true;
+            elem.type = "text/javascript";
+            var scpt = document.getElementsByTagName('script')[0];
+            scpt.parentNode.insertBefore(elem, scpt);
+        })();
+
+        window._qevents.push({
+            qacct:"p-c2W8esUZ6Q8oA"
+        });
+    </script>
+    <noscript>
+        <div style="display:none;">
+            <img src="//pixel.quantserve.com/pixel/p-c2W8esUZ6Q8oA.gif" border="0" height="1" width="1" alt="Quantcast"/>
+        </div>
+    </noscript><div id="IC_D_1x1_1"class="relative overflow-hidden flex items-center justify-center w-full mx-auto"></div><div id="modal-elite-ad" class="modal-elite-ad">
+                            <div id="modal-elite-ad_content" class="modal-elite-ad_content">
+			                    <button id="modal-elite-ad-close" type="button" class="modal-elite-ad_close">×</button>
+
+                                <!--<div id="modal-elite-ad-content-0" style="display: none">
+			                        <h2>Ever heard of Finviz*Elite?</h2>
+                                    <p>
+                                        Our premium service offers you real-time quotes, advanced visualizations, technical studies, and much more.<br>
+                                        Become Elite and make informed financial decisions.
+                                    </p>
+                                    <a href="/elite?utm_source=finviz&utm_medium=banner&utm_campaign=modal-0" id="modal-elite-ad-btn-0" class="" target="_blank">Find out more</a>
+                                </div>-->
+
+                                <div id="modal-elite-ad-content-1" style="display: block">
+			                        <h2>Upgrade your FINVIZ experience</h2>
+                                    <p>
+                                        Join thousands of traders who make more informed decisions with&nbsp;our&nbsp;premium features.
+                                        Real-time quotes, advanced&nbsp;visualizations, backtesting, and much more.
+                                    </p>
+                                    <a href="/elite?utm_source=finviz&utm_medium=banner&utm_campaign=modal-1" id="modal-elite-ad-btn-1" class="modal-elite_button" target="_blank">Learn more about FINVIZ*Elite</a>
+                                </div>
+                            </div>
+                         </div><script src="/assets/dist/script/pv.v1.27fa030f.js" async></script><script defer>window.renderScriptNotLoaded();</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"97a50d885a8d21de","version":"2025.8.0","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"token":"e53f08f6c9e04bfd9760701085ec93b4","b":1}' crossorigin="anonymous"></script>
+</body>
+</html>
