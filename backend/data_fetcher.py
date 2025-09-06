@@ -94,7 +94,9 @@ class MarketDataFetcher:
             logger.warning(f"[E001] {ERROR_CODES['E001']} AI functions will be skipped.")
             self.openai_client = None
         else:
-            http_client = httpx.Client(proxies={})
+            # trust_env=False to prevent httpx from using system proxy settings,
+            # which seems to be the original intent of proxies={}.
+            http_client = httpx.Client(trust_env=False)
             self.openai_client = openai.OpenAI(api_key=api_key, http_client=http_client)
 
     # --- Ticker List Fetching ---
