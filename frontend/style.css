@@ -1,14 +1,13 @@
 :root {
-    --background: #1a1a1a;
-    --card-background: #2a2a2a;
-    --tab-text: #00c853;
-    --tab-active-bg: #00c853;
+    --background: #E6F3F7;
+    --card-background: #FFFFFF;
+    --tab-text: #006B6B;
+    --tab-active-bg: #006B6B;
     --tab-active-text: #000000;
-    --text-primary: #e0e0e0;
-    --text-secondary: #b0b0b0;
-    --border-color: #3a3a3a;
-    --sector-bg: #1e1e1e;
-    --sector-border: #444;
+    --text-primary: #212121;
+    --text-secondary: #757575;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.05);
 }
 
 body {
@@ -16,32 +15,112 @@ body {
     background-color: var(--background);
     color: var(--text-primary);
     margin: 0;
-    padding: 10px;
+    padding: 0;
     font-size: 14px;
+    line-height: 1.6;
 }
 
-h1 {
-    color: var(--tab-text);
-    text-align: center;
-    font-size: 1.5em;
-    margin: 20px 0;
-}
-
-#dashboard {
+.container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 15px;
 }
 
-/* --- D3 Heatmap Styles --- */
-.heatmaps-main-container {
-    margin-top: 20px;
-    padding: 10px;
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    color: var(--tab-text);
+    font-size: 1.8em;
+    margin: 0 0 5px 0;
+}
+
+.last-updated {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin: 0;
+}
+
+/* --- Tab Styles --- */
+.tab-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: var(--tab-text);
+    font-size: 1em;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+}
+
+.tab-button:hover {
+    background-color: rgba(0, 107, 107, 0.05);
+}
+
+.tab-button.active {
+    color: var(--tab-active-text);
+    background-color: var(--tab-active-bg);
+    border-bottom-color: var(--tab-active-bg);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.5s;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* --- Card Style --- */
+.card {
     background-color: var(--card-background);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px var(--shadow-color);
 }
 
+/* --- Loading Spinner --- */
+.loading-container {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-secondary);
+}
+.loading-spinner {
+    margin: 20px auto;
+    border: 4px solid rgba(0,0,0,0.1);
+    border-left-color: var(--tab-text);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* --- D3 Heatmap Styles --- */
 .heatmap-wrapper {
     margin-bottom: 30px;
 }
@@ -50,34 +129,33 @@ h1 {
     color: var(--tab-text);
     font-size: 1.4em;
     text-align: left;
-    margin: 10px 0 15px 0;
+    margin-bottom: 15px;
     padding-bottom: 5px;
     border-bottom: 2px solid var(--border-color);
 }
 
-/* D3 SVG Styles */
 .sector-label {
-    fill: #fff;
-    font-size: 18px;
+    fill: #333;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .industry-label {
-    fill: #ccc;
-    font-size: 14px;
+    fill: #666;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .stock-rect {
-    stroke: #1a1a1a;
-    stroke-width: 1px;
+    stroke: var(--card-background);
+    stroke-width: 2px;
 }
 
 .stock-label {
     fill: white;
     font-size: 12px;
     font-weight: bold;
-    pointer-events: none; /* Allows mouse events to pass through to the rect */
+    pointer-events: none;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
@@ -86,12 +164,12 @@ h1 {
     text-align: left;
     padding: 8px;
     font-size: 12px;
-    background: #222;
-    border: 1px solid #555;
+    background: #fff;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     pointer-events: none;
-    color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    color: var(--text-primary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     line-height: 1.4;
 }
 
@@ -103,25 +181,17 @@ h1 {
 }
 
 
-/* News Styles */
-.news-container {
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
+/* --- News Styles --- */
 .news-summary {
-    background-color: var(--card-background);
-    color: var(--text-primary);
-    padding: 15px;
-    border-radius: 8px;
     margin-bottom: 20px;
-    border: 1px solid var(--border-color);
 }
 
 .news-summary h3, .main-topics-container h3 {
     margin-top: 0;
     color: var(--tab-text);
-    font-size: 1.1em;
+    font-size: 1.2em;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 5px;
 }
 
 .main-topics-container {
@@ -129,76 +199,194 @@ h1 {
 }
 
 .topic-box {
-    background-color: var(--sector-bg);
+    background-color: var(--background);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
 }
 
 .topic-title {
     font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 8px;
+    margin: 0 0 8px 0;
+    font-size: 1em;
+}
+
+.topic-title-red { color: #c62828; }
+.topic-title-blue { color: #1565c0; }
+
+.topic-box p {
+    margin: 0;
     font-size: 0.95em;
 }
 
-.topic-title-red {
-    color: #ef5350;
+/* --- Market Tab Styles --- */
+.market-section {
+    margin-bottom: 30px;
+}
+.market-section h3 {
+    color: var(--tab-text);
+    font-size: 1.3em;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+.fg-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.fg-gauge {
+    position: relative;
+    width: 250px;
+    height: 125px;
+    overflow: hidden;
+}
+.fg-gauge-base {
+    width: 100%;
+    height: 100%;
+    border-radius: 250px 250px 0 0;
+    background: conic-gradient(
+        from -90deg,
+        #d32f2f 0%, #ef5350 20%, /* Extreme Fear */
+        #ffc107 40%,             /* Fear */
+        #fff176 50%,             /* Neutral */
+        #a5d6a7 60%,             /* Greed */
+        #4caf50 80%, #2e7d32 100% /* Extreme Greed */
+    );
+    -webkit-mask-image: radial-gradient(circle at 50% 100%, transparent 65%, black 66%);
+    mask-image: radial-gradient(circle at 50% 100%, transparent 65%, black 66%);
+}
+.fg-gauge-needle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    height: 110px;
+    background-color: #333;
+    transform-origin: bottom center;
+    transition: transform 0.8s ease-out;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+.fg-gauge-center {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    border-radius: 50%;
+    border: 3px solid var(--card-background);
+}
+.fg-value-display {
+    text-align: center;
+}
+.fg-now-value {
+    font-size: 3em;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.fg-now-category {
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.fg-history {
+    text-align: center;
+    margin-top: 15px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+.fg-history p {
+    margin: 4px 0;
 }
 
-.topic-title-blue {
-    color: #42a5f5;
+/* --- Indicators Tab Styles --- */
+.indicators-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+.indicators-table th, .indicators-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.indicators-table thead th {
+    background-color: var(--background);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.indicators-table tbody tr:nth-child(even) {
+    background-color: #f7f9fa;
+}
+.indicators-table tbody tr:hover {
+    background-color: #eff3f5;
+}
+.indicators-table .importance-3 {
+    color: #ff9800;
+    font-weight: bold;
 }
 
-.topic-box p {
-    margin: 5px 0;
-    line-height: 1.4;
+/* --- Column Tab Styles --- */
+.column-container h3 {
+    color: var(--tab-text);
+    font-size: 1.3em;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 5px;
+}
+.column-date {
     font-size: 0.9em;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+}
+.column-content {
+    line-height: 1.7;
 }
 
-/* モバイル対応 */
+/* --- Mobile Responsive --- */
 @media (max-width: 768px) {
-    body {
+    .container {
         padding: 5px;
     }
-    
-    #dashboard {
-        padding: 0;
+    .tab-button {
+        padding: 8px 10px;
+        font-size: 0.9em;
+        margin: 0 2px 5px 2px;
     }
-    
-    .heatmap-main-title {
-        font-size: 1.2em;
+    .header h1 {
+        font-size: 1.5em;
     }
-
-    .sector-label {
-        font-size: 14px;
+    .card {
+        padding: 15px;
     }
-
-    .industry-label {
-        font-size: 11px;
-    }
-
-    .stock-label {
-        font-size: 9px;
-    }
+    .heatmap-main-title { font-size: 1.2em; }
+    .sector-label { font-size: 14px; }
+    .industry-label { font-size: 11px; }
+    .stock-label { font-size: 9px; }
 }
 
-/* スクロールバーのスタイリング */
+/* --- Scrollbar --- */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
-
 ::-webkit-scrollbar-track {
     background: var(--background);
 }
-
 ::-webkit-scrollbar-thumb {
-    background: var(--border-color);
+    background: #ccc;
     border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
+    background: #aaa;
 }
