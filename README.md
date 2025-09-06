@@ -59,3 +59,98 @@ HanaViewは、個人投資家が毎朝の市場チェックを効率化するた
     ```
 
 これで、フロントエンドに表示されるデータが手動で更新されます。
+
+## 4. Xserver VPSへのデプロイ手順 (Deployment to Xserver VPS)
+
+このセクションでは、本アプリケーションをXserver VPSにデプロイし、Cloudflareを利用して常時SSL化（HTTPS）されたWebアプリとして公開する手順を解説します。
+
+### 4.1. 前提条件
+
+- **Xserver VPS契約**: サーバーが利用可能な状態であること。
+- **ドメイン取得**: 公開に使用するドメインを取得済みであること。
+- **ローカル環境**: `git`がインストールされていること。
+
+### 4.2. サーバーの初期設定
+
+Xserver VPSにSSHでログインし、基本的なツールをインストールします。
+
+```bash
+# apt-getの場合 (Ubuntu/Debian)
+sudo apt-get update
+sudo apt-get install -y docker.io docker-compose git
+
+# yumの場合 (CentOS)
+sudo yum update -y
+sudo yum install -y docker docker-compose git
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+### 4.3. Cloudflareの設定
+
+1.  **Cloudflareにサインアップ**し、取得したドメインをサイトとして追加します。
+2.  DNS設定画面で、VPSのIPアドレスを指す**Aレコード**を作成します。
+    -   **タイプ**: A
+    -   **名前**: `example.com` (ドメイン名) または `@`
+    -   **IPv4アドレス**: Xserver VPSのIPアドレス
+    -   **プロキシステータス**: **プロキシ済み**（オレンジ色の雲アイコン）に設定します。
+3.  `www`などのサブドメインも使用する場合は、同様にAレコードまたはCNAMEレコードを追加します。
+
+### 4.4. SSL証明書の準備 (Cloudflare Origin CA)
+
+Cloudflareの「フル (厳密)」SSLモードを利用するため、サーバーとCloudflare間の通信を暗号化する**Origin CA証明書**を無料で発行します。
+
+1.  Cloudflareダッシュボードで、**[SSL/TLS] > [オリジンサーバー]** タブに移動します。
+2.  **「証明書を作成する」** をクリックします。
+3.  デフォルト設定のまま **「作成」** をクリックします。
+4.  **オリジン証明書**と**プライベートキー**が生成されます。これらをコピーして、それぞれ `nginx.crt` と `nginx.key` という名前でローカルPCに保存します。
+
+### 4.5. アプリケーションのデプロイ
+
+1.  **リポジトリをクローンします。**
+    ローカルPCで、ターミナルを開き、リポジトリをクローンします。
+    ```bash
+    git clone <repository_url>
+    cd <repository_directory>
+    ```
+
+2.  **SSL証明書を配置します。**
+    先ほど保存した `nginx.crt` と `nginx.key` を、プロジェクト内の `nginx/certs/` ディレクトリに配置します。既存の自己署名証明書は上書きまたは削除してください。
+
+3.  **Nginx設定ファイルを編集します。**
+    `nginx/nginx.conf` を開き、`server_name` を `localhost` から自分のドメイン名に変更します。
+    ```nginx
+    # Before
+    server_name localhost;
+
+    # After
+    server_name example.com www.example.com;
+    ```
+
+4.  **環境変数ファイルを作成します。**
+    プロジェクトのルートに `.env` ファイルを作成し、OpenAI APIキーを設定します。
+    ```
+    OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ```
+
+5.  **サーバーにプロジェクトをアップロードします。**
+    `scp` や `rsync` などのツールを使い、プロジェクト全体をXserver VPSにアップロードします。
+    ```bash
+    # 例: rsyncを使用する場合 (ローカルPCから実行)
+    rsync -avz --exclude '.git' --exclude '.idea' ./ user@your_vps_ip:/path/to/hanaview/
+    ```
+
+6.  **アプリケーションを起動します。**
+    VPSにSSHでログインし、アップロードしたプロジェクトディレクトリに移動して、Docker Composeを起動します。
+    ```bash
+    cd /path/to/hanaview/
+    sudo docker-compose up -d --build
+    ```
+
+### 4.6. Cloudflareの最終設定
+
+1.  Cloudflareダッシュボードで、**[SSL/TLS] > [概要]** タブに移動します。
+2.  SSL/TLS暗号化モードを **「フル (厳密)」 (Full (Strict))** に設定します。
+3.  **[常にHTTPSを使用]** をオンにすることをお勧めします。
+
+これで、`https://example.com` にアクセスすると、アプリケーションが表示されます。PWAとして「ホーム画面に追加」も可能なはずです。

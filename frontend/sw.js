@@ -1,12 +1,12 @@
 const CACHE_NAME = 'hanaview-cache-v1';
 const APP_SHELL_URLS = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
   'https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js',
   'https://d3js.org/d3.v7.min.js'
 ];
