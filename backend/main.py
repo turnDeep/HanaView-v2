@@ -59,4 +59,4 @@ def get_market_data():
 
 # Mount the frontend directory to serve static files
 # This should come AFTER all API routes
-app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
+app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
