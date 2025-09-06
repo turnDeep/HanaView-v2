@@ -21,7 +21,6 @@ RUN chmod +x /app/backend/cron_job_*.sh
 # Add cron job
 COPY backend/cron_jobs /etc/cron.d/hanaview-cron
 RUN chmod 0644 /etc/cron.d/hanaview-cron
-RUN crontab /etc/cron.d/hanaview-cron
 
 # Start services.
 CMD cron && cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000
