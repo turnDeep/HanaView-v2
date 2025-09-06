@@ -76,189 +76,119 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getPerformanceColor(performance) {
         // Finviz風の色分け
-        if (performance >= 5) return '#00c853';      // 明るい緑
-        if (performance >= 3) return '#2e7d32';      // 緑
-        if (performance >= 1) return '#66bb6a';      // 薄緑
-        if (performance >= 0) return '#81c784';      // より薄い緑
-        if (performance >= -1) return '#ffcdd2';     // 薄い赤
-        if (performance >= -3) return '#ef5350';     // 赤
-        if (performance >= -5) return '#e53935';     // 濃い赤
-        return '#c62828';                            // 暗い赤
+        if (performance >= 3) return '#00c853';    // Strong Green
+        if (performance > 1) return '#2e7d32';     // Medium Green
+        if (performance > 0) return '#66bb6a';     // Light Green
+        if (performance == 0) return '#888888';    // Neutral Gray
+        if (performance > -1) return '#ef5350';    // Light Red
+        if (performance > -3) return '#e53935';    // Medium Red
+        return '#c62828';                          // Strong Red
     }
 
-    function calculateTileSize(marketCap, totalMarketCap, containerArea) {
-        // 時価総額に基づくタイルサイズの計算
-        const ratio = marketCap / totalMarketCap;
-        const area = containerArea * ratio;
-        const size = Math.sqrt(area);
-        // 最小サイズと最大サイズの制限
-        return Math.max(30, Math.min(150, size));
-    }
-
-    function renderHeatmap(container, title, heatmapData, periodLabel) {
-        if (!heatmapData || !heatmapData.sectors) {
-            container.innerHTML += `<div class="heatmap-error">No ${title} data available.</div>`;
+    function renderHeatmap(container, title, heatmapData) {
+        if (!heatmapData || !heatmapData.stocks || heatmapData.stocks.length === 0) {
+            container.innerHTML += `<div class="heatmap-error">No data for ${title}.</div>`;
             return;
         }
 
         const heatmapWrapper = document.createElement('div');
         heatmapWrapper.className = 'heatmap-wrapper';
 
-        // タイトルとピリオドラベル
-        const heatmapHeader = document.createElement('div');
-        heatmapHeader.className = 'heatmap-header';
-        const headerTitle = document.createElement('h3');
-        headerTitle.textContent = `${title} - ${periodLabel}`;
-        heatmapHeader.appendChild(headerTitle);
-        heatmapWrapper.appendChild(heatmapHeader);
+        const headerTitle = document.createElement('h2');
+        headerTitle.className = 'heatmap-main-title';
+        headerTitle.textContent = title;
+        heatmapWrapper.appendChild(headerTitle);
 
-        const heatmapContainer = document.createElement('div');
-        heatmapContainer.className = 'heatmap-container';
+        // --- D3 Treemap Implementation ---
+        const width = 1000;
+        const height = 600;
+        const svg = d3.create("svg")
+            .attr("viewBox", `0 0 ${width} ${height}`)
+            .attr("width", "100%")
+            .attr("height", "auto")
+            .style("font-family", "sans-serif");
 
-        // セクターごとに処理
-        const sectors = heatmapData.sectors;
-        const sectorOrder = [
-            'Technology',
-            'Healthcare',
-            'Financial',
-            'Consumer Cyclical',
-            'Communication Services',
-            'Industrials',
-            'Consumer Defensive',
-            'Energy',
-            'Basic Materials',
-            'Real Estate',
-            'Utilities'
-        ];
+        // 1. Create hierarchy
+        const groupedData = d3.group(heatmapData.stocks, d => d.sector, d => d.industry);
+        const root = d3.hierarchy(groupedData)
+            .sum(d => (d.market_cap && d.ticker) ? d.market_cap : 0) // Sum market_cap for leaf nodes
+            .sort((a, b) => b.value - a.value);
 
-        // 全体の時価総額を計算
-        let totalMarketCap = 0;
-        Object.values(sectors).forEach(stocks => {
-            stocks.forEach(stock => {
-                totalMarketCap += stock.market_cap || 1000000000; // デフォルト10億ドル
-            });
-        });
+        // 2. Create treemap layout
+        const treemap = d3.treemap()
+            .size([width, height])
+            .paddingTop(28)
+            .paddingInner(3)
+            .round(true);
 
-        sectorOrder.forEach(sectorName => {
-            if (!sectors[sectorName] || sectors[sectorName].length === 0) return;
+        treemap(root);
 
-            const sectorDiv = document.createElement('div');
-            sectorDiv.className = 'sector';
-            
-            // セクター名
-            const sectorTitle = document.createElement('div');
-            sectorTitle.className = 'sector-title';
-            sectorTitle.textContent = sectorName;
-            sectorDiv.appendChild(sectorTitle);
+        // Tooltip
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "heatmap-tooltip")
+            .style("opacity", 0);
 
-            // 銘柄タイルコンテナ
-            const stocksContainer = document.createElement('div');
-            stocksContainer.className = 'stocks-container';
+        // 3. Draw the cells
+        const node = svg.selectAll("g")
+            .data(root.descendants())
+            .join("g")
+            .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-            // 銘柄をパフォーマンス順にソート（大きい順）
-            const sortedStocks = [...sectors[sectorName]].sort((a, b) => {
-                return Math.abs(b.performance) - Math.abs(a.performance);
-            });
+        // Sector and Industry Headers
+        node.filter(d => d.depth === 1 || d.depth === 2)
+            .append("text")
+            .attr("class", d => d.depth === 1 ? "sector-label" : "industry-label")
+            .attr("x", 4)
+            .attr("y", 20)
+            .text(d => d.data[0]);
 
-            sortedStocks.forEach(stock => {
-                const stockTile = document.createElement('div');
-                stockTile.className = 'stock-tile';
-                
-                // タイルサイズを時価総額に基づいて計算
-                const containerArea = 10000; // 基準面積
-                const tileSize = calculateTileSize(
-                    stock.market_cap || 1000000000,
-                    totalMarketCap,
-                    containerArea
-                );
-                
-                // スマホ用にサイズを調整（最大幅を制限）
-                const mobileSize = Math.min(tileSize * 0.7, 60);
-                stockTile.style.width = `${mobileSize}px`;
-                stockTile.style.height = `${mobileSize}px`;
-                
-                // 色設定
-                stockTile.style.backgroundColor = getPerformanceColor(stock.performance);
-                
-                // ティッカーシンボル
-                const ticker = document.createElement('div');
-                ticker.className = 'ticker';
-                ticker.textContent = stock.ticker;
-                
-                // パフォーマンス
-                const performance = document.createElement('div');
-                performance.className = 'performance';
-                const perfValue = stock.performance || 0;
-                performance.textContent = `${perfValue > 0 ? '+' : ''}${perfValue.toFixed(2)}%`;
-                
-                stockTile.appendChild(ticker);
-                stockTile.appendChild(performance);
-                
-                // ホバー/タップ時のツールチップ
-                stockTile.title = `${stock.ticker}: ${perfValue > 0 ? '+' : ''}${perfValue.toFixed(2)}%`;
-                
-                stocksContainer.appendChild(stockTile);
+        // Stock Tiles
+        const leaf = node.filter(d => d.depth === 3);
+
+        leaf.append("rect")
+            .attr("class", "stock-rect")
+            .attr("fill", d => getPerformanceColor(d.data.performance))
+            .attr("width", d => d.x1 - d.x0)
+            .attr("height", d => d.y1 - d.y0)
+            .on("mouseover", (event, d) => {
+                tooltip.transition().duration(200).style("opacity", .9);
+                tooltip.html(`<strong>${d.data.ticker}</strong><br/>${d.data.industry}<br/>Perf: ${d.data.performance.toFixed(2)}%<br/>Mkt Cap: ${(d.data.market_cap / 1e9).toFixed(2)}B`)
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.transition().duration(500).style("opacity", 0);
             });
 
-            sectorDiv.appendChild(stocksContainer);
-            heatmapContainer.appendChild(sectorDiv);
-        });
+        // Clip-path for text
+        leaf.append("clipPath")
+            .attr("id", d => `clip-${d.data.ticker}`)
+            .append("rect")
+            .attr("width", d => d.x1 - d.x0)
+            .attr("height", d => d.y1 - d.y0);
 
-        heatmapWrapper.appendChild(heatmapContainer);
+        // Stock Labels (Ticker and Performance)
+        leaf.append("text")
+            .attr("class", "stock-label")
+            .attr("clip-path", d => `url(#clip-${d.data.ticker})`)
+            .selectAll("tspan")
+            .data(d => [d.data.ticker, `${d.data.performance.toFixed(2)}%`])
+            .join("tspan")
+            .attr("x", 4)
+            .attr("y", (d, i) => i === 0 ? "1.1em" : "2.2em")
+            .text(d => d);
+
+        heatmapWrapper.appendChild(svg.node());
         container.appendChild(heatmapWrapper);
     }
 
+
     function renderAllHeatmaps(container, sp500Data, nasdaqData) {
-        // S&P 500 Heatmaps
         if (sp500Data) {
-            const sp500Section = document.createElement('div');
-            sp500Section.className = 'heatmap-section';
-            
-            const sp500Title = document.createElement('h2');
-            sp500Title.className = 'heatmap-main-title';
-            sp500Title.textContent = 'S&P 500 Heatmap';
-            sp500Section.appendChild(sp500Title);
-
-            // 1-Day
-            if (sp500Data.day) {
-                renderHeatmap(sp500Section, 'S&P 500', sp500Data.day, '1-Day');
-            }
-            // 1-Week
-            if (sp500Data.week) {
-                renderHeatmap(sp500Section, 'S&P 500', sp500Data.week, '1-Week');
-            }
-            // 1-Month
-            if (sp500Data.month) {
-                renderHeatmap(sp500Section, 'S&P 500', sp500Data.month, '1-Month');
-            }
-            
-            container.appendChild(sp500Section);
+            renderHeatmap(container, 'S&P 500 Heatmap', sp500Data);
         }
-
-        // NASDAQ 100 Heatmaps
         if (nasdaqData) {
-            const nasdaqSection = document.createElement('div');
-            nasdaqSection.className = 'heatmap-section';
-            
-            const nasdaqTitle = document.createElement('h2');
-            nasdaqTitle.className = 'heatmap-main-title';
-            nasdaqTitle.textContent = 'NASDAQ 100 Heatmap';
-            nasdaqSection.appendChild(nasdaqTitle);
-
-            // 1-Day
-            if (nasdaqData.day) {
-                renderHeatmap(nasdaqSection, 'NASDAQ 100', nasdaqData.day, '1-Day');
-            }
-            // 1-Week
-            if (nasdaqData.week) {
-                renderHeatmap(nasdaqSection, 'NASDAQ 100', nasdaqData.week, '1-Week');
-            }
-            // 1-Month
-            if (nasdaqData.month) {
-                renderHeatmap(nasdaqSection, 'NASDAQ 100', nasdaqData.month, '1-Month');
-            }
-            
-            container.appendChild(nasdaqSection);
+            renderHeatmap(container, 'NASDAQ 100 Heatmap', nasdaqData);
         }
     }
 
@@ -281,65 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Heatmaps Section
             const heatmapsContainer = document.createElement('div');
             heatmapsContainer.className = 'heatmaps-main-container';
-            
-            // Mock data for testing (replace with actual data from backend)
-            const mockSP500Data = {
-                day: {
-                    sectors: {
-                        'Technology': [
-                            { ticker: 'AAPL', performance: 2.5, market_cap: 3000000000000 },
-                            { ticker: 'MSFT', performance: -1.2, market_cap: 2800000000000 },
-                            { ticker: 'GOOGL', performance: 0.8, market_cap: 1800000000000 },
-                            { ticker: 'NVDA', performance: 5.3, market_cap: 1200000000000 },
-                            { ticker: 'META', performance: -2.1, market_cap: 900000000000 }
-                        ],
-                        'Healthcare': [
-                            { ticker: 'JNJ', performance: 0.5, market_cap: 400000000000 },
-                            { ticker: 'UNH', performance: 1.2, market_cap: 500000000000 },
-                            { ticker: 'PFE', performance: -0.8, market_cap: 250000000000 }
-                        ],
-                        'Financial': [
-                            { ticker: 'JPM', performance: 1.8, market_cap: 450000000000 },
-                            { ticker: 'BAC', performance: 2.1, market_cap: 250000000000 },
-                            { ticker: 'WFC', performance: -0.3, market_cap: 180000000000 }
-                        ]
-                    }
-                },
-                week: {
-                    sectors: {
-                        'Technology': [
-                            { ticker: 'AAPL', performance: 4.2, market_cap: 3000000000000 },
-                            { ticker: 'MSFT', performance: 2.8, market_cap: 2800000000000 },
-                            { ticker: 'GOOGL', performance: -1.5, market_cap: 1800000000000 }
-                        ]
-                    }
-                },
-                month: {
-                    sectors: {
-                        'Technology': [
-                            { ticker: 'AAPL', performance: -3.5, market_cap: 3000000000000 },
-                            { ticker: 'MSFT', performance: 6.2, market_cap: 2800000000000 }
-                        ]
-                    }
-                }
-            };
 
-            // Adapt backend data to the structure the frontend expects (day, week, month)
-            let sp500HeatmapData;
-            if (data.sp500_heatmap && data.sp500_heatmap.sectors) {
-                // The backend only provides one set of data, which we'll treat as 'day'
-                sp500HeatmapData = { day: data.sp500_heatmap };
-            } else {
-                // Fallback to mock data if the fetched data is missing or invalid
-                sp500HeatmapData = mockSP500Data;
-            }
-
-            let nasdaqHeatmapData;
-            if (data.nasdaq_heatmap && data.nasdaq_heatmap.sectors) {
-                nasdaqHeatmapData = { day: data.nasdaq_heatmap };
-            } else {
-                nasdaqHeatmapData = mockSP500Data; // Using same mock for simplicity
-            }
+            // Use the fetched data directly
+            let sp500HeatmapData = data.sp500_heatmap;
+            let nasdaqHeatmapData = data.nasdaq_heatmap;
             
             renderAllHeatmaps(heatmapsContainer, sp500HeatmapData, nasdaqHeatmapData);
             dashboardElement.appendChild(heatmapsContainer);

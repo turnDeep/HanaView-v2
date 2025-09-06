@@ -171,11 +171,11 @@ class MarketDataFetcher:
         self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
 
     def _fetch_stock_performance_for_heatmap(self, tickers, batch_size=30):
-        """改善版：レート制限対策を含むヒートマップ用データ取得"""
+        """改善版：レート制限対策を含むヒートマップ用データ取得（業種・フラット構造対応）"""
         if not tickers:
-            return {"sectors": {}, "error": "Ticker list is empty."}
+            return {"stocks": [], "error": "Ticker list is empty."}
 
-        sectors = {}
+        stocks = []
 
         # バッチ処理でレート制限を回避
         for i in range(0, len(tickers), batch_size):
@@ -192,14 +192,19 @@ class MarketDataFetcher:
                     if len(hist) >= 2 and hist['Close'].iloc[-2] != 0:
                         performance = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100
 
-                    sector = info.get('sector', 'Other')
-                    market_cap = info.get('marketCap', 1000000000)
+                    sector = info.get('sector', 'N/A')
+                    industry = info.get('industry', 'N/A')
+                    market_cap = info.get('marketCap', 0)
 
-                    if sector not in sectors:
-                        sectors[sector] = []
+                    # セクターやインダストリーが取得できない、または時価総額が0のものはスキップ
+                    if sector == 'N/A' or industry == 'N/A' or market_cap == 0:
+                        logger.warning(f"Skipping {ticker_symbol} due to missing sector, industry, or market cap.")
+                        continue
 
-                    sectors[sector].append({
+                    stocks.append({
                         "ticker": ticker_symbol,
+                        "sector": sector,
+                        "industry": industry,
                         "performance": round(performance, 2),
                         "market_cap": market_cap
                     })
@@ -215,7 +220,7 @@ class MarketDataFetcher:
                 logger.info(f"Processed {min(i + batch_size, len(tickers))}/{len(tickers)} tickers, waiting...")
                 time.sleep(3)  # 3秒待機
 
-        return {"sectors": sectors}
+        return {"stocks": stocks}
 
     # --- AI Generation ---
     def _call_openai_api(self, prompt, json_mode=False, max_tokens=150):
