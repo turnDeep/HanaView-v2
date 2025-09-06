@@ -50,15 +50,15 @@ ERROR_CODES = {
 LOG_DIR = 'logs'
 LOG_FILE = os.path.join(LOG_DIR, 'app.log')
 
-# Ensure log directory exists
-os.makedirs(LOG_DIR, exist_ok=True)
+# # Ensure log directory exists
+# os.makedirs(LOG_DIR, exist_ok=True) #いったんlogディレクトリの作成をコメントアウト
 
-# Create a rotating file handler
-# 5MB per file, keep 5 old files
-file_handler = logging.handlers.RotatingFileHandler(
-    LOG_FILE, maxBytes=5*1024*1024, backupCount=5, encoding='utf-8'
-)
-file_handler.setLevel(logging.INFO)
+# # Create a rotating file handler
+# # 5MB per file, keep 5 old files
+# file_handler = logging.handlers.RotatingFileHandler(
+#     LOG_FILE, maxBytes=5*1024*1024, backupCount=5, encoding='utf-8'
+# )
+# file_handler.setLevel(logging.INFO)
 
 # Create a stream handler for console output
 stream_handler = logging.StreamHandler()
@@ -66,7 +66,7 @@ stream_handler.setLevel(logging.INFO)
 
 # Create a formatter and set it for both handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-file_handler.setFormatter(formatter)
+# file_handler.setFormatter(formatter)
 stream_handler.setFormatter(formatter)
 
 # Get the root logger and add handlers
@@ -74,7 +74,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # Avoid adding handlers multiple times if this module is reloaded
 if not logger.handlers:
-    logger.addHandler(file_handler)
+    # logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
 
