@@ -29,6 +29,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Rendering Functions ---
 
+    function renderLightweightChart(containerId, data, title) {
+        const container = document.getElementById(containerId);
+        if (!container || !data || data.length === 0) {
+            container.innerHTML = `<p>Chart data for ${title} is not available.</p>`;
+            return;
+        }
+        container.innerHTML = ''; // Clear previous content
+
+        const chart = LightweightCharts.createChart(container, {
+            width: container.clientWidth,
+            height: 300, // Fixed height for chart
+            layout: {
+                backgroundColor: '#ffffff',
+                textColor: '#333333',
+            },
+            grid: {
+                vertLines: { color: '#e1e1e1' },
+                horzLines: { color: '#e1e1e1' },
+            },
+            crosshair: {
+                mode: LightweightCharts.CrosshairMode.Normal,
+            },
+            timeScale: {
+                borderColor: '#cccccc',
+                timeVisible: true,
+                secondsVisible: false,
+            },
+        });
+
+        const candlestickSeries = chart.addCandlestickSeries({
+            upColor: '#26a69a',
+            downColor: '#ef5350',
+            borderDownColor: '#ef5350',
+            borderUpColor: '#26a69a',
+            wickDownColor: '#ef5350',
+            wickUpColor: '#26a69a',
+        });
+
+        // Convert backend time string to UTC timestamp for the chart
+        const chartData = data.map(item => ({
+            time: (new Date(item.time).getTime() / 1000), // Convert to UNIX timestamp (seconds)
+            open: item.open,
+            high: item.high,
+            low: item.low,
+            close: item.close,
+        }));
+
+        candlestickSeries.setData(chartData);
+        chart.timeScale().fitContent();
+
+        // Handle resizing
+        new ResizeObserver(entries => {
+            if (entries.length > 0 && entries[0].contentRect.width > 0) {
+                chart.applyOptions({ width: entries[0].contentRect.width });
+            }
+        }).observe(container);
+    }
+
     function renderMarketOverview(container, marketData) {
         if (!container) return;
         container.innerHTML = ''; // Clear content
@@ -76,20 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // TradingView Charts
+        // Lightweight Charts
         content += `
             <div class="market-grid">
                 <div class="market-section">
                     <h3>VIX指数 (4時間足)</h3>
-                    <div class="tradingview-widget-container" style="height:400px; width:100%;">
-                        <div id="tradingview-vix"></div>
-                    </div>
+                    <div class="chart-container" id="vix-chart-container"></div>
                 </div>
                 <div class="market-section">
                     <h3>米国10年債先物 (4時間足)</h3>
-                    <div class="tradingview-widget-container" style="height:400px; width:100%;">
-                        <div id="tradingview-t-note"></div>
-                    </div>
+                    <div class="chart-container" id="t-note-chart-container"></div>
                 </div>
             </div>
         `;
@@ -97,40 +151,12 @@ document.addEventListener('DOMContentLoaded', () => {
         card.innerHTML = content;
         container.appendChild(card);
 
-        // --- Embed TradingView Widgets ---
-        // This requires the TradingView script to be loaded in index.html
-        // The script is added to index.html in the next step.
-        // For now, we define the creation logic.
-        if (typeof TradingView !== 'undefined') {
-            // VIX Chart
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": "TVC:VIX",
-                "interval": "240",
-                "timezone": "Asia/Tokyo",
-                "theme": "light",
-                "style": "1",
-                "locale": "ja",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview-vix"
-            });
-
-            // T-Note Chart
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": "ZN1!",
-                "interval": "240",
-                "timezone": "Asia/Tokyo",
-                "theme": "light",
-                "style": "1",
-                "locale": "ja",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview-t-note"
-            });
+        // Render lightweight charts
+        if (marketData.vix && marketData.vix.history) {
+            renderLightweightChart('vix-chart-container', marketData.vix.history, 'VIX');
+        }
+        if (marketData.t_note_future && marketData.t_note_future.history) {
+            renderLightweightChart('t-note-chart-container', marketData.t_note_future.history, '10y T-Note');
         }
     }
 

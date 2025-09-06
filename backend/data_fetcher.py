@@ -1,5 +1,6 @@
 import json
 import logging
+import logging.handlers
 import os
 import re
 import sys
@@ -19,16 +20,62 @@ FINAL_DATA_PATH_PREFIX = os.path.join(DATA_DIR, 'data_')
 # URLs
 CNN_FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata/"
 MINKABU_INDICATORS_URL = "https://fx.minkabu.jp/indicators"
+YAHOO_FINANCE_NEWS_URL = "https://finance.yahoo.com/topic/stock-market-news/"
+YAHOO_EARNINGS_CALENDAR_URL = "https://finance.yahoo.com/calendar/earnings"
 SP500_WIKI_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 NASDAQ100_WIKI_URL = "https://en.wikipedia.org/wiki/Nasdaq-100"
 
 # Tickers
-VIX_TICKER = "^VIX"
+VIX_TICKER = "VX=F"  # Use VIX futures for intraday data
 T_NOTE_TICKER = "ZN=F"
 
+# --- Error Handling ---
+class MarketDataError(Exception):
+    """Custom exception for data fetching and processing errors."""
+    def __init__(self, code, message=None):
+        self.code = code
+        self.message = message or ERROR_CODES.get(code, "An unknown error occurred.")
+        super().__init__(f"[{self.code}] {self.message}")
+
+ERROR_CODES = {
+    "E001": "OpenAI API key is not configured.",
+    "E002": "Data file could not be read.",
+    "E003": "Failed to connect to an external API.",
+    "E004": "Failed to fetch Fear & Greed Index data.",
+    "E005": "AI content generation failed.",
+    "E006": "Failed to fetch heatmap data.",
+}
+
 # --- Logging Configuration ---
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LOG_DIR = 'logs'
+LOG_FILE = os.path.join(LOG_DIR, 'app.log')
+
+# Ensure log directory exists
+os.makedirs(LOG_DIR, exist_ok=True)
+
+# Create a rotating file handler
+# 5MB per file, keep 5 old files
+file_handler = logging.handlers.RotatingFileHandler(
+    LOG_FILE, maxBytes=5*1024*1024, backupCount=5, encoding='utf-8'
+)
+file_handler.setLevel(logging.INFO)
+
+# Create a stream handler for console output
+stream_handler = logging.StreamHandler()
+stream_handler.setLevel(logging.INFO)
+
+# Create a formatter and set it for both handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+stream_handler.setFormatter(formatter)
+
+# Get the root logger and add handlers
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+# Avoid adding handlers multiple times if this module is reloaded
+if not logger.handlers:
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
 
 
 # --- Main Data Fetching Class ---
@@ -38,10 +85,12 @@ class MarketDataFetcher:
         self.http_session = Session(impersonate="chrome110", headers={'Accept-Language': 'en-US,en;q=0.9'})
         # yfinance用のセッションも別途作成
         self.yf_session = Session(impersonate="safari15_5")
-        self.data = {"market": {}}
+        self.data = {"market": {}, "news": [], "indicators": {"economic": [], "notable_earnings": []}}
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
-            logger.warning("OPENAI_API_KEY environment variable not set. AI functions will be skipped.")
+            # E001: OpenAI API Key not set. This is critical for generation steps.
+            # We will log a warning but allow fetching to proceed. Generation will fail later.
+            logger.warning(f"[E001] {ERROR_CODES['E001']} AI functions will be skipped.")
             self.openai_client = None
         else:
             self.openai_client = openai.OpenAI(api_key=api_key)
@@ -99,17 +148,25 @@ class MarketDataFetcher:
             return {"current": round(current_price, 2), "history": history_list}
         except Exception as e:
             logger.error(f"Error fetching {ticker_symbol}: {e}")
-            # エラー時は少し待機してリトライ
-            time.sleep(1)
-            return {"current": None, "history": [], "error": str(e)}
+            # E003: Failed to connect to an external API.
+            raise MarketDataError("E003", f"yfinance failed for {ticker_symbol}: {e}") from e
 
     def fetch_vix(self):
         logger.info("Fetching VIX data...")
-        self.data['market']['vix'] = self._fetch_yfinance_data(VIX_TICKER, interval="1d", resample_period='1d')
+        try:
+            # Use default 4h resampling for VIX futures
+            self.data['market']['vix'] = self._fetch_yfinance_data(VIX_TICKER)
+        except MarketDataError as e:
+            self.data['market']['vix'] = {"current": None, "history": [], "error": str(e)}
+            logger.error(f"VIX fetch failed: {e}")
 
     def fetch_t_note_future(self):
         logger.info("Fetching T-note future data...")
-        self.data['market']['t_note_future'] = self._fetch_yfinance_data(T_NOTE_TICKER)
+        try:
+            self.data['market']['t_note_future'] = self._fetch_yfinance_data(T_NOTE_TICKER)
+        except MarketDataError as e:
+            self.data['market']['t_note_future'] = {"current": None, "history": [], "error": str(e)}
+            logger.error(f"T-Note fetch failed: {e}")
 
     def _get_historical_value(self, data, days_ago):
         target_date = datetime.now() - timedelta(days=days_ago)
@@ -138,7 +195,7 @@ class MarketDataFetcher:
             self.data['market']['fear_and_greed'] = {'now': round(current_value), 'previous_close': round(self._get_historical_value(fg_data, 1)), 'prev_week': round(self._get_historical_value(fg_data, 7)), 'prev_month': round(self._get_historical_value(fg_data, 30)), 'prev_year': round(self._get_historical_value(fg_data, 365)), 'category': self._get_fear_greed_category(current_value)}
         except Exception as e:
             logger.error(f"Error fetching Fear & Greed Index: {e}")
-            self.data['market']['fear_and_greed'] = {'now': None, 'error': str(e)}
+            self.data['market']['fear_and_greed'] = {'now': None, 'error': f"[E004] {ERROR_CODES['E004']}: {e}"}
 
     def fetch_economic_indicators(self):
         logger.info("Fetching economic indicators...")
@@ -157,18 +214,98 @@ class MarketDataFetcher:
             self.data['indicators'] = {"economic": indicators}
         except Exception as e:
             logger.error(f"Error fetching economic indicators: {e}")
-            self.data['indicators'] = {"economic": [], "error": str(e)}
+            self.data['indicators']['economic'] = []
+            self.data['indicators']['error'] = f"[E003] {ERROR_CODES['E003']}: {e}"
+
+    def fetch_yahoo_finance_news(self):
+        """Fetches news from Yahoo Finance."""
+        logger.info("Fetching news from Yahoo Finance...")
+        try:
+            response = self.http_session.get(YAHOO_FINANCE_NEWS_URL, timeout=30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            news_items = []
+            # Find all list items that likely contain news articles
+            for item in soup.find_all('li', class_='js-stream-content', limit=10):
+                title_tag = item.find('a')
+                summary_tag = item.find('p')
+
+                if title_tag and summary_tag:
+                    title = title_tag.get_text(strip=True)
+                    link = title_tag['href']
+                    # Yahoo Finance links can be relative, so make them absolute
+                    if not link.startswith('http'):
+                        link = f"https://finance.yahoo.com{link}"
+
+                    summary = summary_tag.get_text(strip=True)
+
+                    news_items.append({
+                        "title": title,
+                        "link": link,
+                        "summary": summary,
+                        "publisher": "Yahoo Finance"
+                    })
+
+            self.data['news_raw'] = news_items
+            logger.info(f"Fetched {len(news_items)} news items from Yahoo Finance.")
+
+        except Exception as e:
+            logger.error(f"Error fetching Yahoo Finance news: {e}")
+            self.data['news_raw'] = []
+            # This is not critical, so we just log it and the AI gen will handle the empty list
+
+    def fetch_earnings_calendar(self):
+        """Fetches the earnings calendar for the current day."""
+        logger.info("Fetching earnings calendar from Yahoo Finance...")
+        try:
+            # Yahoo's calendar page is JS-heavy, so we might need to find the right API or be clever.
+            # For today, we'll try scraping the main page.
+            # Note: A more robust solution might involve finding an API endpoint.
+            response = self.http_session.get(f"{YAHOO_EARNINGS_CALENDAR_URL}?day={datetime.now().strftime('%Y-%m-%d')}", timeout=30)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            earnings_list = []
+            rows = soup.find_all('tr', class_='simpTblRow')
+
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) >= 4:
+                    symbol = cols[0].get_text(strip=True)
+                    company = cols[1].get_text(strip=True)
+                    time_str = cols[2].get_text(strip=True)
+
+                    earnings_list.append({
+                        "symbol": symbol,
+                        "company": company,
+                        "release_time": time_str
+                    })
+
+            self.data['earnings_raw'] = earnings_list
+            logger.info(f"Fetched {len(earnings_list)} earnings announcements for today.")
+
+        except Exception as e:
+            logger.error(f"Error fetching earnings calendar: {e}")
+            self.data['earnings_raw'] = []
+            # This is not critical, so we just log it and the AI gen will handle the empty list
+
 
     def fetch_heatmap_data(self):
         """ヒートマップデータ取得（API対策強化版）"""
         logger.info("Fetching heatmap data...")
-        sp500_tickers = self._get_sp500_tickers()
-        nasdaq100_tickers = self._get_nasdaq100_tickers()
-        logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
+        try:
+            sp500_tickers = self._get_sp500_tickers()
+            nasdaq100_tickers = self._get_nasdaq100_tickers()
+            logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
 
-        # バッチサイズを小さくしてレート制限を回避
-        self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
-        self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
+            # バッチサイズを小さくしてレート制限を回避
+            self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
+            self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
+        except Exception as e:
+            logger.error(f"Error during heatmap data fetching: {e}")
+            self.data['sp500_heatmap'] = {"stocks": [], "error": f"[E006] {ERROR_CODES['E006']}: {e}"}
+            self.data['nasdaq_heatmap'] = {"stocks": [], "error": f"[E006] {ERROR_CODES['E006']}: {e}"}
 
     def _fetch_stock_performance_for_heatmap(self, tickers, batch_size=30):
         """改善版：レート制限対策を含むヒートマップ用データ取得（業種・フラット構造対応）"""
@@ -225,7 +362,8 @@ class MarketDataFetcher:
     # --- AI Generation ---
     def _call_openai_api(self, prompt, json_mode=False, max_tokens=150):
         if not self.openai_client:
-            return "OpenAI API key not configured. Skipping."
+            # E001 is logged at startup, here we raise E005 because the generation failed.
+            raise MarketDataError("E005", "OpenAI client is not available.")
         try:
             logger.info(f"Calling OpenAI API (json_mode={json_mode}, max_tokens={max_tokens})...")
             messages = [{"role": "user", "content": prompt}]
@@ -242,7 +380,8 @@ class MarketDataFetcher:
             return json.loads(content) if json_mode else content
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
-            return {"error": f"Error generating text: {e}"} if json_mode else f"Error generating text: {e}"
+            # E005: AI content generation failed.
+            raise MarketDataError("E005", str(e)) from e
 
     def generate_ai_commentary(self):
         logger.info("Generating AI commentary...")
@@ -255,33 +394,70 @@ class MarketDataFetcher:
         self.data['market']['ai_commentary'] = self._call_openai_api(prompt, max_tokens=200)
 
     def generate_ai_news(self):
-        """Generates AI news summary and topics."""
-        logger.info("Generating AI news...")
-        # Simple prompt using key market data
-        vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
-        fear_greed_value = self.data.get('market', {}).get('fear_and_greed', {}).get('now', 'N/A')
+        """Generates AI news summary and topics based on fetched Yahoo Finance news."""
+        logger.info("Generating AI news analysis...")
+
+        raw_news = self.data.get('news_raw')
+        if not raw_news:
+            logger.warning("No raw news available to generate AI news.")
+            self.data['news'] = {
+                "summary": "ニュースが取得できなかったため、AIによる分析は行えませんでした。",
+                "topics": [],
+            }
+            return
+
+        # Prepare the news content for the prompt
+        news_content = ""
+        for i, item in enumerate(raw_news):
+            news_content += f"記事{i+1}: {item['title']}\n概要: {item['summary']}\n\n"
 
         prompt = f"""
-        現在の市場データ（VIX: {vix}, Fear & Greed Index: {fear_greed_value}）を基に、日本の個人投資家向けのニュースを作成してください。
+        以下の米国市場に関するニュース記事群を分析し、日本の個人投資家向けに要約してください。
+
+        ニュース記事:
+        ---
+        {news_content}
+        ---
+
+        上記のニュース全体から、今日の市場のムードが最も伝わるように、事実とその解釈を織り交ぜて「今朝の3行サマリー」を作成してください。
+        さらに、最も重要と思われる「主要トピック」を3つ選び、それぞれ以下の形式で記述してください。
+        - 事実: ニュースで報道された客観的な事実。
+        - 解釈: その事実が市場でどのように受け止められているか、専門家としてのあなたの解釈。
+        - 市場への影響: このトピックが今後の市場（特にS&P 500やNASDAQ）に与えうる短期的な影響。
+
         以下のJSON形式で、厳密に出力してください。
-        - summary: 市場全体の雰囲気を伝える3行程度のサマリー
-        - topics: 主要なトピックを3つ。各トピックはtitle(15字以内)とbody(100字以内)を持つこと。
 
         {{
-          "summary": "...",
+          "summary": "（ここに3行のサマリーを記述）",
           "topics": [
-            {{"title": "...", "body": "..."}},
-            {{"title": "...", "body": "..."}},
-            {{"title": "...", "body": "..."}}
+            {{
+              "title": "（トピック1のタイトル、15文字以内）",
+              "fact": "（事実を記述）",
+              "interpretation": "（解釈を記述）",
+              "impact": "（市場への影響を記述）"
+            }},
+            {{
+              "title": "（トピック2のタイトル、15文字以内）",
+              "fact": "（事実を記述）",
+              "interpretation": "（解釈を記述）",
+              "impact": "（市場への影響を記述）"
+            }},
+            {{
+              "title": "（トピック3のタイトル、15文字以内）",
+              "fact": "（事実を記述）",
+              "interpretation": "（解釈を記述）",
+              "impact": "（市場への影響を記述）"
+            }}
           ]
         }}
         """
-        news_data = self._call_openai_api(prompt, json_mode=True, max_tokens=500)
 
-        # Add a fallback in case of error
+        # Use a larger max_tokens for this more complex task
+        news_data = self._call_openai_api(prompt, json_mode=True, max_tokens=1024)
+
         if isinstance(news_data, str) or 'error' in news_data:
             self.data['news'] = {
-                "summary": "ニュースの生成に失敗しました。",
+                "summary": "AIによるニュースの分析に失敗しました。",
                 "topics": [],
                 "error": str(news_data)
             }
@@ -300,15 +476,124 @@ class MarketDataFetcher:
         content = self._call_openai_api(prompt, max_tokens=400)
         self.data['column'] = {"weekly_report": {"title": "今週の注目ポイント (AIコラム)", "content": content, "date": datetime.now().strftime('%Y-%m-%d')}}
 
+    def generate_heatmap_ai_commentary(self):
+        """Generates AI commentary for heatmaps."""
+        logger.info("Generating heatmap AI commentary...")
+        for index_name in ['sp500_heatmap', 'nasdaq_heatmap']:
+            heatmap_data = self.data.get(index_name, {})
+            if not heatmap_data or not heatmap_data.get('stocks'):
+                logger.warning(f"No data for {index_name}, skipping AI commentary.")
+                continue
+
+            stocks = heatmap_data['stocks']
+            # Sort by performance to find top/bottom movers
+            stocks_sorted = sorted(stocks, key=lambda x: x.get('performance', 0), reverse=True)
+            top_5 = stocks_sorted[:5]
+            bottom_5 = stocks_sorted[-5:]
+
+            # Calculate sector performance
+            sector_perf = {}
+            sector_count = {}
+            for stock in stocks:
+                sector = stock.get('sector', 'N/A')
+                perf = stock.get('performance', 0)
+                if sector != 'N/A':
+                    sector_perf[sector] = sector_perf.get(sector, 0) + perf
+                    sector_count[sector] = sector_count.get(sector, 0) + 1
+
+            avg_sector_perf = {s: sector_perf[s] / sector_count[s] for s in sector_perf}
+            sorted_sectors = sorted(avg_sector_perf.items(), key=lambda item: item[1], reverse=True)
+
+            prompt = f"""
+            以下の{index_name.replace('_heatmap', '').upper()}のヒートマップデータを分析し、市況を要約してください。
+            - 上昇率トップ5銘柄: {', '.join([f"{s['ticker']} ({s['performance']:.2f}%)" for s in top_5])}
+            - 下落率トップ5銘柄: {', '.join([f"{s['ticker']} ({s['performance']:.2f}%)" for s in bottom_5])}
+            - パフォーマンスが良かったセクター: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors[:3]])}
+            - パフォーマンスが悪かったセクター: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors[-3:]])}
+
+            この情報に基づき、今日の{index_name.replace('_heatmap', '').upper()}市場の動向について、100字程度で簡潔な解説を生成してください。
+            """
+            commentary = self._call_openai_api(prompt, max_tokens=200)
+            self.data[index_name]['ai_commentary'] = commentary
+
+    def select_notable_earnings(self):
+        """Selects notable earnings reports using AI."""
+        logger.info("Selecting notable earnings reports...")
+
+        raw_earnings = self.data.get('earnings_raw')
+        if not raw_earnings:
+            logger.warning("No raw earnings data to select from.")
+            return
+
+        # Prepare the earnings list for the prompt
+        earnings_list_str = ", ".join([f"{e['company']} ({e['symbol']})" for e in raw_earnings])
+
+        prompt = f"""
+        以下は、本日決算発表を予定している企業の一部です。
+        - {earnings_list_str}
+
+        これらの企業の中から、日本の個人投資家が最も注目すべきだと考えられる企業を最大5社まで選んでください。
+        選定理由は考慮せず、単に注目度が高いと思われる企業のリストをJSON形式で返してください。
+
+        以下のJSON形式で、厳密に出力してください。
+        {{
+          "notable_earnings": [
+            {{ "symbol": "...", "company": "...", "reason": "（なぜ注目されているかの簡単な理由）" }},
+            {{ "symbol": "...", "company": "...", "reason": "..." }}
+          ]
+        }}
+        """
+
+        selected_earnings = self._call_openai_api(prompt, json_mode=True, max_tokens=512)
+
+        if isinstance(selected_earnings, str) or 'error' in selected_earnings:
+            logger.error(f"AI selection of notable earnings failed: {selected_earnings}")
+        else:
+            self.data['indicators']['notable_earnings'] = selected_earnings.get('notable_earnings', [])
+
+    def cleanup_old_data(self):
+        """Deletes data files older than 7 days."""
+        logger.info("Cleaning up old data files...")
+        try:
+            today = datetime.now()
+            seven_days_ago = today - timedelta(days=7)
+
+            for filename in os.listdir(DATA_DIR):
+                match = re.match(r'data_(\d{4}-\d{2}-\d{2})\.json', filename)
+                if match:
+                    file_date_str = match.group(1)
+                    file_date = datetime.strptime(file_date_str, '%Y-%m-%d')
+                    if file_date < seven_days_ago:
+                        file_path = os.path.join(DATA_DIR, filename)
+                        os.remove(file_path)
+                        logger.info(f"Deleted old data file: {filename}")
+        except Exception as e:
+            logger.error(f"Error during data cleanup: {e}")
+
+
     # --- Main Execution Methods ---
     def fetch_all_data(self):
         os.makedirs(DATA_DIR, exist_ok=True)
         logger.info("--- Starting Raw Data Fetch ---")
-        self.fetch_vix()
-        self.fetch_t_note_future()
-        self.fetch_fear_greed_index()
-        self.fetch_economic_indicators()
-        self.fetch_heatmap_data()
+
+        fetch_tasks = [
+            self.fetch_vix,
+            self.fetch_t_note_future,
+            self.fetch_fear_greed_index,
+            self.fetch_economic_indicators,
+            self.fetch_yahoo_finance_news,
+            self.fetch_earnings_calendar,
+            self.fetch_heatmap_data
+        ]
+
+        for task in fetch_tasks:
+            try:
+                task()
+            except MarketDataError as e:
+                logger.error(f"Failed to execute fetch task '{task.__name__}': {e}")
+                # We can decide to add error info to the data dict here if needed
+                # For now, logging is sufficient as individual methods handle their data structure on error.
+
         with open(RAW_DATA_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Raw Data Fetch Completed. Saved to {RAW_DATA_PATH} ---")
@@ -321,9 +606,39 @@ class MarketDataFetcher:
             return
         with open(RAW_DATA_PATH, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
-        self.generate_ai_commentary()
-        self.generate_ai_news()
-        self.generate_weekly_column()
+
+        # AI Generation Steps - wrap in try/except to allow partial report generation
+        try:
+            self.generate_ai_commentary()
+        except MarketDataError as e:
+            logger.error(f"Could not generate AI commentary: {e}")
+            self.data['market']['ai_commentary'] = f"Error: {e}"
+
+        try:
+            self.generate_ai_news()
+        except MarketDataError as e:
+            logger.error(f"Could not generate AI news: {e}")
+            self.data['news'] = {"summary": f"Error: {e}", "topics": []}
+
+        try:
+            self.generate_heatmap_ai_commentary()
+        except MarketDataError as e:
+            logger.error(f"Could not generate heatmap AI commentary: {e}")
+            self.data['sp500_heatmap']['ai_commentary'] = f"Error: {e}"
+            self.data['nasdaq_heatmap']['ai_commentary'] = f"Error: {e}"
+
+        try:
+            self.select_notable_earnings()
+        except MarketDataError as e:
+            logger.error(f"Could not select notable earnings: {e}")
+            self.data['indicators']['notable_earnings'] = []
+
+        try:
+            self.generate_weekly_column()
+        except MarketDataError as e:
+            logger.error(f"Could not generate weekly column: {e}")
+            self.data['column'] = {}
+
         jst = timezone(timedelta(hours=9))
         self.data['date'] = datetime.now(jst).strftime('%Y-%m-%d')
         self.data['last_updated'] = datetime.now(jst).isoformat()
@@ -333,6 +648,10 @@ class MarketDataFetcher:
         with open(os.path.join(DATA_DIR, 'data.json'), 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Report Generation Completed. Saved to {final_path} ---")
+
+        # Clean up old files after a successful report generation
+        self.cleanup_old_data()
+
         return self.data
 
 

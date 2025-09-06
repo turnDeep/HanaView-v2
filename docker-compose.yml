@@ -2,12 +2,23 @@ version: '3.8'
 services:
   app:
     build: .
-    ports:
-      - "8000:8000"
+    # ports are no longer exposed directly, nginx handles it
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - TZ=Asia/Tokyo
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
     restart: unless-stopped
