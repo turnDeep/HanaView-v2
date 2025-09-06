@@ -5,7 +5,7 @@
     --tab-active-bg: #00c853;
     --tab-active-text: #000000;
     --text-primary: #e0e0e0;
-    --text-secondary: #9e9e9e;
+    --text-secondary: #b0b0b0;
     --border-color: #3a3a3a;
     --sector-bg: #1e1e1e;
     --sector-border: #444;
@@ -20,168 +20,79 @@ body {
     font-size: 14px;
 }
 
-h1, h2 {
+h1 {
     color: var(--tab-text);
     text-align: center;
     font-size: 1.5em;
-    margin: 10px 0;
-}
-
-h3 {
-    font-size: 1.2em;
-    margin: 10px 0;
+    margin: 20px 0;
 }
 
 #dashboard {
-    max-width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 10px;
+}
+
+/* --- D3 Heatmap Styles --- */
+.heatmaps-main-container {
+    margin-top: 20px;
     padding: 10px;
     background-color: var(--card-background);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* Heatmap Styles - Finviz風 */
-.heatmaps-main-container {
-    margin-top: 20px;
-}
-
-.heatmap-section {
+.heatmap-wrapper {
     margin-bottom: 30px;
 }
 
 .heatmap-main-title {
     color: var(--tab-text);
-    font-size: 1.3em;
+    font-size: 1.4em;
     text-align: left;
-    margin: 20px 0 10px 0;
+    margin: 10px 0 15px 0;
     padding-bottom: 5px;
     border-bottom: 2px solid var(--border-color);
 }
 
-.heatmap-wrapper {
-    margin-bottom: 20px;
-    background-color: var(--sector-bg);
-    border-radius: 4px;
-    padding: 10px;
-}
-
-.heatmap-header {
-    margin-bottom: 10px;
-    padding-bottom: 5px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.heatmap-header h3 {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 1.1em;
+/* D3 SVG Styles */
+.sector-label {
+    fill: #fff;
+    font-size: 18px;
     font-weight: 600;
 }
 
-.heatmap-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 5px;
-    background-color: #0a0a0a;
-    border-radius: 4px;
-}
-
-.sector {
-    background-color: var(--sector-bg);
-    border: 1px solid var(--sector-border);
-    border-radius: 4px;
-    padding: 8px;
-}
-
-.sector-title {
-    font-size: 0.85em;
-    font-weight: 600;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stocks-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.stock-tile {
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    color: white;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    padding: 2px;
-    box-sizing: border-box;
-    border-radius: 2px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
-
-.stock-tile:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-    z-index: 10;
-}
-
-.stock-tile .ticker {
-    font-weight: bold;
-    font-size: 0.7em;
-    line-height: 1;
-    margin-bottom: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.stock-tile .performance {
-    font-size: 0.6em;
-    line-height: 1;
+.industry-label {
+    fill: #ccc;
+    font-size: 14px;
     font-weight: 500;
 }
 
-/* パフォーマンスによる色分け（Finviz風） */
-.stock-tile[data-perf-extreme-positive] {
-    background-color: #00c853 !important;
+.stock-rect {
+    stroke: #1a1a1a;
+    stroke-width: 1px;
 }
 
-.stock-tile[data-perf-high-positive] {
-    background-color: #2e7d32 !important;
+.stock-label {
+    fill: white;
+    font-size: 12px;
+    font-weight: bold;
+    pointer-events: none; /* Allows mouse events to pass through to the rect */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.stock-tile[data-perf-moderate-positive] {
-    background-color: #66bb6a !important;
-}
-
-.stock-tile[data-perf-low-positive] {
-    background-color: #81c784 !important;
-}
-
-.stock-tile[data-perf-low-negative] {
-    background-color: #ffcdd2 !important;
-}
-
-.stock-tile[data-perf-moderate-negative] {
-    background-color: #ef5350 !important;
-}
-
-.stock-tile[data-perf-high-negative] {
-    background-color: #e53935 !important;
-}
-
-.stock-tile[data-perf-extreme-negative] {
-    background-color: #c62828 !important;
+.heatmap-tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 8px;
+    font-size: 12px;
+    background: #222;
+    border: 1px solid #555;
+    border-radius: 4px;
+    pointer-events: none;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    line-height: 1.4;
 }
 
 .heatmap-error {
@@ -191,6 +102,7 @@ h3 {
     font-style: italic;
 }
 
+
 /* News Styles */
 .news-container {
     padding: 10px;
@@ -198,7 +110,7 @@ h3 {
 }
 
 .news-summary {
-    background-color: var(--sector-bg);
+    background-color: var(--card-background);
     color: var(--text-primary);
     padding: 15px;
     border-radius: 8px;
@@ -252,43 +164,23 @@ h3 {
     }
     
     #dashboard {
-        padding: 8px;
-        border-radius: 4px;
+        padding: 0;
     }
     
-    .heatmap-wrapper {
-        padding: 8px;
-    }
-    
-    .stock-tile {
-        min-width: 35px !important;
-        min-height: 35px !important;
-        max-width: 60px !important;
-        max-height: 60px !important;
-    }
-    
-    .stock-tile .ticker {
-        font-size: 0.65em;
-    }
-    
-    .stock-tile .performance {
-        font-size: 0.55em;
-    }
-    
-    .sector-title {
-        font-size: 0.8em;
-    }
-    
-    h1 {
-        font-size: 1.3em;
-    }
-    
-    h2 {
+    .heatmap-main-title {
         font-size: 1.2em;
     }
-    
-    h3 {
-        font-size: 1em;
+
+    .sector-label {
+        font-size: 14px;
+    }
+
+    .industry-label {
+        font-size: 11px;
+    }
+
+    .stock-label {
+        font-size: 9px;
     }
 }
 

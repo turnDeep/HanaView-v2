@@ -7,7 +7,7 @@ import os
 
 app = FastAPI()
 
-DATA_DIR = '../data'
+DATA_DIR = 'data'
 
 def get_latest_data_file():
     """Finds the latest data_YYYY-MM-DD.json file."""
@@ -37,4 +37,4 @@ def get_market_data():
 
 # Mount the frontend directory to serve static files
 # This should come AFTER all API routes
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
+app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
