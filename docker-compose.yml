@@ -1,13 +1,13 @@
-version: '3.8'
 services:
   app:
     build: .
+    env_file:
+      - ./.env
     ports:
       - "3000:8000"
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
     environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - TZ=Asia/Tokyo
     restart: unless-stopped
