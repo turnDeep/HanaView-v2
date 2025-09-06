@@ -44,21 +44,19 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     const { request } = event;
 
-    // Strategy 1: Stale-While-Revalidate for API data
+    // Strategy 1: Network First for API data
     if (request.url.includes(DATA_URL)) {
         event.respondWith(
             caches.open(CACHE_NAME).then(cache => {
-                const networkResponsePromise = fetch(request).then(networkResponse => {
+                return fetch(request).then(networkResponse => {
+                    // If the fetch is successful, update the cache and return the response
                     if (networkResponse.ok) {
                         cache.put(request, networkResponse.clone());
                     }
                     return networkResponse;
-                });
-
-                return cache.match(request).then(cachedResponse => {
-                    // Return cached response if available, otherwise wait for network
-                    // This provides a fast response while updating the cache in the background.
-                    return cachedResponse || networkResponsePromise;
+                }).catch(() => {
+                    // If the network request fails, try to get it from the cache
+                    return cache.match(request);
                 });
             })
         );
