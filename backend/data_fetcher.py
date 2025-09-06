@@ -27,7 +27,7 @@ SP500_WIKI_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 NASDAQ100_WIKI_URL = "https://en.wikipedia.org/wiki/Nasdaq-100"
 
 # Tickers
-VIX_TICKER = "VX=F"  # Use VIX futures for intraday data
+VIX_TICKER = "^VIX"  # Use VIX index for intraday data (futures VX=F is delisted)
 T_NOTE_TICKER = "ZN=F"
 
 # --- Error Handling ---

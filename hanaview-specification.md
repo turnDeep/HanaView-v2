@@ -209,7 +209,7 @@ GET /api/health
 
 #### 3.2.2 yfinance データ取得
 **ティッカーシンボル：**
-- VIX: `VX=F`
+- VIX: `^VIX`
 - 10年債先物: `ZN=F`
 - S&P500: `^GSPC`
 - NASDAQ: `^IXIC`
@@ -217,7 +217,7 @@ GET /api/health
 
 **データ取得例：**
 ```python
-ticker = yf.Ticker("VX=F", session=session)
+ticker = yf.Ticker("^VIX", session=session)
 hist = ticker.history(period="5d", interval="1h")
 ```
 
@@ -227,7 +227,7 @@ hist = ticker.history(period="5d", interval="1h")
 
 #### 4.1.1 処理フロー
 1. **VIXデータ取得**
-   - yfinanceからVX=Fの5日間1時間足データ取得
+   - yfinanceから^VIXの5日間1時間足データ取得
    - 4時間足にリサンプリング
    - JSONフォーマットに変換
 
