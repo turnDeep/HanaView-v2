@@ -4,17 +4,39 @@ from fastapi.staticfiles import StaticFiles
 import json
 from datetime import datetime
 import os
+import re
 
 app = FastAPI()
 
 DATA_DIR = 'data'
 
 def get_latest_data_file():
-    """Finds the latest data_YYYY-MM-DD.json file."""
-    # For this implementation, we'll use a fixed name for simplicity,
-    # as specified in the data_fetcher.py placeholder.
-    # A real implementation would dynamically find the latest file based on date.
-    return os.path.join(DATA_DIR, 'data.json')
+    """
+    Finds the latest data_YYYY-MM-DD.json file in the DATA_DIR.
+    """
+    if not os.path.isdir(DATA_DIR):
+        return None
+
+    files = os.listdir(DATA_DIR)
+    data_files = []
+    # Regex to match the dated file format
+    file_pattern = re.compile(r'^data_(\d{4}-\d{2}-\d{2})\.json$')
+
+    for f in files:
+        match = file_pattern.match(f)
+        if match:
+            data_files.append(f)
+
+    if not data_files:
+        # Fallback to data.json if no dated files are found
+        fallback_path = os.path.join(DATA_DIR, 'data.json')
+        if os.path.exists(fallback_path):
+            return fallback_path
+        return None
+
+    # Sort files by date (newest first) and return the latest one
+    latest_file = sorted(data_files, reverse=True)[0]
+    return os.path.join(DATA_DIR, latest_file)
 
 @app.get("/api/health")
 def health_check():
