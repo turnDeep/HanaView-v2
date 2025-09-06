@@ -139,7 +139,7 @@ class MarketDataFetcher:
 
             hist.index = hist.index.tz_convert('Asia/Tokyo')
             resampled_hist = hist['Close'].resample(resample_period).ohlc().dropna()
-            current_price = hist['Close'][-1]
+            current_price = hist['Close'].iloc[-1]
             history_list = [
                 {
                     "time": index.strftime('%Y-%m-%dT%H:%M:%S'),
