@@ -5,7 +5,10 @@ const APP_SHELL_URLS = [
   '/style.css',
   '/app.js',
   '/manifest.json',
-  'https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js'
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  'https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js',
+  'https://d3js.org/d3.v7.min.js'
 ];
 const DATA_URL = '/api/data';
 
@@ -37,31 +40,48 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event: serve from cache or network
+// Fetch event: apply caching strategies
 self.addEventListener('fetch', event => {
-  const { request } = event;
+    const { request } = event;
 
-  // For API data, use a "stale-while-revalidate" strategy
-  if (request.url.includes(DATA_URL)) {
+    // Strategy 1: Stale-While-Revalidate for API data
+    if (request.url.includes(DATA_URL)) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then(cache => {
+                const networkResponsePromise = fetch(request).then(networkResponse => {
+                    if (networkResponse.ok) {
+                        cache.put(request, networkResponse.clone());
+                    }
+                    return networkResponse;
+                });
+
+                return cache.match(request).then(cachedResponse => {
+                    // Return cached response if available, otherwise wait for network
+                    // This provides a fast response while updating the cache in the background.
+                    return cachedResponse || networkResponsePromise;
+                });
+            })
+        );
+        return; // IMPORTANT: End execution for this strategy
+    }
+
+    // Strategy 2: Cache First for App Shell and other assets
     event.respondWith(
-      caches.open(CACHE_NAME).then(cache => {
-        return cache.match(request).then(cachedResponse => {
-          const fetchPromise = fetch(request).then(networkResponse => {
-            cache.put(request, networkResponse.clone());
-            return networkResponse;
-          });
-          // Return cached response immediately, then update cache in the background.
-          return cachedResponse || fetchPromise;
-        });
-      })
+        caches.match(request).then(cachedResponse => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+            // If not in cache, fetch from network
+            return fetch(request).then(networkResponse => {
+                // Optionally, cache newly fetched assets if they are important
+                // For now, we only pre-cache the app shell, so we just return the response.
+                return networkResponse;
+            });
+        }).catch(error => {
+            // This catch handles errors like the user being offline.
+            // You could return a custom offline page here if you had one.
+            console.error('Service Worker: Fetch failed; user is likely offline.', error);
+            // The browser will show its default offline page.
+        })
     );
-    return;
-  }
-
-  // For other requests (app shell), use a "cache-first" strategy
-  event.respondWith(
-    caches.match(request).then(response => {
-      return response || fetch(request);
-    })
-  );
 });
