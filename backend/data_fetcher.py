@@ -11,6 +11,7 @@ import yfinance as yf
 from bs4 import BeautifulSoup
 from curl_cffi.requests import Session
 import openai
+import httpx
 
 # --- Constants ---
 DATA_DIR = 'data'
@@ -93,7 +94,8 @@ class MarketDataFetcher:
             logger.warning(f"[E001] {ERROR_CODES['E001']} AI functions will be skipped.")
             self.openai_client = None
         else:
-            self.openai_client = openai.OpenAI(api_key=api_key)
+            http_client = httpx.Client(proxies={})
+            self.openai_client = openai.OpenAI(api_key=api_key, http_client=http_client)
 
     # --- Ticker List Fetching ---
     def _get_sp500_tickers(self):

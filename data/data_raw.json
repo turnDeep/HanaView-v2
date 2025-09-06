@@ -1,40 +1,12 @@
 {
   "market": {
     "vix": {
-      "current": 15.18,
-      "history": [
-        {
-          "time": "2025-09-02T00:00:00",
-          "open": 17.17,
-          "high": 17.17,
-          "low": 17.17,
-          "close": 17.17
-        },
-        {
-          "time": "2025-09-03T00:00:00",
-          "open": 16.35,
-          "high": 16.35,
-          "low": 16.35,
-          "close": 16.35
-        },
-        {
-          "time": "2025-09-04T00:00:00",
-          "open": 15.3,
-          "high": 15.3,
-          "low": 15.3,
-          "close": 15.3
-        },
-        {
-          "time": "2025-09-05T00:00:00",
-          "open": 15.18,
-          "high": 15.18,
-          "low": 15.18,
-          "close": 15.18
-        }
-      ]
+      "current": null,
+      "history": [],
+      "error": "[E003] yfinance failed for VX=F: No data returned"
     },
     "t_note_future": {
-      "current": 113.41,
+      "current": 113.39,
       "history": [
         {
           "time": "2025-09-02T12:00:00",
@@ -193,9 +165,9 @@
         {
           "time": "2025-09-06T04:00:00",
           "open": 113.33,
-          "high": 113.41,
+          "high": 113.39,
           "low": 113.33,
-          "close": 113.41
+          "close": 113.39
         }
       ]
     },
@@ -203,14 +175,17 @@
       "now": 53,
       "previous_close": 53,
       "prev_week": 61,
-      "prev_month": 55,
+      "prev_month": 58,
       "prev_year": 39,
       "category": "Neutral"
     }
   },
+  "news": [],
   "indicators": {
     "economic": []
   },
+  "news_raw": [],
+  "earnings_raw": [],
   "sp500_heatmap": {
     "stocks": [
       {
@@ -218,7 +193,7 @@
         "sector": "Industrials",
         "industry": "Conglomerates",
         "performance": -0.14,
-        "market_cap": 82834538496
+        "market_cap": 82717442048
       },
       {
         "ticker": "AOS",
@@ -239,7 +214,7 @@
         "sector": "Healthcare",
         "industry": "Drug Manufacturers - General",
         "performance": -0.21,
-        "market_cap": 376277958656
+        "market_cap": 375499980800
       },
       {
         "ticker": "ACN",
@@ -260,7 +235,7 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -6.58,
-        "market_cap": 262560399360
+        "market_cap": 245276049408
       },
       {
         "ticker": "AES",
@@ -351,21 +326,21 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "performance": 1.16,
-        "market_cap": 2844063956992
+        "market_cap": 2843006468096
       },
       {
         "ticker": "GOOG",
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "performance": 1.08,
-        "market_cap": 2841723535360
+        "market_cap": 2843016953856
       },
       {
         "ticker": "MO",
         "sector": "Consumer Defensive",
         "industry": "Tobacco",
         "performance": -0.06,
-        "market_cap": 111863898112
+        "market_cap": 111796690944
       },
       {
         "ticker": "AMZN",
@@ -379,7 +354,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Packaging & Containers",
         "performance": -0.6,
-        "market_cap": 19245541376
+        "market_cap": 19130337280
       },
       {
         "ticker": "AEE",
@@ -400,7 +375,7 @@
         "sector": "Financial Services",
         "industry": "Credit Services",
         "performance": -1.34,
-        "market_cap": 230093389824
+        "market_cap": 227010625536
       },
       {
         "ticker": "AIG",
@@ -484,7 +459,7 @@
         "sector": "Financial Services",
         "industry": "Asset Management",
         "performance": -2.38,
-        "market_cap": 77086334976
+        "market_cap": 75250155520
       },
       {
         "ticker": "AAPL",
@@ -505,14 +480,14 @@
         "sector": "Consumer Cyclical",
         "industry": "Auto Parts",
         "performance": -0.01,
-        "market_cap": 17518786560
+        "market_cap": 17516615680
       },
       {
         "ticker": "ACGL",
         "sector": "Financial Services",
         "industry": "Insurance - Diversified",
         "performance": -1.01,
-        "market_cap": 34418339840
+        "market_cap": 34071255040
       },
       {
         "ticker": "ADM",
@@ -532,7 +507,7 @@
         "ticker": "AJG",
         "sector": "Financial Services",
         "industry": "Insurance Brokers",
-        "performance": -0.35,
+        "performance": -0.13,
         "market_cap": 76698681344
       },
       {
@@ -616,7 +591,7 @@
         "ticker": "BAC",
         "sector": "Financial Services",
         "industry": "Banks - Diversified",
-        "performance": -1.68,
+        "performance": -1.13,
         "market_cap": 368643899392
       },
       {
@@ -638,7 +613,7 @@
         "sector": "Financial Services",
         "industry": "Insurance - Diversified",
         "performance": -1.41,
-        "market_cap": 1093281775616
+        "market_cap": 1078403661824
       },
       {
         "ticker": "BBY",
@@ -665,7 +640,7 @@
         "ticker": "BLK",
         "sector": "Financial Services",
         "industry": "Asset Management",
-        "performance": -0.87,
+        "performance": -0.4,
         "market_cap": 170206674944
       },
       {
@@ -673,14 +648,14 @@
         "sector": "Financial Services",
         "industry": "Asset Management",
         "performance": 0.05,
-        "market_cap": 208667836416
+        "market_cap": 208778313728
       },
       {
         "ticker": "XYZ",
         "sector": "Technology",
         "industry": "Software - Infrastructure",
         "performance": -1.07,
-        "market_cap": 46176006144
+        "market_cap": 45682225152
       },
       {
         "ticker": "BK",
@@ -700,7 +675,7 @@
         "ticker": "BKNG",
         "sector": "Consumer Cyclical",
         "industry": "Travel Services",
-        "performance": -1.43,
+        "performance": -1.26,
         "market_cap": 178442420224
       },
       {
@@ -743,7 +718,7 @@
         "sector": "Consumer Defensive",
         "industry": "Beverages - Wineries & Distilleries",
         "performance": 2.52,
-        "market_cap": 13717563392
+        "market_cap": 13709555712
       },
       {
         "ticker": "BLDR",
@@ -770,7 +745,7 @@
         "ticker": "CHRW",
         "sector": "Industrials",
         "industry": "Integrated Freight & Logistics",
-        "performance": -1.34,
+        "performance": -0.86,
         "market_cap": 14894817280
       },
       {
@@ -967,7 +942,7 @@
         "sector": "Financial Services",
         "industry": "Banks - Diversified",
         "performance": -1.73,
-        "market_cap": 178714722304
+        "market_cap": 175621865472
       },
       {
         "ticker": "CFG",
@@ -1016,7 +991,7 @@
         "sector": "Financial Services",
         "industry": "Financial Data & Stock Exchanges",
         "performance": -2.52,
-        "market_cap": 78828576768
+        "market_cap": 76842450944
       },
       {
         "ticker": "CL",
@@ -1058,14 +1033,14 @@
         "sector": "Consumer Defensive",
         "industry": "Beverages - Brewers",
         "performance": 1.75,
-        "market_cap": 26163161088
+        "market_cap": 26171324416
       },
       {
         "ticker": "CEG",
         "sector": "Utilities",
         "industry": "Utilities - Renewable",
         "performance": -2.42,
-        "market_cap": 96552034304
+        "market_cap": 94215405568
       },
       {
         "ticker": "COO",
@@ -1093,14 +1068,14 @@
         "sector": "Technology",
         "industry": "Software - Infrastructure",
         "performance": -1.03,
-        "market_cap": 22592374784
+        "market_cap": 22360049664
       },
       {
         "ticker": "CTVA",
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "performance": -0.48,
-        "market_cap": 49336582144
+        "market_cap": 49098936320
       },
       {
         "ticker": "CSGP",
@@ -1191,14 +1166,14 @@
         "sector": "Technology",
         "industry": "Software - Application",
         "performance": -0.79,
-        "market_cap": 10975071232
+        "market_cap": 10888268800
       },
       {
         "ticker": "DECK",
         "sector": "Consumer Cyclical",
         "industry": "Footwear & Accessories",
         "performance": -2.83,
-        "market_cap": 18381228032
+        "market_cap": 17860497408
       },
       {
         "ticker": "DE",
@@ -1233,14 +1208,14 @@
         "sector": "Healthcare",
         "industry": "Medical Devices",
         "performance": -0.31,
-        "market_cap": 31670460416
+        "market_cap": 31572400128
       },
       {
         "ticker": "FANG",
         "sector": "Energy",
         "industry": "Oil & Gas E&P",
         "performance": -2.82,
-        "market_cap": 41321291776
+        "market_cap": 40154607616
       },
       {
         "ticker": "DLR",
@@ -1267,7 +1242,7 @@
         "ticker": "D",
         "sector": "Utilities",
         "industry": "Utilities - Regulated Electric",
-        "performance": -1.02,
+        "performance": 0.12,
         "market_cap": 49661321216
       },
       {
@@ -1282,7 +1257,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Internet Retail",
         "performance": -0.78,
-        "market_cap": 106277568512
+        "market_cap": 105453092864
       },
       {
         "ticker": "DOV",
@@ -1366,7 +1341,7 @@
         "sector": "Healthcare",
         "industry": "Medical Devices",
         "performance": -0.02,
-        "market_cap": 47531610112
+        "market_cap": 47519879168
       },
       {
         "ticker": "EA",
@@ -1387,7 +1362,7 @@
         "sector": "Industrials",
         "industry": "Engineering & Construction",
         "performance": -2.37,
-        "market_cap": 27995594752
+        "market_cap": 27995531264
       },
       {
         "ticker": "EMR",
@@ -1450,7 +1425,7 @@
         "sector": "Financial Services",
         "industry": "Insurance Brokers",
         "performance": -0.4,
-        "market_cap": 17591879680
+        "market_cap": 17520777216
       },
       {
         "ticker": "ESS",
@@ -1499,7 +1474,7 @@
         "sector": "Energy",
         "industry": "Oil & Gas E&P",
         "performance": -1.19,
-        "market_cap": 23019151360
+        "market_cap": 22745325568
       },
       {
         "ticker": "EXPE",
@@ -1611,7 +1586,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Auto Manufacturers",
         "performance": 0.51,
-        "market_cap": 46484762624
+        "market_cap": 46723555328
       },
       {
         "ticker": "FTNT",
@@ -1632,14 +1607,14 @@
         "sector": "Communication Services",
         "industry": "Entertainment",
         "performance": 1.13,
-        "market_cap": 25799680000
+        "market_cap": 26097709056
       },
       {
         "ticker": "FOX",
         "sector": "Communication Services",
         "industry": "Entertainment",
         "performance": 1.17,
-        "market_cap": 25799708672
+        "market_cap": 26097692672
       },
       {
         "ticker": "BEN",
@@ -1660,7 +1635,7 @@
         "sector": "Technology",
         "industry": "Scientific & Technical Instruments",
         "performance": -0.11,
-        "market_cap": 45748137984
+        "market_cap": 45696151552
       },
       {
         "ticker": "IT",
@@ -1674,7 +1649,7 @@
         "sector": "Industrials",
         "industry": "Aerospace & Defense",
         "performance": -1.08,
-        "market_cap": 299328995328
+        "market_cap": 296106688512
       },
       {
         "ticker": "GEHC",
@@ -1688,14 +1663,14 @@
         "sector": "Industrials",
         "industry": "Specialty Industrial Machinery",
         "performance": -2.79,
-        "market_cap": 163010347008
+        "market_cap": 158456152064
       },
       {
         "ticker": "GEN",
         "sector": "Technology",
         "industry": "Software - Infrastructure",
         "performance": -0.1,
-        "market_cap": 18186602496
+        "market_cap": 18168135680
       },
       {
         "ticker": "GNRC",
@@ -1722,14 +1697,14 @@
         "ticker": "GM",
         "sector": "Consumer Cyclical",
         "industry": "Auto Manufacturers",
-        "performance": 0.21,
+        "performance": 0.47,
         "market_cap": 55477587968
       },
       {
         "ticker": "GPC",
         "sector": "Consumer Cyclical",
         "industry": "Auto Parts",
-        "performance": -1.24,
+        "performance": -0.51,
         "market_cap": 19403333632
       },
       {
@@ -1751,7 +1726,7 @@
         "sector": "Financial Services",
         "industry": "Insurance - Life",
         "performance": -1.16,
-        "market_cap": 11457945600
+        "market_cap": 11325100032
       },
       {
         "ticker": "GDDY",
@@ -1849,7 +1824,7 @@
         "sector": "Industrials",
         "industry": "Conglomerates",
         "performance": -0.42,
-        "market_cap": 136604303360
+        "market_cap": 136026685440
       },
       {
         "ticker": "HRL",
@@ -1884,7 +1859,7 @@
         "sector": "Industrials",
         "industry": "Electrical Equipment & Parts",
         "performance": -0.26,
-        "market_cap": 23230685184
+        "market_cap": 23171166208
       },
       {
         "ticker": "HUM",
@@ -1961,14 +1936,14 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -0.49,
-        "market_cap": 107717304320
+        "market_cap": 107192238080
       },
       {
         "ticker": "IBKR",
         "sector": "Financial Services",
         "industry": "Capital Markets",
         "performance": -6.41,
-        "market_cap": 109264396288
+        "market_cap": 102261170176
       },
       {
         "ticker": "ICE",
@@ -2024,7 +1999,7 @@
         "sector": "Real Estate",
         "industry": "REIT - Residential",
         "performance": -0.33,
-        "market_cap": 18604808192
+        "market_cap": 18543491072
       },
       {
         "ticker": "IQV",
@@ -2058,7 +2033,7 @@
         "ticker": "JKHY",
         "sector": "Technology",
         "industry": "Information Technology Services",
-        "performance": 0.23,
+        "performance": 0.59,
         "market_cap": 11822656512
       },
       {
@@ -2101,7 +2076,7 @@
         "sector": "Consumer Defensive",
         "industry": "Household & Personal Products",
         "performance": -9.35,
-        "market_cap": 39417610240
+        "market_cap": 35733082112
       },
       {
         "ticker": "KDP",
@@ -2128,14 +2103,14 @@
         "ticker": "KMB",
         "sector": "Consumer Defensive",
         "industry": "Household & Personal Products",
-        "performance": 0.56,
+        "performance": 1.55,
         "market_cap": 43094904832
       },
       {
         "ticker": "KIM",
         "sector": "Real Estate",
         "industry": "REIT - Retail",
-        "performance": -0.13,
+        "performance": 0.98,
         "market_cap": 15413071872
       },
       {
@@ -2177,7 +2152,7 @@
         "ticker": "LHX",
         "sector": "Industrials",
         "industry": "Aerospace & Defense",
-        "performance": -0.22,
+        "performance": 0.22,
         "market_cap": 50962812928
       },
       {
@@ -2220,7 +2195,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Residential Construction",
         "performance": 2.76,
-        "market_cap": 36553965568
+        "market_cap": 36567584768
       },
       {
         "ticker": "LII",
@@ -2234,14 +2209,14 @@
         "sector": "Healthcare",
         "industry": "Drug Manufacturers - General",
         "performance": -2.11,
-        "market_cap": 665986924544
+        "market_cap": 651912544256
       },
       {
         "ticker": "LIN",
         "sector": "Basic Materials",
         "industry": "Specialty Chemicals",
         "performance": -0.61,
-        "market_cap": 221508255744
+        "market_cap": 220162621440
       },
       {
         "ticker": "LYV",
@@ -2283,7 +2258,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Apparel Retail",
         "performance": -18.58,
-        "market_cap": 20110997504
+        "market_cap": 19899234304
       },
       {
         "ticker": "LYB",
@@ -2318,7 +2293,7 @@
         "sector": "Financial Services",
         "industry": "Insurance Brokers",
         "performance": -1.15,
-        "market_cap": 101328666624
+        "market_cap": 100163477504
       },
       {
         "ticker": "MLM",
@@ -2353,7 +2328,7 @@
         "sector": "Consumer Defensive",
         "industry": "Packaged Foods",
         "performance": 1.11,
-        "market_cap": 19027849216
+        "market_cap": 19033876480
       },
       {
         "ticker": "MCD",
@@ -2430,7 +2405,7 @@
         "sector": "Technology",
         "industry": "Software - Infrastructure",
         "performance": -2.55,
-        "market_cap": 3775825444864
+        "market_cap": 3679419105280
       },
       {
         "ticker": "MAA",
@@ -2464,8 +2439,8 @@
         "ticker": "TAP",
         "sector": "Consumer Defensive",
         "industry": "Beverages - Brewers",
-        "performance": 0.96,
-        "market_cap": 9974448128
+        "performance": 1.92,
+        "market_cap": 9973138432
       },
       {
         "ticker": "MDLZ",
@@ -2507,7 +2482,7 @@
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "performance": -0.52,
-        "market_cap": 10352880640
+        "market_cap": 10298915840
       },
       {
         "ticker": "MSI",
@@ -2556,14 +2531,14 @@
         "sector": "Communication Services",
         "industry": "Entertainment",
         "performance": 0.48,
-        "market_cap": 17321349120
+        "market_cap": 17332330496
       },
       {
         "ticker": "NWS",
         "sector": "Communication Services",
         "industry": "Entertainment",
         "performance": 0.69,
-        "market_cap": 17358514176
+        "market_cap": 17332330496
       },
       {
         "ticker": "NEE",
@@ -2591,7 +2566,7 @@
         "sector": "Industrials",
         "industry": "Specialty Industrial Machinery",
         "performance": -0.43,
-        "market_cap": 12698668032
+        "market_cap": 12643603456
       },
       {
         "ticker": "NSC",
@@ -2604,7 +2579,7 @@
         "ticker": "NTRS",
         "sector": "Financial Services",
         "industry": "Asset Management",
-        "performance": -1.71,
+        "performance": -1.1,
         "market_cap": 24265422848
       },
       {
@@ -2640,7 +2615,7 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -2.7,
-        "market_cap": 4179408453632
+        "market_cap": 4066436186112
       },
       {
         "ticker": "NVR",
@@ -2745,7 +2720,7 @@
         "sector": "Communication Services",
         "industry": "Entertainment",
         "performance": 1.76,
-        "market_cap": 16157249536
+        "market_cap": 16442250240
       },
       {
         "ticker": "PH",
@@ -2786,7 +2761,7 @@
         "ticker": "PEP",
         "sector": "Consumer Defensive",
         "industry": "Beverages - Non-Alcoholic",
-        "performance": -0.34,
+        "performance": 0.63,
         "market_cap": 200419622912
       },
       {
@@ -2955,7 +2930,7 @@
         "sector": "Industrials",
         "industry": "Aerospace & Defense",
         "performance": -0.73,
-        "market_cap": 212399980544
+        "market_cap": 210846826496
       },
       {
         "ticker": "O",
@@ -3011,7 +2986,7 @@
         "sector": "Financial Services",
         "industry": "Capital Markets",
         "performance": -1.61,
-        "market_cap": 91453554688
+        "market_cap": 89978347520
       },
       {
         "ticker": "ROK",
@@ -3025,7 +3000,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Personal Services",
         "performance": -0.6,
-        "market_cap": 27556610048
+        "market_cap": 27391852544
       },
       {
         "ticker": "ROP",
@@ -3074,7 +3049,7 @@
         "sector": "Energy",
         "industry": "Oil & Gas Equipment & Services",
         "performance": -0.53,
-        "market_cap": 53714956288
+        "market_cap": 53431619584
       },
       {
         "ticker": "STX",
@@ -3172,7 +3147,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Restaurants",
         "performance": -1.82,
-        "market_cap": 98904023040
+        "market_cap": 97108287488
       },
       {
         "ticker": "STT",
@@ -3207,7 +3182,7 @@
         "sector": "Technology",
         "industry": "Computer Hardware",
         "performance": -0.71,
-        "market_cap": 24186918912
+        "market_cap": 24014573568
       },
       {
         "ticker": "SYF",
@@ -3255,7 +3230,7 @@
         "ticker": "TPR",
         "sector": "Consumer Cyclical",
         "industry": "Luxury Goods",
-        "performance": -1.55,
+        "performance": -1.18,
         "market_cap": 21682358272
       },
       {
@@ -3290,7 +3265,7 @@
         "ticker": "TER",
         "sector": "Technology",
         "industry": "Semiconductor Equipment & Materials",
-        "performance": 0.68,
+        "performance": 0.78,
         "market_cap": 19120695296
       },
       {
@@ -3312,7 +3287,7 @@
         "sector": "Energy",
         "industry": "Oil & Gas E&P",
         "performance": -4.28,
-        "market_cap": 21353631744
+        "market_cap": 20440078336
       },
       {
         "ticker": "TXT",
@@ -3354,7 +3329,7 @@
         "sector": "Consumer Cyclical",
         "industry": "Specialty Retail",
         "performance": -0.2,
-        "market_cap": 32136241152
+        "market_cap": 32072695808
       },
       {
         "ticker": "TT",
@@ -3389,7 +3364,7 @@
         "sector": "Financial Services",
         "industry": "Banks - Regional",
         "performance": -1.17,
-        "market_cap": 60693712896
+        "market_cap": 59984748544
       },
       {
         "ticker": "TYL",
@@ -3494,7 +3469,7 @@
         "sector": "Industrials",
         "industry": "Pollution & Treatment Controls",
         "performance": -0.83,
-        "market_cap": 26453927936
+        "market_cap": 26233098240
       },
       {
         "ticker": "VRSN",
@@ -3578,7 +3553,7 @@
         "sector": "Industrials",
         "industry": "Railroads",
         "performance": -0.31,
-        "market_cap": 33127278592
+        "market_cap": 33024698368
       },
       {
         "ticker": "WMT",
@@ -3627,7 +3602,7 @@
         "sector": "Financial Services",
         "industry": "Banks - Diversified",
         "performance": -3.51,
-        "market_cap": 262137708544
+        "market_cap": 252943630336
       },
       {
         "ticker": "WELL",
@@ -3750,7 +3725,7 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -6.58,
-        "market_cap": 262560399360
+        "market_cap": 245276049408
       },
       {
         "ticker": "ABNB",
@@ -3764,14 +3739,14 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "performance": 1.16,
-        "market_cap": 2844063956992
+        "market_cap": 2843006468096
       },
       {
         "ticker": "GOOG",
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "performance": 1.08,
-        "market_cap": 2841723535360
+        "market_cap": 2843016953856
       },
       {
         "ticker": "AMZN",
@@ -3841,14 +3816,14 @@
         "sector": "Healthcare",
         "industry": "Drug Manufacturers - General",
         "performance": -0.1,
-        "market_cap": 253310844928
+        "market_cap": 253944020992
       },
       {
         "ticker": "TEAM",
         "sector": "Technology",
         "industry": "Software - Application",
         "performance": 2.59,
-        "market_cap": 44093108224
+        "market_cap": 45234421760
       },
       {
         "ticker": "ADSK",
@@ -3889,7 +3864,7 @@
         "ticker": "BKNG",
         "sector": "Consumer Cyclical",
         "industry": "Travel Services",
-        "performance": -1.43,
+        "performance": -1.26,
         "market_cap": 178442420224
       },
       {
@@ -3939,7 +3914,7 @@
         "sector": "Consumer Defensive",
         "industry": "Beverages - Non-Alcoholic",
         "performance": 1.67,
-        "market_cap": 40391335936
+        "market_cap": 40386183168
       },
       {
         "ticker": "CTSH",
@@ -3960,7 +3935,7 @@
         "sector": "Utilities",
         "industry": "Utilities - Renewable",
         "performance": -2.42,
-        "market_cap": 96552034304
+        "market_cap": 94215405568
       },
       {
         "ticker": "CPRT",
@@ -4009,21 +3984,21 @@
         "sector": "Healthcare",
         "industry": "Medical Devices",
         "performance": -0.31,
-        "market_cap": 31670460416
+        "market_cap": 31572400128
       },
       {
         "ticker": "FANG",
         "sector": "Energy",
         "industry": "Oil & Gas E&P",
         "performance": -2.82,
-        "market_cap": 41321291776
+        "market_cap": 40154607616
       },
       {
         "ticker": "DASH",
         "sector": "Consumer Cyclical",
         "industry": "Internet Retail",
         "performance": -0.78,
-        "market_cap": 106277568512
+        "market_cap": 105453092864
       },
       {
         "ticker": "EA",
@@ -4072,14 +4047,14 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -0.12,
-        "market_cap": 18497189888
+        "market_cap": 18475020288
       },
       {
         "ticker": "HON",
         "sector": "Industrials",
         "industry": "Conglomerates",
         "performance": -0.42,
-        "market_cap": 136604303360
+        "market_cap": 136026685440
       },
       {
         "ticker": "IDXX",
@@ -4093,7 +4068,7 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -0.49,
-        "market_cap": 107717304320
+        "market_cap": 107192238080
       },
       {
         "ticker": "INTU",
@@ -4142,14 +4117,14 @@
         "sector": "Basic Materials",
         "industry": "Specialty Chemicals",
         "performance": -0.61,
-        "market_cap": 221508255744
+        "market_cap": 220162621440
       },
       {
         "ticker": "LULU",
         "sector": "Consumer Cyclical",
         "industry": "Apparel Retail",
         "performance": -18.58,
-        "market_cap": 20110997504
+        "market_cap": 19899234304
       },
       {
         "ticker": "MAR",
@@ -4198,7 +4173,7 @@
         "sector": "Technology",
         "industry": "Software - Infrastructure",
         "performance": -2.55,
-        "market_cap": 3775825444864
+        "market_cap": 3679419105280
       },
       {
         "ticker": "MSTR",
@@ -4233,7 +4208,7 @@
         "sector": "Technology",
         "industry": "Semiconductors",
         "performance": -2.7,
-        "market_cap": 4179408453632
+        "market_cap": 4066436186112
       },
       {
         "ticker": "NXPI",
@@ -4309,7 +4284,7 @@
         "ticker": "PEP",
         "sector": "Consumer Defensive",
         "industry": "Beverages - Non-Alcoholic",
-        "performance": -0.34,
+        "performance": 0.63,
         "market_cap": 200419622912
       },
       {
@@ -4345,14 +4320,14 @@
         "sector": "Technology",
         "industry": "Software - Application",
         "performance": 1.15,
-        "market_cap": 191344640000
+        "market_cap": 191274172416
       },
       {
         "ticker": "SBUX",
         "sector": "Consumer Cyclical",
         "industry": "Restaurants",
         "performance": -1.82,
-        "market_cap": 98904023040
+        "market_cap": 97108287488
       },
       {
         "ticker": "SNPS",
@@ -4394,7 +4369,7 @@
         "sector": "Industrials",
         "industry": "Specialty Business Services",
         "performance": -2.31,
-        "market_cap": 80758071296
+        "market_cap": 78917017600
       },
       {
         "ticker": "TTD",
