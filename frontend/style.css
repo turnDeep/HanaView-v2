@@ -119,6 +119,89 @@ body {
     to { transform: rotate(360deg); }
 }
 
+/* --- Calendar/Indicators Styles --- */
+.calendar-title {
+    color: var(--tab-text);
+    font-size: 1.4em;
+    text-align: center;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #333;
+}
+
+.calendar-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.calendar-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 20px;
+    margin: 10px 0 5px 0;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.calendar-section-green {
+    background-color: #2e7d32;
+}
+
+.calendar-section-blue {
+    background-color: #1565c0;
+}
+
+.calendar-section-red {
+    background-color: #c62828;
+}
+
+.calendar-row {
+    display: grid;
+    grid-template-columns: 150px 100px 1fr;
+    align-items: center;
+    padding: 8px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.calendar-row-even {
+    background-color: #e3f2fd;
+}
+
+.calendar-row-odd {
+    background-color: #ffe8ed;
+}
+
+.calendar-cell {
+    padding: 0 10px;
+}
+
+.calendar-time {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.calendar-ticker {
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.calendar-name {
+    font-size: 0.95em;
+    color: var(--text-primary);
+}
+
+.calendar-watermark {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 10px;
+    font-size: 0.9em;
+    color: #696969;
+    font-style: italic;
+}
 
 /* --- D3 Heatmap Styles --- */
 .heatmap-wrapper {
@@ -180,7 +263,6 @@ body {
     font-style: italic;
 }
 
-
 /* --- News Styles --- */
 .news-summary {
     margin-bottom: 20px;
@@ -241,7 +323,7 @@ body {
     height: 300px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    position: relative; /* Needed for chart to size correctly */
+    position: relative;
 }
 .fg-container {
     display: flex;
@@ -262,11 +344,11 @@ body {
     border-radius: 250px 250px 0 0;
     background: conic-gradient(
         from -90deg,
-        #d32f2f 0%, #ef5350 20%, /* Extreme Fear */
-        #ffc107 40%,             /* Fear */
-        #fff176 50%,             /* Neutral */
-        #a5d6a7 60%,             /* Greed */
-        #4caf50 80%, #2e7d32 100% /* Extreme Greed */
+        #d32f2f 0%, #ef5350 20%,
+        #ffc107 40%,
+        #fff176 50%,
+        #a5d6a7 60%,
+        #4caf50 80%, #2e7d32 100%
     );
     -webkit-mask-image: radial-gradient(circle at 50% 100%, transparent 65%, black 66%);
     mask-image: radial-gradient(circle at 50% 100%, transparent 65%, black 66%);
@@ -316,33 +398,6 @@ body {
     margin: 4px 0;
 }
 
-/* --- Indicators Tab Styles --- */
-.indicators-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95em;
-}
-.indicators-table th, .indicators-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-}
-.indicators-table thead th {
-    background-color: var(--background);
-    font-weight: 600;
-    color: var(--text-primary);
-}
-.indicators-table tbody tr:nth-child(even) {
-    background-color: #f7f9fa;
-}
-.indicators-table tbody tr:hover {
-    background-color: #eff3f5;
-}
-.indicators-table .importance-3 {
-    color: #ff9800;
-    font-weight: bold;
-}
-
 /* --- Column Tab Styles --- */
 .column-container h3 {
     color: var(--tab-text);
@@ -375,6 +430,13 @@ body {
     }
     .card {
         padding: 15px;
+    }
+    .calendar-row {
+        grid-template-columns: 100px 60px 1fr;
+        font-size: 0.9em;
+    }
+    .calendar-cell {
+        padding: 0 5px;
     }
     .heatmap-main-title { font-size: 1.2em; }
     .sector-label { font-size: 14px; }
