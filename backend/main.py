@@ -8,7 +8,14 @@ import re
 
 app = FastAPI()
 
-DATA_DIR = 'data'
+# Get the absolute path to the project root directory
+# __file__ is the path to the current script (main.py)
+# os.path.dirname(__file__) is the directory of the script (backend/)
+# os.path.join(..., '..') goes up one level to the project root
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+DATA_DIR = os.path.join(PROJECT_ROOT, 'data')
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, 'frontend')
+
 
 def get_latest_data_file():
     """
@@ -59,4 +66,4 @@ def get_market_data():
 
 # Mount the frontend directory to serve static files
 # This should come AFTER all API routes
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="static")
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="static")
