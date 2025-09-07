@@ -635,7 +635,7 @@ class MarketDataFetcher:
             response_format = {"type": "json_object"} if json_mode else {"type": "text"}
 
             response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-5-mini",
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=0.7,
