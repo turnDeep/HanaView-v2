@@ -409,20 +409,19 @@ class MarketDataFetcher:
                     logger.debug(f"Skipping row {i} in US earnings: {e}")
                     continue
             
-            # Add special tickers with fixed dates
+            # Add special tickers with fixed dates from environment variables
             strtoday = datetime.now().strftime("%Y/%m/%d")
             strdt_now2 = dt_now.strftime('%m/%d --:--')
-            
-            special_tickers = {
-                "2025/04/16": ("ASML", "(エーエスエムエル・ホールディングス)"),
-                "2025/05/07": ("ARM", "(アーム・ホールディングス)"),
-                "2025/03/12": ("PDD", "(ピンドゥオドゥオ)"),
-                "2025/04/17": ("TSMC", "(台湾・セミコンダクター)"),
-                "2025/03/25": ("AZN", "(アストラゼネカ)"),
-                "2025/02/20": ("MELI", "(メルカドリブレ)")
-            }
-            
+
+            special_tickers_json = os.getenv("SPECIAL_TICKERS", "{}")
+            try:
+                special_tickers = json.loads(special_tickers_json)
+            except json.JSONDecodeError:
+                logger.error("Failed to decode SPECIAL_TICKERS from environment variable.")
+                special_tickers = {}
+
             if strtoday in special_tickers:
+                # The value from JSON will be a list, so we unpack it.
                 ticker, company = special_tickers[strtoday]
                 earning = {
                     "datetime": strdt_now2,
@@ -870,6 +869,12 @@ class MarketDataFetcher:
 
 
 if __name__ == '__main__':
+    # For running the script directly, load .env file.
+    # In the Docker container, cron runs this from /app/backend,
+    # so it should find the .env file in /app.
+    from dotenv import load_dotenv
+    load_dotenv()
+
     if os.path.basename(os.getcwd()) == 'backend':
         os.chdir('..')
     if len(sys.argv) > 1:
