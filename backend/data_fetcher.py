@@ -12,6 +12,12 @@ from bs4 import BeautifulSoup
 from curl_cffi.requests import Session
 import openai
 import httpx
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # --- Constants ---
 DATA_DIR = 'data'
@@ -20,15 +26,47 @@ FINAL_DATA_PATH_PREFIX = os.path.join(DATA_DIR, 'data_')
 
 # URLs
 CNN_FEAR_GREED_URL = "https://production.dataviz.cnn.io/index/fearandgreed/graphdata/"
-MINKABU_INDICATORS_URL = "https://fx.minkabu.jp/indicators"
 YAHOO_FINANCE_NEWS_URL = "https://finance.yahoo.com/topic/stock-market-news/"
 YAHOO_EARNINGS_CALENDAR_URL = "https://finance.yahoo.com/calendar/earnings"
 SP500_WIKI_URL = "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
 NASDAQ100_WIKI_URL = "https://en.wikipedia.org/wiki/Nasdaq-100"
 
+# Monex URLs
+MONEX_ECONOMIC_CALENDAR_URL = "https://mst.monex.co.jp/pc/servlet/ITS/report/EconomyIndexCalendar"
+MONEX_US_EARNINGS_URL = "https://mst.monex.co.jp/mst/servlet/ITS/fi/FIClosingCalendarUSGuest"
+MONEX_JP_EARNINGS_URL = "https://mst.monex.co.jp/mst/servlet/ITS/fi/FIClosingCalendarJPGuest"
+
 # Tickers
-VIX_TICKER = "^VIX"  # Use VIX index for intraday data (futures VX=F is delisted)
+VIX_TICKER = "^VIX"
 T_NOTE_TICKER = "ZN=F"
+
+# Important tickers from originalcalendar.py
+US_TICKER_LIST = ["AAPL", "NVDA", "MSFT", "GOOG", "META", "AMZN", "NFLX", "BRK-B", "TSLA", "AVGO", 
+                  "LLY", "WMT", "JPM", "V", "UNH", "XOM", "ORCL", "MA", "HD", "PG", "COST", "JNJ", 
+                  "ABBV", "TMUS", "BAC", "CRM", "KO", "CVX", "VZ", "MRK", "AMD", "PEP", "CSCO", 
+                  "LIN", "ACN", "WFC", "TMO", "ADBE", "MCD", "ABT", "BX", "PM", "NOW", "IBM", "AXP", 
+                  "MS", "TXN", "GE", "QCOM", "CAT", "ISRG", "DHR", "INTU", "DIS", "CMCSA", "AMGN", 
+                  "T", "GS", "PFE", "NEE", "CHTR", "RTX", "BKNG", "UBER", "AMAT", "SPGI", "LOW", 
+                  "BLK", "PGR", "UNP", "SYK", "HON", "ETN", "SCHW", "LMT", "TJX", "COP", "ANET", 
+                  "BSX", "KKR", "VRTX", "C", "PANW", "ADP", "NKE", "BA", "MDT", "FI", "UPS", "SBUX", 
+                  "ADI", "CB", "GILD", "MU", "BMY", "DE", "PLD", "MMC", "INTC", "AMT", "SO", "LRCX", 
+                  "ELV", "DELL", "PLTR", "REGN", "MDLZ", "MO", "HCA", "SHW", "KLAC", "ICE", "CI", "ABNB"]
+
+JP_TICKER_LIST = ["7203", "8306", "6501", "6861", "6758", "9983", "6098", "9984", "8316", "9432", 
+                  "4519", "4063", "8058", "8001", "8766", "8035", "9433", "8031", "7974", "4568", 
+                  "9434", "8411", "2914", "7267", "7741", "7011", "4502", "6857", "6902", "4661", 
+                  "6503", "3382", "6367", "8725", "4578", "6702", "6981", "6146", "7751", "6178", 
+                  "4543", "4901", "6273", "8053", "8002", "6954", "5108", "8591", "6301", "8801", 
+                  "6723", "8750", "6762", "6594", "9020", "6701", "9613", "4503", "8267", "8630", 
+                  "6752", "6201", "9022", "7733", "4452", "4689", "2802", "5401", "1925", "7269", 
+                  "8802", "8113", "2502", "8015", "4612", "4307", "1605", "8309", "8308", "1928", 
+                  "8604", "9101", "6326", "4684", "7532", "9735", "8830", "9503", "5020", "3659", 
+                  "9843", "6971", "7832", "4091", "7309", "4755", "9104", "4716", "7936", "9766", 
+                  "4507", "8697", "5802", "2503", "7270", "6920", "6869", "6988", "2801", "2587", 
+                  "3407", "5803", "7201", "8593", "9531", "4523", "9107", "7202", "3092", "8601", 
+                  "5019", "9202", "9435", "1802", "4768", "7911", "4151", "9502", "6586", "7701", 
+                  "3402", "7272", "9532", "9697", "4911", "9021", "8795", "3064", "7259", "1812", 
+                  "2897", "7912", "4324", "6504", "7013", "7550", "6645", "5713", "5411", "4188"]
 
 # --- Error Handling ---
 class MarketDataError(Exception):
@@ -45,21 +83,12 @@ ERROR_CODES = {
     "E004": "Failed to fetch Fear & Greed Index data.",
     "E005": "AI content generation failed.",
     "E006": "Failed to fetch heatmap data.",
+    "E007": "Failed to fetch calendar data via Selenium.",
 }
 
 # --- Logging Configuration ---
 LOG_DIR = 'logs'
 LOG_FILE = os.path.join(LOG_DIR, 'app.log')
-
-# # Ensure log directory exists
-# os.makedirs(LOG_DIR, exist_ok=True) #いったんlogディレクトリの作成をコメントアウト
-
-# # Create a rotating file handler
-# # 5MB per file, keep 5 old files
-# file_handler = logging.handlers.RotatingFileHandler(
-#     LOG_FILE, maxBytes=5*1024*1024, backupCount=5, encoding='utf-8'
-# )
-# file_handler.setLevel(logging.INFO)
 
 # Create a stream handler for console output
 stream_handler = logging.StreamHandler()
@@ -67,7 +96,6 @@ stream_handler.setLevel(logging.INFO)
 
 # Create a formatter and set it for both handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# file_handler.setFormatter(formatter)
 stream_handler.setFormatter(formatter)
 
 # Get the root logger and add handlers
@@ -75,7 +103,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # Avoid adding handlers multiple times if this module is reloaded
 if not logger.handlers:
-    # logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
 
@@ -86,18 +113,46 @@ class MarketDataFetcher:
         self.http_session = Session(impersonate="chrome110", headers={'Accept-Language': 'en-US,en;q=0.9'})
         # yfinance用のセッションも別途作成
         self.yf_session = Session(impersonate="safari15_5")
-        self.data = {"market": {}, "news": [], "indicators": {"economic": [], "notable_earnings": []}}
+        self.data = {"market": {}, "news": [], "indicators": {"economic": [], "us_earnings": [], "jp_earnings": []}}
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
-            # E001: OpenAI API Key not set. This is critical for generation steps.
-            # We will log a warning but allow fetching to proceed. Generation will fail later.
             logger.warning(f"[E001] {ERROR_CODES['E001']} AI functions will be skipped.")
             self.openai_client = None
         else:
-            # trust_env=False to prevent httpx from using system proxy settings,
-            # which seems to be the original intent of proxies={}.
             http_client = httpx.Client(trust_env=False)
             self.openai_client = openai.OpenAI(api_key=api_key, http_client=http_client)
+        
+        # Setup Selenium driver
+        self.driver = None
+
+    def _setup_selenium_driver(self):
+        """Setup Chrome driver for Selenium."""
+        if self.driver:
+            return
+        
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--window-size=800,1080')
+        
+        try:
+            self.driver = webdriver.Chrome(options=chrome_options)
+            logger.info("Selenium Chrome driver initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize Chrome driver: {e}")
+            raise MarketDataError("E007", f"Chrome driver initialization failed: {e}")
+
+    def _close_selenium_driver(self):
+        """Close Selenium driver."""
+        if self.driver:
+            try:
+                self.driver.quit()
+                self.driver = None
+                logger.info("Selenium Chrome driver closed")
+            except Exception as e:
+                logger.error(f"Error closing Chrome driver: {e}")
 
     # --- Ticker List Fetching ---
     def _get_sp500_tickers(self):
@@ -130,7 +185,6 @@ class MarketDataFetcher:
     def _fetch_yfinance_data(self, ticker_symbol, period="5d", interval="1h", resample_period='4h'):
         """Yahoo Finance API対策を含むデータ取得"""
         try:
-            # curl_cffiのセッションを使用してyfinanceを初期化
             ticker = yf.Ticker(ticker_symbol, session=self.yf_session)
             hist = ticker.history(period=period, interval=interval)
 
@@ -152,13 +206,11 @@ class MarketDataFetcher:
             return {"current": round(current_price, 2), "history": history_list}
         except Exception as e:
             logger.error(f"Error fetching {ticker_symbol}: {e}")
-            # E003: Failed to connect to an external API.
             raise MarketDataError("E003", f"yfinance failed for {ticker_symbol}: {e}") from e
 
     def fetch_vix(self):
         logger.info("Fetching VIX data...")
         try:
-            # Use default 4h resampling for VIX futures
             self.data['market']['vix'] = self._fetch_yfinance_data(VIX_TICKER)
         except MarketDataError as e:
             self.data['market']['vix'] = {"current": None, "history": [], "error": str(e)}
@@ -201,25 +253,280 @@ class MarketDataFetcher:
             logger.error(f"Error fetching Fear & Greed Index: {e}")
             self.data['market']['fear_and_greed'] = {'now': None, 'error': f"[E004] {ERROR_CODES['E004']}: {e}"}
 
-    def fetch_economic_indicators(self):
-        logger.info("Fetching economic indicators...")
+    def fetch_calendar_data(self):
+        """Fetch economic indicators and earnings calendar using Selenium."""
+        logger.info("Fetching calendar data via Selenium...")
+        
         try:
-            response = self.http_session.get(MINKABU_INDICATORS_URL, timeout=30)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
+            self._setup_selenium_driver()
+            dt_now = datetime.now()
+            
+            # Fetch economic indicators
+            self._fetch_economic_indicators(dt_now)
+            
+            # Fetch US earnings
+            self._fetch_us_earnings(dt_now)
+            
+            # Fetch JP earnings
+            self._fetch_jp_earnings(dt_now)
+            
+        except Exception as e:
+            logger.error(f"Error during calendar data fetching: {e}")
+            self.data['indicators']['error'] = f"[E007] {ERROR_CODES['E007']}: {e}"
+        finally:
+            self._close_selenium_driver()
+
+    def _fetch_economic_indicators(self, dt_now):
+        """Fetch economic indicators from Monex."""
+        logger.info("Fetching economic indicators from Monex...")
+        try:
+            self.driver.get(MONEX_ECONOMIC_CALENDAR_URL)
+            time.sleep(2)
+            
+            # Click filters (importance level and today/tomorrow)
+            try:
+                # Select importance level checkbox
+                importance_checkbox = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/table/tbody/tr[1]/td/ul/li[1]/label/input")
+                importance_checkbox.click()
+                time.sleep(1)
+                
+                # Select today and tomorrow
+                today_checkbox = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/table/tbody/tr[2]/td/ul/li[3]/label/input")
+                today_checkbox.click()
+                time.sleep(1)
+                
+                # Click search button
+                search_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[3]/a")
+                search_button.click()
+                time.sleep(2)
+            except Exception as e:
+                logger.warning(f"Could not set filters for economic indicators: {e}")
+            
+            # Get table data
+            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/table")
+            html = table.get_attribute('outerHTML')
+            df = pd.read_html(html)[0]
+            
             indicators = []
-            rows = soup.select("div.data-table.is-indicators > table > tbody > tr")
-            for row in rows:
-                cols = row.find_all('td')
-                if len(cols) < 6: continue
-                importance_stars = len(cols[2].find_all('i', class_='icon-star_small_on'))
-                if importance_stars < 3: continue
-                indicators.append({"date": cols[0].text.strip().split('（')[0], "time": cols[0].find('span').text.strip(), "country": cols[1].text.strip(), "name": cols[3].text.strip(), "importance": importance_stars, "forecast": cols[4].text.strip(), "result": cols[5].text.strip()})
-            self.data['indicators'] = {"economic": indicators}
+            for i in range(len(df)):
+                try:
+                    # Parse time
+                    time_str = df.iloc[i, 1] if len(str(df.iloc[i, 1])) >= 5 else "00:00"
+                    text0 = str(dt_now.year) + "/" + df.iloc[i, 0][:5] + " " + time_str[:5]
+                    tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
+                    
+                    # Filter by time range (past 2 hours to next 26 hours)
+                    if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
+                        indicator = {
+                            "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                            "country": df.iloc[i, 2],
+                            "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
+                            "importance": "★★" if "★★" in str(df.iloc[i, 3]) else "★",
+                            "type": "economic"
+                        }
+                        indicators.append(indicator)
+                except Exception as e:
+                    logger.debug(f"Skipping row {i} in economic indicators: {e}")
+                    continue
+            
+            # Try to get next day's data
+            try:
+                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/div[1]/span[3]")
+                next_button.click()
+                time.sleep(2)
+                
+                table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/table")
+                html = table.get_attribute('outerHTML')
+                df = pd.read_html(html)[0]
+                
+                for i in range(len(df)):
+                    try:
+                        time_str = df.iloc[i, 1] if len(str(df.iloc[i, 1])) >= 5 else "00:00"
+                        text0 = str(dt_now.year) + "/" + df.iloc[i, 0][:5] + " " + time_str[:5]
+                        tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
+                        
+                        if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
+                            indicator = {
+                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                "country": df.iloc[i, 2],
+                                "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
+                                "importance": "★★★" if "★★★" in str(df.iloc[i, 3]) else "★★" if "★★" in str(df.iloc[i, 3]) else "★",
+                                "type": "economic"
+                            }
+                            indicators.append(indicator)
+                    except Exception as e:
+                        logger.debug(f"Skipping row {i} in next day economic indicators: {e}")
+                        continue
+            except Exception as e:
+                logger.debug(f"Could not get next day economic indicators: {e}")
+            
+            self.data['indicators']['economic'] = indicators
+            logger.info(f"Fetched {len(indicators)} economic indicators")
+            
         except Exception as e:
             logger.error(f"Error fetching economic indicators: {e}")
             self.data['indicators']['economic'] = []
-            self.data['indicators']['error'] = f"[E003] {ERROR_CODES['E003']}: {e}"
+
+    def _fetch_us_earnings(self, dt_now):
+        """Fetch US earnings calendar from Monex."""
+        logger.info("Fetching US earnings calendar from Monex...")
+        try:
+            self.driver.get(MONEX_US_EARNINGS_URL)
+            time.sleep(2)
+            
+            # Click to get next page (usually shows more relevant dates)
+            try:
+                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[6]/div/div/div[1]/a[3]")
+                next_button.click()
+                time.sleep(2)
+            except Exception as e:
+                logger.debug(f"Could not click next button for US earnings: {e}")
+            
+            # Get table data
+            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[6]/table")
+            html = table.get_attribute('outerHTML')
+            df = pd.read_html(html)[0]
+            
+            earnings = []
+            for i in range(len(df)):
+                try:
+                    ticker = df.iloc[i, 2]
+                    if ticker in US_TICKER_LIST:
+                        # Parse datetime (add 13 hours for timezone conversion)
+                        text0 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
+                        tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M') + timedelta(hours=13)
+                        
+                        if tdatetime > dt_now - timedelta(hours=2):
+                            company_name = df.iloc[i, 3][:20] if len(df.iloc[i, 3]) > 20 else df.iloc[i, 3]
+                            earning = {
+                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                "ticker": ticker,
+                                "company": f"({company_name})",
+                                "type": "us_earnings"
+                            }
+                            earnings.append(earning)
+                except Exception as e:
+                    logger.debug(f"Skipping row {i} in US earnings: {e}")
+                    continue
+            
+            # Add special tickers with fixed dates
+            strtoday = datetime.now().strftime("%Y/%m/%d")
+            strdt_now2 = dt_now.strftime('%m/%d --:--')
+            
+            special_tickers = {
+                "2025/04/16": ("ASML", "(エーエスエムエル・ホールディングス)"),
+                "2025/05/07": ("ARM", "(アーム・ホールディングス)"),
+                "2025/03/12": ("PDD", "(ピンドゥオドゥオ)"),
+                "2025/04/17": ("TSMC", "(台湾・セミコンダクター)"),
+                "2025/03/25": ("AZN", "(アストラゼネカ)"),
+                "2025/02/20": ("MELI", "(メルカドリブレ)")
+            }
+            
+            if strtoday in special_tickers:
+                ticker, company = special_tickers[strtoday]
+                earning = {
+                    "datetime": strdt_now2,
+                    "ticker": ticker,
+                    "company": company,
+                    "type": "us_earnings"
+                }
+                earnings.append(earning)
+            
+            self.data['indicators']['us_earnings'] = earnings
+            logger.info(f"Fetched {len(earnings)} US earnings")
+            
+        except Exception as e:
+            logger.error(f"Error fetching US earnings: {e}")
+            self.data['indicators']['us_earnings'] = []
+
+    def _fetch_jp_earnings(self, dt_now):
+        """Fetch Japanese earnings calendar from Monex."""
+        logger.info("Fetching Japanese earnings calendar from Monex...")
+        try:
+            self.driver.get(MONEX_JP_EARNINGS_URL)
+            time.sleep(2)
+            
+            # Click to get next page
+            try:
+                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/div/div/div[1]/a[3]")
+                next_button.click()
+                time.sleep(2)
+            except Exception as e:
+                logger.debug(f"Could not click next button for JP earnings: {e}")
+            
+            # Get table data
+            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/table")
+            html = table.get_attribute('outerHTML')
+            df = pd.read_html(html)[0]
+            
+            earnings = []
+            for i in range(len(df)):
+                try:
+                    # Extract ticker code from the company string
+                    text2 = df.iloc[i, 2][-6:]
+                    text3 = re.sub(r'\D', '', text2)
+                    
+                    if text3 in JP_TICKER_LIST:
+                        text1 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
+                        text4 = df.iloc[i, 2][:-8]
+                        company_name = text4[:20] if len(text4) > 20 else text4
+                        
+                        earning = {
+                            "datetime": text1,
+                            "ticker": text3,
+                            "company": f"({company_name})",
+                            "type": "jp_earnings"
+                        }
+                        earnings.append(earning)
+                except Exception as e:
+                    logger.debug(f"Skipping row {i} in JP earnings: {e}")
+                    continue
+            
+            # Try to get more pages
+            for page in range(7):
+                try:
+                    cur_url = self.driver.current_url
+                    next_button = self.driver.find_element(By.CLASS_NAME, "next")
+                    next_button.click()
+                    time.sleep(2)
+                    
+                    if cur_url == self.driver.current_url:
+                        break
+                    
+                    table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/table")
+                    html = table.get_attribute('outerHTML')
+                    df = pd.read_html(html)[0]
+                    
+                    for i in range(len(df)):
+                        try:
+                            text2 = df.iloc[i, 2][-6:]
+                            text3 = re.sub(r'\D', '', text2)
+                            
+                            if text3 in JP_TICKER_LIST:
+                                text1 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
+                                text4 = df.iloc[i, 2][:-8]
+                                company_name = text4[:20] if len(text4) > 20 else text4
+                                
+                                earning = {
+                                    "datetime": text1,
+                                    "ticker": text3,
+                                    "company": f"({company_name})",
+                                    "type": "jp_earnings"
+                                }
+                                earnings.append(earning)
+                        except Exception as e:
+                            logger.debug(f"Skipping row {i} in JP earnings page {page}: {e}")
+                            continue
+                except Exception as e:
+                    logger.debug(f"Could not get page {page} for JP earnings: {e}")
+                    break
+            
+            self.data['indicators']['jp_earnings'] = earnings
+            logger.info(f"Fetched {len(earnings)} Japanese earnings")
+            
+        except Exception as e:
+            logger.error(f"Error fetching Japanese earnings: {e}")
+            self.data['indicators']['jp_earnings'] = []
 
     def fetch_yahoo_finance_news(self):
         """Fetches news from Yahoo Finance."""
@@ -230,7 +537,6 @@ class MarketDataFetcher:
             soup = BeautifulSoup(response.content, 'html.parser')
 
             news_items = []
-            # Find all list items that likely contain news articles
             for item in soup.find_all('li', class_='js-stream-content', limit=10):
                 title_tag = item.find('a')
                 summary_tag = item.find('p')
@@ -238,7 +544,6 @@ class MarketDataFetcher:
                 if title_tag and summary_tag:
                     title = title_tag.get_text(strip=True)
                     link = title_tag['href']
-                    # Yahoo Finance links can be relative, so make them absolute
                     if not link.startswith('http'):
                         link = f"https://finance.yahoo.com{link}"
 
@@ -257,43 +562,6 @@ class MarketDataFetcher:
         except Exception as e:
             logger.error(f"Error fetching Yahoo Finance news: {e}")
             self.data['news_raw'] = []
-            # This is not critical, so we just log it and the AI gen will handle the empty list
-
-    def fetch_earnings_calendar(self):
-        """Fetches the earnings calendar for the current day."""
-        logger.info("Fetching earnings calendar from Yahoo Finance...")
-        try:
-            # Yahoo's calendar page is JS-heavy, so we might need to find the right API or be clever.
-            # For today, we'll try scraping the main page.
-            # Note: A more robust solution might involve finding an API endpoint.
-            response = self.http_session.get(f"{YAHOO_EARNINGS_CALENDAR_URL}?day={datetime.now().strftime('%Y-%m-%d')}", timeout=30)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
-
-            earnings_list = []
-            rows = soup.find_all('tr', class_='simpTblRow')
-
-            for row in rows:
-                cols = row.find_all('td')
-                if len(cols) >= 4:
-                    symbol = cols[0].get_text(strip=True)
-                    company = cols[1].get_text(strip=True)
-                    time_str = cols[2].get_text(strip=True)
-
-                    earnings_list.append({
-                        "symbol": symbol,
-                        "company": company,
-                        "release_time": time_str
-                    })
-
-            self.data['earnings_raw'] = earnings_list
-            logger.info(f"Fetched {len(earnings_list)} earnings announcements for today.")
-
-        except Exception as e:
-            logger.error(f"Error fetching earnings calendar: {e}")
-            self.data['earnings_raw'] = []
-            # This is not critical, so we just log it and the AI gen will handle the empty list
-
 
     def fetch_heatmap_data(self):
         """ヒートマップデータ取得（API対策強化版）"""
@@ -303,7 +571,6 @@ class MarketDataFetcher:
             nasdaq100_tickers = self._get_nasdaq100_tickers()
             logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
 
-            # バッチサイズを小さくしてレート制限を回避
             self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
             self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
         except Exception as e:
@@ -318,13 +585,11 @@ class MarketDataFetcher:
 
         stocks = []
 
-        # バッチ処理でレート制限を回避
         for i in range(0, len(tickers), batch_size):
             batch = tickers[i:i+batch_size]
 
             for ticker_symbol in batch:
                 try:
-                    # curl_cffiセッションを使用
                     ticker_obj = yf.Ticker(ticker_symbol, session=self.yf_session)
                     info = ticker_obj.info
                     hist = ticker_obj.history(period="2d")
@@ -337,7 +602,6 @@ class MarketDataFetcher:
                     industry = info.get('industry', 'N/A')
                     market_cap = info.get('marketCap', 0)
 
-                    # セクターやインダストリーが取得できない、または時価総額が0のものはスキップ
                     if sector == 'N/A' or industry == 'N/A' or market_cap == 0:
                         logger.warning(f"Skipping {ticker_symbol} due to missing sector, industry, or market cap.")
                         continue
@@ -352,21 +616,18 @@ class MarketDataFetcher:
 
                 except Exception as e:
                     logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
-                    # エラー時は少し待機
                     time.sleep(0.5)
                     continue
 
-            # バッチ間で待機（レート制限対策）
             if i + batch_size < len(tickers):
                 logger.info(f"Processed {min(i + batch_size, len(tickers))}/{len(tickers)} tickers, waiting...")
-                time.sleep(3)  # 3秒待機
+                time.sleep(3)
 
         return {"stocks": stocks}
 
     # --- AI Generation ---
     def _call_openai_api(self, prompt, json_mode=False, max_tokens=150):
         if not self.openai_client:
-            # E001 is logged at startup, here we raise E005 because the generation failed.
             raise MarketDataError("E005", "OpenAI client is not available.")
         try:
             logger.info(f"Calling OpenAI API (json_mode={json_mode}, max_tokens={max_tokens})...")
@@ -384,7 +645,6 @@ class MarketDataFetcher:
             return json.loads(content) if json_mode else content
         except Exception as e:
             logger.error(f"Error calling OpenAI API: {e}")
-            # E005: AI content generation failed.
             raise MarketDataError("E005", str(e)) from e
 
     def generate_ai_commentary(self):
@@ -410,7 +670,6 @@ class MarketDataFetcher:
             }
             return
 
-        # Prepare the news content for the prompt
         news_content = ""
         for i, item in enumerate(raw_news):
             news_content += f"記事{i+1}: {item['title']}\n概要: {item['summary']}\n\n"
@@ -456,7 +715,6 @@ class MarketDataFetcher:
         }}
         """
 
-        # Use a larger max_tokens for this more complex task
         news_data = self._call_openai_api(prompt, json_mode=True, max_tokens=1024)
 
         if isinstance(news_data, str) or 'error' in news_data:
@@ -490,12 +748,10 @@ class MarketDataFetcher:
                 continue
 
             stocks = heatmap_data['stocks']
-            # Sort by performance to find top/bottom movers
             stocks_sorted = sorted(stocks, key=lambda x: x.get('performance', 0), reverse=True)
             top_5 = stocks_sorted[:5]
             bottom_5 = stocks_sorted[-5:]
 
-            # Calculate sector performance
             sector_perf = {}
             sector_count = {}
             for stock in stocks:
@@ -520,41 +776,6 @@ class MarketDataFetcher:
             commentary = self._call_openai_api(prompt, max_tokens=200)
             self.data[index_name]['ai_commentary'] = commentary
 
-    def select_notable_earnings(self):
-        """Selects notable earnings reports using AI."""
-        logger.info("Selecting notable earnings reports...")
-
-        raw_earnings = self.data.get('earnings_raw')
-        if not raw_earnings:
-            logger.warning("No raw earnings data to select from.")
-            return
-
-        # Prepare the earnings list for the prompt
-        earnings_list_str = ", ".join([f"{e['company']} ({e['symbol']})" for e in raw_earnings])
-
-        prompt = f"""
-        以下は、本日決算発表を予定している企業の一部です。
-        - {earnings_list_str}
-
-        これらの企業の中から、日本の個人投資家が最も注目すべきだと考えられる企業を最大5社まで選んでください。
-        選定理由は考慮せず、単に注目度が高いと思われる企業のリストをJSON形式で返してください。
-
-        以下のJSON形式で、厳密に出力してください。
-        {{
-          "notable_earnings": [
-            {{ "symbol": "...", "company": "...", "reason": "（なぜ注目されているかの簡単な理由）" }},
-            {{ "symbol": "...", "company": "...", "reason": "..." }}
-          ]
-        }}
-        """
-
-        selected_earnings = self._call_openai_api(prompt, json_mode=True, max_tokens=512)
-
-        if isinstance(selected_earnings, str) or 'error' in selected_earnings:
-            logger.error(f"AI selection of notable earnings failed: {selected_earnings}")
-        else:
-            self.data['indicators']['notable_earnings'] = selected_earnings.get('notable_earnings', [])
-
     def cleanup_old_data(self):
         """Deletes data files older than 7 days."""
         logger.info("Cleaning up old data files...")
@@ -574,7 +795,6 @@ class MarketDataFetcher:
         except Exception as e:
             logger.error(f"Error during data cleanup: {e}")
 
-
     # --- Main Execution Methods ---
     def fetch_all_data(self):
         os.makedirs(DATA_DIR, exist_ok=True)
@@ -584,9 +804,8 @@ class MarketDataFetcher:
             self.fetch_vix,
             self.fetch_t_note_future,
             self.fetch_fear_greed_index,
-            self.fetch_economic_indicators,
+            self.fetch_calendar_data,  # Changed from fetch_economic_indicators
             self.fetch_yahoo_finance_news,
-            self.fetch_earnings_calendar,
             self.fetch_heatmap_data
         ]
 
@@ -595,8 +814,6 @@ class MarketDataFetcher:
                 task()
             except MarketDataError as e:
                 logger.error(f"Failed to execute fetch task '{task.__name__}': {e}")
-                # We can decide to add error info to the data dict here if needed
-                # For now, logging is sufficient as individual methods handle their data structure on error.
 
         with open(RAW_DATA_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
@@ -611,7 +828,7 @@ class MarketDataFetcher:
         with open(RAW_DATA_PATH, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
 
-        # AI Generation Steps - wrap in try/except to allow partial report generation
+        # AI Generation Steps
         try:
             self.generate_ai_commentary()
         except MarketDataError as e:
@@ -632,12 +849,6 @@ class MarketDataFetcher:
             self.data['nasdaq_heatmap']['ai_commentary'] = f"Error: {e}"
 
         try:
-            self.select_notable_earnings()
-        except MarketDataError as e:
-            logger.error(f"Could not select notable earnings: {e}")
-            self.data['indicators']['notable_earnings'] = []
-
-        try:
             self.generate_weekly_column()
         except MarketDataError as e:
             logger.error(f"Could not generate weekly column: {e}")
@@ -653,7 +864,6 @@ class MarketDataFetcher:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Report Generation Completed. Saved to {final_path} ---")
 
-        # Clean up old files after a successful report generation
         self.cleanup_old_data()
 
         return self.data
