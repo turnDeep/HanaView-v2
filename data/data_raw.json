@@ -301,13 +301,6 @@
           "high": 113.39,
           "low": 113.33,
           "close": 113.39
-        },
-        {
-          "time": "2025-09-08T12:00:00",
-          "open": 113.39,
-          "high": 113.39,
-          "low": 113.39,
-          "close": 113.39
         }
       ]
     },
@@ -325,7 +318,7 @@
     "economic": [],
     "us_earnings": [],
     "jp_earnings": [],
-    "error": "[E007] Failed to fetch calendar data via Selenium.: [E007] Chrome driver initialization failed: Message: session not created: This version of ChromeDriver only supports Chrome version 138\nCurrent browser version is 140.0.7339.80 with binary path /home/jules/.cache/selenium/chrome/linux64/140.0.7339.80/chrome\nStacktrace:\n#0 0x55e30432e87a <unknown>\n#1 0x55e303dd32e0 <unknown>\n#2 0x55e303e13eb7 <unknown>\n#3 0x55e303e12da5 <unknown>\n#4 0x55e303e0d023 <unknown>\n#5 0x55e303e08ad7 <unknown>\n#6 0x55e303e58e9e <unknown>\n#7 0x55e303e58466 <unknown>\n#8 0x55e303e4a683 <unknown>\n#9 0x55e303e16b5b <unknown>\n#10 0x55e303e17f31 <unknown>\n#11 0x55e3042f37cb <unknown>\n#12 0x55e3042f75d4 <unknown>\n#13 0x55e3042da2c9 <unknown>\n#14 0x55e3042f8178 <unknown>\n#15 0x55e3042be6bf <unknown>\n#16 0x55e30431be78 <unknown>\n#17 0x55e30431c056 <unknown>\n#18 0x55e30432db96 <unknown>\n#19 0x7f0127211aa4 <unknown>\n#20 0x7f012729ec3c <unknown>\n"
+    "error": "[E007] Failed to fetch calendar data via Selenium.: [E007] Chrome driver initialization failed: Message: session not created: This version of ChromeDriver only supports Chrome version 138\nCurrent browser version is 140.0.7339.80 with binary path /home/jules/.cache/selenium/chrome/linux64/140.0.7339.80/chrome\nStacktrace:\n#0 0x55a4b7abf87a <unknown>\n#1 0x55a4b75642e0 <unknown>\n#2 0x55a4b75a4eb7 <unknown>\n#3 0x55a4b75a3da5 <unknown>\n#4 0x55a4b759e023 <unknown>\n#5 0x55a4b7599ad7 <unknown>\n#6 0x55a4b75e9e9e <unknown>\n#7 0x55a4b75e9466 <unknown>\n#8 0x55a4b75db683 <unknown>\n#9 0x55a4b75a7b5b <unknown>\n#10 0x55a4b75a8f31 <unknown>\n#11 0x55a4b7a847cb <unknown>\n#12 0x55a4b7a885d4 <unknown>\n#13 0x55a4b7a6b2c9 <unknown>\n#14 0x55a4b7a89178 <unknown>\n#15 0x55a4b7a4f6bf <unknown>\n#16 0x55a4b7aace78 <unknown>\n#17 0x55a4b7aad056 <unknown>\n#18 0x55a4b7abeb96 <unknown>\n#19 0x7f5f94cdaaa4 <unknown>\n#20 0x7f5f94d67c3c <unknown>\n"
   },
   "news_raw": [],
   "sp500_heatmap_1d": {

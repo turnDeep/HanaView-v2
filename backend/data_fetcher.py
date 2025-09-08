@@ -786,19 +786,12 @@ class MarketDataFetcher:
         self.data['column'] = {"weekly_report": {"title": "今週の注目ポイント (AIコラム)", "content": content, "date": datetime.now().strftime('%Y-%m-%d')}}
 
     def generate_heatmap_ai_commentary(self):
-        """Generates AI commentary for heatmaps."""
+        """Generates AI commentary for heatmaps based on 1-day, 1-week, and 1-month performance."""
         logger.info("Generating heatmap AI commentary...")
-        for index_name in ['sp500_heatmap', 'nasdaq_heatmap']:
-            heatmap_data = self.data.get(index_name, {})
-            if not heatmap_data or not heatmap_data.get('stocks'):
-                logger.warning(f"No data for {index_name}, skipping AI commentary.")
-                continue
 
-            stocks = heatmap_data['stocks']
-            stocks_sorted = sorted(stocks, key=lambda x: x.get('performance', 0), reverse=True)
-            top_5 = stocks_sorted[:5]
-            bottom_5 = stocks_sorted[-5:]
-
+        def get_sector_performance(stocks):
+            if not stocks:
+                return []
             sector_perf = {}
             sector_count = {}
             for stock in stocks:
@@ -808,20 +801,58 @@ class MarketDataFetcher:
                     sector_perf[sector] = sector_perf.get(sector, 0) + perf
                     sector_count[sector] = sector_count.get(sector, 0) + 1
 
-            avg_sector_perf = {s: sector_perf[s] / sector_count[s] for s in sector_perf}
-            sorted_sectors = sorted(avg_sector_perf.items(), key=lambda item: item[1], reverse=True)
+            if not sector_count:
+                return []
 
-            prompt = f"""
-            以下の{index_name.replace('_heatmap', '').upper()}のヒートマップデータを分析し、市況を要約してください。
-            - 上昇率トップ5銘柄: {', '.join([f"{s['ticker']} ({s['performance']:.2f}%)" for s in top_5])}
-            - 下落率トップ5銘柄: {', '.join([f"{s['ticker']} ({s['performance']:.2f}%)" for s in bottom_5])}
-            - パフォーマンスが良かったセクター: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors[:3]])}
-            - パフォーマンスが悪かったセクター: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors[-3:]])}
+            avg_sector_perf = {s: sector_perf[s] / sector_count[s] for s in sector_perf if s in sector_count}
+            return sorted(avg_sector_perf.items(), key=lambda item: item[1], reverse=True)
 
-            この情報に基づき、今日の{index_name.replace('_heatmap', '').upper()}市場の動向について、100字程度で簡潔な解説を生成してください。
-            """
-            commentary = self._call_openai_api(prompt, max_tokens=200)
-            self.data[index_name]['ai_commentary'] = commentary
+        for index_base_name in ['sp500', 'nasdaq']:
+            try:
+                heatmap_1d = self.data.get(f'{index_base_name}_heatmap_1d', {})
+                heatmap_1w = self.data.get(f'{index_base_name}_heatmap_1w', {})
+                heatmap_1m = self.data.get(f'{index_base_name}_heatmap_1m', {})
+
+                if not heatmap_1d.get('stocks'):
+                    logger.warning(f"No 1-day data for {index_base_name}, skipping AI commentary.")
+                    continue
+
+                sorted_sectors_1d = get_sector_performance(heatmap_1d.get('stocks', []))
+                sorted_sectors_1w = get_sector_performance(heatmap_1w.get('stocks', []))
+                sorted_sectors_1m = get_sector_performance(heatmap_1m.get('stocks', []))
+
+                if not sorted_sectors_1d:
+                    logger.warning(f"Could not calculate sector performance for {index_base_name}, skipping.")
+                    continue
+
+                prompt = f"""
+                以下の{index_base_name.upper()}に関する1日、1週間、1ヶ月のセクター別パフォーマンスデータを分析してください。
+
+                # データ
+                - **1日間パフォーマンス (上位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1d[:3]])}
+                - **1週間パフォーマンス (上位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1w[:3]]) if sorted_sectors_1w else "データなし"}
+                - **1ヶ月間パフォーマンス (上位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1m[:3]]) if sorted_sectors_1m else "データなし"}
+
+                - **1日間パフォーマンス (下位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1d[-3:]])}
+                - **1週間パフォーマンス (下位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1w[-3:]]) if sorted_sectors_1w else "データなし"}
+                - **1ヶ月間パフォーマンス (下位3セクター)**: {', '.join([f"{s[0]} ({s[1]:.2f}%)" for s in sorted_sectors_1m[-3:]]) if sorted_sectors_1m else "データなし"}
+
+                # 指示
+                上記データに基づき、以下の点について簡潔な解説を生成してください。
+                1.  **短期(1日)のトレンド**: 今日の市場で特に強かったセクターと弱かったセクターは何か。
+                2.  **中期(1週間)のトレンド**: この1週間で勢いを増している、または失っているセクターは何か。
+                3.  **長期(1ヶ月)のトレンドとの比較**: 短期・中期のトレンドは、過去1ヶ月の長期的なトレンドを継続しているか、それとも転換点を示しているか。特に注目すべきセクターの動向を指摘してください。
+
+                全体の解説は200字程度にまとめてください。
+                """
+
+                commentary = self._call_openai_api(prompt, max_tokens=400)
+                # Save commentary to the original heatmap key for backward compatibility
+                self.data[f'{index_base_name}_heatmap']['ai_commentary'] = commentary
+
+            except Exception as e:
+                logger.error(f"Failed to generate AI commentary for {index_base_name}: {e}")
+                self.data[f'{index_base_name}_heatmap']['ai_commentary'] = "AI解説の生成に失敗しました。"
 
     def cleanup_old_data(self):
         """Deletes data files older than 7 days."""
