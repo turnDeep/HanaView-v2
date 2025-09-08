@@ -18,6 +18,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 # --- Constants ---
 DATA_DIR = 'data'
@@ -135,10 +136,12 @@ class MarketDataFetcher:
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--window-size=800,1080')
+        chrome_options.add_argument('--window-size=1920,1080')
+        chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
         
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
+            self.driver.set_page_load_timeout(30)
             logger.info("Selenium Chrome driver initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Chrome driver: {e}")
@@ -153,6 +156,31 @@ class MarketDataFetcher:
                 logger.info("Selenium Chrome driver closed")
             except Exception as e:
                 logger.error(f"Error closing Chrome driver: {e}")
+
+    def _wait_for_element(self, by, value, timeout=10):
+        """Wait for an element to be present and return it."""
+        try:
+            element = WebDriverWait(self.driver, timeout).until(
+                EC.presence_of_element_located((by, value))
+            )
+            return element
+        except TimeoutException:
+            logger.warning(f"Element not found after {timeout} seconds: {value}")
+            return None
+
+    def _safe_find_element(self, by, value):
+        """Safely find an element without throwing an exception."""
+        try:
+            return self.driver.find_element(by, value)
+        except NoSuchElementException:
+            return None
+
+    def _safe_find_elements(self, by, value):
+        """Safely find elements without throwing an exception."""
+        try:
+            return self.driver.find_elements(by, value)
+        except NoSuchElementException:
+            return []
 
     # --- Ticker List Fetching ---
     def _get_sp500_tickers(self):
@@ -277,97 +305,100 @@ class MarketDataFetcher:
             self._close_selenium_driver()
 
     def _fetch_economic_indicators(self, dt_now):
-        """Fetch economic indicators from Monex."""
+        """Fetch economic indicators from Monex with improved element finding."""
         logger.info("Fetching economic indicators from Monex...")
         try:
             self.driver.get(MONEX_ECONOMIC_CALENDAR_URL)
-            time.sleep(2)
+            time.sleep(3)  # Wait for page to load
             
-            # Click filters (importance level and today/tomorrow)
-            try:
-                # Select importance level checkbox
-                importance_checkbox = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/table/tbody/tr[1]/td/ul/li[1]/label/input")
-                importance_checkbox.click()
-                time.sleep(1)
-                
-                # Select today and tomorrow
-                today_checkbox = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/table/tbody/tr[2]/td/ul/li[3]/label/input")
-                today_checkbox.click()
-                time.sleep(1)
-                
-                # Click search button
-                search_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[3]/a")
-                search_button.click()
-                time.sleep(2)
-            except Exception as e:
-                logger.warning(f"Could not set filters for economic indicators: {e}")
-            
-            # Get table data
-            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/table")
-            html = table.get_attribute('outerHTML')
-            df = pd.read_html(html)[0]
-            
+            # Try to find and parse table data using multiple strategies
             indicators = []
-            for i in range(len(df)):
+            
+            # Strategy 1: Try to find table by tag name
+            tables = self._safe_find_elements(By.TAG_NAME, "table")
+            
+            for table in tables:
                 try:
-                    # Parse time
-                    time_str = df.iloc[i, 1] if len(str(df.iloc[i, 1])) >= 5 else "00:00"
-                    text0 = str(dt_now.year) + "/" + df.iloc[i, 0][:5] + " " + time_str[:5]
-                    tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
+                    # Check if this table contains economic data
+                    html = table.get_attribute('outerHTML')
+                    if not html or len(html) < 100:  # Skip small tables
+                        continue
+                        
+                    # Try to parse the table
+                    df = pd.read_html(html)[0]
                     
-                    # Filter by time range (past 2 hours to next 26 hours)
-                    if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
-                        importance_str = str(df.iloc[i, 3])
-                        # 重要度★★以上にフィルタリング
-                        if "★★" in importance_str or "★★★" in importance_str:
-                            # 元のデータ形式を維持しつつ、★★★の可能性も考慮する
-                            importance = "★★★" if "★★★" in importance_str else "★★"
-                            indicator = {
-                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                                "country": df.iloc[i, 2],
-                                "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
-                                "importance": importance,
-                                "type": "economic"
-                            }
-                            indicators.append(indicator)
+                    # Check if this looks like economic data
+                    if len(df.columns) < 4:
+                        continue
+                    
+                    for i in range(len(df)):
+                        try:
+                            # Try to extract date and time
+                            date_str = str(df.iloc[i, 0]) if pd.notna(df.iloc[i, 0]) else ""
+                            time_str = str(df.iloc[i, 1]) if pd.notna(df.iloc[i, 1]) else ""
+                            
+                            # Skip if no valid date
+                            if not date_str or date_str == "nan":
+                                continue
+                            
+                            # Parse datetime (adjust format as needed)
+                            if "/" in date_str and len(date_str) >= 5:
+                                # Try to parse date
+                                text0 = str(dt_now.year) + "/" + date_str[:5]
+                                if time_str and time_str != "nan" and ":" in time_str:
+                                    text0 += " " + time_str[:5]
+                                else:
+                                    text0 += " 00:00"
+                                
+                                tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
+                                
+                                # Filter by time range
+                                if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
+                                    # Try to find importance (usually with ★)
+                                    importance_col = None
+                                    for col_idx in range(len(df.columns)):
+                                        col_val = str(df.iloc[i, col_idx])
+                                        if "★" in col_val:
+                                            importance_col = col_idx
+                                            break
+                                    
+                                    if importance_col is not None:
+                                        importance_str = str(df.iloc[i, importance_col])
+                                        if "★★" in importance_str or "★★★" in importance_str:
+                                            importance = "★★★" if "★★★" in importance_str else "★★"
+                                            
+                                            # Find country and name columns
+                                            country = ""
+                                            name = ""
+                                            for col_idx in range(len(df.columns)):
+                                                if col_idx not in [0, 1, importance_col]:
+                                                    val = str(df.iloc[i, col_idx])
+                                                    if val and val != "nan":
+                                                        if not country:
+                                                            country = val[:10]
+                                                        elif not name:
+                                                            name = val[:30]
+                                            
+                                            if name:
+                                                indicator = {
+                                                    "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                                    "country": country,
+                                                    "name": name,
+                                                    "importance": importance,
+                                                    "type": "economic"
+                                                }
+                                                indicators.append(indicator)
+                        except Exception as e:
+                            logger.debug(f"Skipping row {i}: {e}")
+                            continue
                 except Exception as e:
-                    logger.debug(f"Skipping row {i} in economic indicators: {e}")
+                    logger.debug(f"Could not parse table: {e}")
                     continue
             
-            # Try to get next day's data
-            try:
-                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/div[1]/span[3]")
-                next_button.click()
-                time.sleep(2)
-                
-                table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/div[4]/table")
-                html = table.get_attribute('outerHTML')
-                df = pd.read_html(html)[0]
-                
-                for i in range(len(df)):
-                    try:
-                        time_str = df.iloc[i, 1] if len(str(df.iloc[i, 1])) >= 5 else "00:00"
-                        text0 = str(dt_now.year) + "/" + df.iloc[i, 0][:5] + " " + time_str[:5]
-                        tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
-                        
-                        if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
-                            importance_str = str(df.iloc[i, 3])
-                            # 重要度★★以上にフィルタリング
-                            if "★★" in importance_str or "★★★" in importance_str:
-                                importance = "★★★" if "★★★" in importance_str else "★★"
-                                indicator = {
-                                    "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                                    "country": df.iloc[i, 2],
-                                    "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
-                                    "importance": importance,
-                                    "type": "economic"
-                                }
-                                indicators.append(indicator)
-                    except Exception as e:
-                        logger.debug(f"Skipping row {i} in next day economic indicators: {e}")
-                        continue
-            except Exception as e:
-                logger.debug(f"Could not get next day economic indicators: {e}")
+            # If no indicators found, try alternative approach
+            if not indicators:
+                logger.warning("No economic indicators found using table parsing, trying alternative approach")
+                # You can add alternative parsing strategies here
             
             self.data['indicators']['economic'] = indicators
             logger.info(f"Fetched {len(indicators)} economic indicators")
@@ -377,48 +408,76 @@ class MarketDataFetcher:
             self.data['indicators']['economic'] = []
 
     def _fetch_us_earnings(self, dt_now):
-        """Fetch US earnings calendar from Monex."""
+        """Fetch US earnings calendar from Monex with improved element finding."""
         logger.info("Fetching US earnings calendar from Monex...")
         try:
             self.driver.get(MONEX_US_EARNINGS_URL)
-            time.sleep(2)
-            
-            # Click to get next page (usually shows more relevant dates)
-            try:
-                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[6]/div/div/div[1]/a[3]")
-                next_button.click()
-                time.sleep(2)
-            except Exception as e:
-                logger.debug(f"Could not click next button for US earnings: {e}")
-            
-            # Get table data
-            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[6]/table")
-            html = table.get_attribute('outerHTML')
-            df = pd.read_html(html)[0]
+            time.sleep(3)  # Wait for page to load
             
             earnings = []
-            for i in range(len(df)):
+            
+            # Try to find tables on the page
+            tables = self._safe_find_elements(By.TAG_NAME, "table")
+            
+            for table in tables:
                 try:
-                    ticker = df.iloc[i, 2]
-                    if ticker in US_TICKER_LIST:
-                        # Parse datetime (add 13 hours for timezone conversion)
-                        text0 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
-                        tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M') + timedelta(hours=13)
-                        
-                        if tdatetime > dt_now - timedelta(hours=2):
-                            company_name = df.iloc[i, 3][:20] if len(df.iloc[i, 3]) > 20 else df.iloc[i, 3]
-                            earning = {
-                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                                "ticker": ticker,
-                                "company": f"({company_name})",
-                                "type": "us_earnings"
-                            }
-                            earnings.append(earning)
+                    html = table.get_attribute('outerHTML')
+                    if not html or len(html) < 100:
+                        continue
+                    
+                    # Parse the table
+                    df = pd.read_html(html)[0]
+                    
+                    # Look for earnings data
+                    for i in range(len(df)):
+                        try:
+                            # Look for ticker symbols in various columns
+                            ticker = None
+                            company_name = None
+                            date_str = None
+                            time_str = None
+                            
+                            for col_idx in range(len(df.columns)):
+                                val = str(df.iloc[i, col_idx]) if pd.notna(df.iloc[i, col_idx]) else ""
+                                
+                                # Check if this looks like a ticker
+                                if val in US_TICKER_LIST:
+                                    ticker = val
+                                # Check if this looks like a date
+                                elif "/" in val and len(val) >= 8:
+                                    date_str = val
+                                # Check if this looks like a time
+                                elif ":" in val and len(val) >= 5:
+                                    time_str = val
+                                # Otherwise might be company name
+                                elif len(val) > 3 and val != "nan" and not company_name:
+                                    company_name = val[:20]
+                            
+                            if ticker and ticker in US_TICKER_LIST:
+                                # Create datetime
+                                if date_str and time_str:
+                                    text0 = date_str[:10] + " " + time_str[:5]
+                                    try:
+                                        tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M') + timedelta(hours=13)
+                                        
+                                        if tdatetime > dt_now - timedelta(hours=2):
+                                            earning = {
+                                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                                "ticker": ticker,
+                                                "company": f"({company_name})" if company_name else "",
+                                                "type": "us_earnings"
+                                            }
+                                            earnings.append(earning)
+                                    except:
+                                        pass
+                        except Exception as e:
+                            logger.debug(f"Skipping row {i} in US earnings: {e}")
+                            continue
                 except Exception as e:
-                    logger.debug(f"Skipping row {i} in US earnings: {e}")
+                    logger.debug(f"Could not parse US earnings table: {e}")
                     continue
             
-            # Add special tickers with fixed dates from environment variables
+            # Add special tickers with fixed dates
             strtoday = datetime.now().strftime("%Y/%m/%d")
             strdt_now2 = dt_now.strftime('%m/%d --:--')
 
@@ -430,7 +489,6 @@ class MarketDataFetcher:
                 special_tickers = {}
 
             if strtoday in special_tickers:
-                # The value from JSON will be a list, so we unpack it.
                 ticker, company = special_tickers[strtoday]
                 earning = {
                     "datetime": strdt_now2,
@@ -448,86 +506,79 @@ class MarketDataFetcher:
             self.data['indicators']['us_earnings'] = []
 
     def _fetch_jp_earnings(self, dt_now):
-        """Fetch Japanese earnings calendar from Monex."""
+        """Fetch Japanese earnings calendar from Monex with improved element finding."""
         logger.info("Fetching Japanese earnings calendar from Monex...")
         try:
             self.driver.get(MONEX_JP_EARNINGS_URL)
-            time.sleep(2)
-            
-            # Click to get next page
-            try:
-                next_button = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/div/div/div[1]/a[3]")
-                next_button.click()
-                time.sleep(2)
-            except Exception as e:
-                logger.debug(f"Could not click next button for JP earnings: {e}")
-            
-            # Get table data
-            table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/table")
-            html = table.get_attribute('outerHTML')
-            df = pd.read_html(html)[0]
+            time.sleep(3)  # Wait for page to load
             
             earnings = []
-            for i in range(len(df)):
-                try:
-                    # Extract ticker code from the company string
-                    text2 = df.iloc[i, 2][-6:]
-                    text3 = re.sub(r'\D', '', text2)
-                    
-                    if text3 in JP_TICKER_LIST:
-                        text1 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
-                        text4 = df.iloc[i, 2][:-8]
-                        company_name = text4[:20] if len(text4) > 20 else text4
-                        
-                        earning = {
-                            "datetime": text1,
-                            "ticker": text3,
-                            "company": f"({company_name})",
-                            "type": "jp_earnings"
-                        }
-                        earnings.append(earning)
-                except Exception as e:
-                    logger.debug(f"Skipping row {i} in JP earnings: {e}")
-                    continue
             
-            # Try to get more pages
-            for page in range(7):
+            # Try to find tables on the page
+            tables = self._safe_find_elements(By.TAG_NAME, "table")
+            
+            for table in tables:
                 try:
-                    cur_url = self.driver.current_url
-                    next_button = self.driver.find_element(By.CLASS_NAME, "next")
-                    next_button.click()
-                    time.sleep(2)
-                    
-                    if cur_url == self.driver.current_url:
-                        break
-                    
-                    table = self.driver.find_element(By.XPATH, "/html/body/div[7]/div/div[3]/div[1]/form/div[8]/table")
                     html = table.get_attribute('outerHTML')
+                    if not html or len(html) < 100:
+                        continue
+                    
+                    # Parse the table
                     df = pd.read_html(html)[0]
                     
+                    # Look for earnings data
                     for i in range(len(df)):
                         try:
-                            text2 = df.iloc[i, 2][-6:]
-                            text3 = re.sub(r'\D', '', text2)
+                            # Japanese tickers are usually 4-digit numbers
+                            ticker = None
+                            company_name = None
+                            date_time = None
                             
-                            if text3 in JP_TICKER_LIST:
-                                text1 = df.iloc[i, 0] + " " + df.iloc[i, 1][:5]
-                                text4 = df.iloc[i, 2][:-8]
-                                company_name = text4[:20] if len(text4) > 20 else text4
+                            for col_idx in range(len(df.columns)):
+                                val = str(df.iloc[i, col_idx]) if pd.notna(df.iloc[i, col_idx]) else ""
                                 
-                                earning = {
-                                    "datetime": text1,
-                                    "ticker": text3,
-                                    "company": f"({company_name})",
-                                    "type": "jp_earnings"
-                                }
-                                earnings.append(earning)
+                                # Extract ticker from text (often in format "Company Name (1234)")
+                                if len(val) > 4:
+                                    # Look for 4-digit number in parentheses
+                                    match = re.search(r'[（\(]?(\d{4})[）\)]?', val)
+                                    if match:
+                                        potential_ticker = match.group(1)
+                                        if potential_ticker in JP_TICKER_LIST:
+                                            ticker = potential_ticker
+                                            # Extract company name
+                                            company_match = re.search(r'^([^（\(]+)', val)
+                                            if company_match:
+                                                company_name = company_match.group(1).strip()[:20]
+                                
+                                # Check for date/time pattern
+                                if "/" in val and "日" in val:
+                                    date_time = val
+                            
+                            if ticker and ticker in JP_TICKER_LIST:
+                                if not date_time:
+                                    # Try to construct from separate columns
+                                    date_col = str(df.iloc[i, 0]) if pd.notna(df.iloc[i, 0]) else ""
+                                    time_col = str(df.iloc[i, 1]) if pd.notna(df.iloc[i, 1]) and len(df.columns) > 1 else ""
+                                    
+                                    if date_col and "/" in date_col:
+                                        date_time = date_col
+                                        if time_col and ":" in time_col:
+                                            date_time += " " + time_col[:5]
+                                
+                                if date_time:
+                                    earning = {
+                                        "datetime": date_time[:16],  # Limit length
+                                        "ticker": ticker,
+                                        "company": f"({company_name})" if company_name else "",
+                                        "type": "jp_earnings"
+                                    }
+                                    earnings.append(earning)
                         except Exception as e:
-                            logger.debug(f"Skipping row {i} in JP earnings page {page}: {e}")
+                            logger.debug(f"Skipping row {i} in JP earnings: {e}")
                             continue
                 except Exception as e:
-                    logger.debug(f"Could not get page {page} for JP earnings: {e}")
-                    break
+                    logger.debug(f"Could not parse JP earnings table: {e}")
+                    continue
             
             self.data['indicators']['jp_earnings'] = earnings
             logger.info(f"Fetched {len(earnings)} Japanese earnings")
