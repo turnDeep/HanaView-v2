@@ -302,6 +302,34 @@ body {
     font-size: 0.95em;
 }
 
+.topic-details {
+    margin-top: 15px;
+    padding-left: 10px;
+    border-left: 3px solid var(--border-color);
+}
+
+.topic-section {
+    margin-bottom: 12px;
+}
+
+.topic-section:last-child {
+    margin-bottom: 0;
+}
+
+.topic-section h4 {
+    margin: 0 0 4px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.topic-section p {
+    margin: 0;
+    padding-left: 10px;
+}
+
 /* --- Market Tab Styles --- */
 .market-section {
     margin-bottom: 30px;

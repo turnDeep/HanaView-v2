@@ -167,21 +167,44 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = '<div class="card"><p>ニュースデータがありません。</p></div>';
             return;
         }
+
         const card = document.createElement('div');
         card.className = 'card';
+
+        // Render summary
         if (newsData.summary) {
             card.innerHTML += `<div class="news-summary"><h3>今朝の3行サマリー</h3><p>${newsData.summary.replace(/\n/g, '<br>')}</p></div>`;
         }
+
+        // Render topics
         if (newsData.topics && newsData.topics.length > 0) {
             const topicsContainer = document.createElement('div');
             topicsContainer.className = 'main-topics-container';
             topicsContainer.innerHTML = '<h3>主要トピック</h3>';
+
             newsData.topics.forEach((topic, index) => {
-                topicsContainer.innerHTML += `
-                    <div class="topic-box">
-                        <p class="topic-title ${index === 0 ? 'topic-title-red' : 'topic-title-blue'}">${index + 1}. ${topic.title}</p>
-                        <p>${topic.body}</p>
-                    </div>`;
+                const topicBox = document.createElement('div');
+                topicBox.className = 'topic-box';
+
+                let topicContent = `
+                    <p class="topic-title ${index === 0 ? 'topic-title-red' : 'topic-title-blue'}">${index + 1}. ${topic.title}</p>
+                    <div class="topic-details">
+                        <div class="topic-section">
+                            <h4>事実</h4>
+                            <p>${topic.fact || 'N/A'}</p>
+                        </div>
+                        <div class="topic-section">
+                            <h4>解釈</h4>
+                            <p>${topic.interpretation || 'N/A'}</p>
+                        </div>
+                        <div class="topic-section">
+                            <h4>市場への影響</h4>
+                            <p>${topic.impact || 'N/A'}</p>
+                        </div>
+                    </div>
+                `;
+                topicBox.innerHTML = topicContent;
+                topicsContainer.appendChild(topicBox);
             });
             card.appendChild(topicsContainer);
         }

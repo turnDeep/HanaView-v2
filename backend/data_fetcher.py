@@ -536,40 +536,43 @@ class MarketDataFetcher:
             logger.error(f"Error fetching Japanese earnings: {e}")
             self.data['indicators']['jp_earnings'] = []
 
-    def fetch_yahoo_finance_news(self):
-        """Fetches news from Yahoo Finance."""
-        logger.info("Fetching news from Yahoo Finance...")
-        try:
-            response = self.http_session.get(YAHOO_FINANCE_NEWS_URL, timeout=30)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
+    def fetch_yfinance_indices_news(self):
+        """Fetches news for major indices using yfinance."""
+        logger.info("Fetching news for major indices from yfinance...")
+        indices = {
+            "NASDAQ Composite (^IXIC)": "^IXIC",
+            "S&P 500 (^GSPC)": "^GSPC",
+            "Dow 30 (^DJI)": "^DJI",
+            "Nikkei 225 (^N225)": "^N225"
+        }
 
-            news_items = []
-            for item in soup.find_all('li', class_='js-stream-content', limit=10):
-                title_tag = item.find('a')
-                summary_tag = item.find('p')
+        all_news = []
+        processed_links = set()
 
-                if title_tag and summary_tag:
-                    title = title_tag.get_text(strip=True)
-                    link = title_tag['href']
-                    if not link.startswith('http'):
-                        link = f"https://finance.yahoo.com{link}"
+        for name, ticker_symbol in indices.items():
+            logger.info(f"Fetching news for {name}...")
+            try:
+                index = yf.Ticker(ticker_symbol, session=self.yf_session)
+                news = index.news
+                if news:
+                    for article in news:
+                        link = article.get('link')
+                        if link and link not in processed_links:
+                            all_news.append({
+                                "title": article.get('title', 'N/A'),
+                                "link": link,
+                                "publisher": article.get('publisher', 'N/A'),
+                                # Keep summary for context in AI prompt, even if empty
+                                "summary": article.get('summary', '')
+                            })
+                            processed_links.add(link)
+                time.sleep(1) # Wait between requests to be polite
+            except Exception as e:
+                logger.error(f"Failed to fetch news for {name}: {e}")
 
-                    summary = summary_tag.get_text(strip=True)
-
-                    news_items.append({
-                        "title": title,
-                        "link": link,
-                        "summary": summary,
-                        "publisher": "Yahoo Finance"
-                    })
-
-            self.data['news_raw'] = news_items
-            logger.info(f"Fetched {len(news_items)} news items from Yahoo Finance.")
-
-        except Exception as e:
-            logger.error(f"Error fetching Yahoo Finance news: {e}")
-            self.data['news_raw'] = []
+        # Limit to 20 news items to keep AI prompt concise
+        self.data['news_raw'] = all_news[:20]
+        logger.info(f"Fetched {len(self.data['news_raw'])} unique news items from yfinance.")
 
     def fetch_heatmap_data(self):
         """ヒートマップデータ取得（API対策強化版）"""
@@ -728,21 +731,24 @@ class MarketDataFetcher:
 
         news_content = ""
         for i, item in enumerate(raw_news):
-            news_content += f"記事{i+1}: {item['title']}\n概要: {item['summary']}\n\n"
+            # yfinance may not have summary, so we focus on the title.
+            news_content += f"記事{i+1}: {item['title']}\n発行元: {item['publisher']}\n\n"
 
         prompt = f"""
-        以下の米国市場に関するニュース記事群を分析し、日本の個人投資家向けに要約してください。
+        以下の米国と日本の市場に関するニュース記事のヘッドライン群を分析し、日本の個人投資家向けに要約してください。
 
-        ニュース記事:
+        ニュース記事ヘッドライン:
         ---
         {news_content}
         ---
 
         上記のニュース全体から、今日の市場のムードが最も伝わるように、事実とその解釈を織り交ぜて「今朝の3行サマリー」を作成してください。
-        さらに、最も重要と思われる「主要トピック」を3つ選び、それぞれ以下の形式で記述してください。
-        - 事実: ニュースで報道された客観的な事実。
-        - 解釈: その事実が市場でどのように受け止められているか、専門家としてのあなたの解釈。
-        - 市場への影響: このトピックが今後の市場（特にS&P 500やNASDAQ）に与えうる短期的な影響。
+        さらに、経済全体に影響を与えうる最も重要と思われる「主要トピック」を3つ選び、それぞれ以下の形式で記述してください。
+
+        - title: ニュースのタイトルを基にした、分かりやすい日本語のタイトル（20文字以内）
+        - fact: ニュースで報道された客観的な事実を簡潔に記述。
+        - interpretation: その事実が市場でどのように受け止められているか、専門家としてのあなたの解釈を記述。
+        - impact: このトピックが今後の市場（特に日米の株価指数）に与えうる短期的な影響を記述。
 
         以下のJSON形式で、厳密に出力してください。
 
@@ -750,19 +756,19 @@ class MarketDataFetcher:
           "summary": "（ここに3行のサマリーを記述）",
           "topics": [
             {{
-              "title": "（トピック1のタイトル、15文字以内）",
+              "title": "（トピック1のタイトル）",
               "fact": "（事実を記述）",
               "interpretation": "（解釈を記述）",
               "impact": "（市場への影響を記述）"
             }},
             {{
-              "title": "（トピック2のタイトル、15文字以内）",
+              "title": "（トピック2のタイトル）",
               "fact": "（事実を記述）",
               "interpretation": "（解釈を記述）",
               "impact": "（市場への影響を記述）"
             }},
             {{
-              "title": "（トピック3のタイトル、15文字以内）",
+              "title": "（トピック3のタイトル）",
               "fact": "（事実を記述）",
               "interpretation": "（解釈を記述）",
               "impact": "（市場への影響を記述）"
@@ -892,7 +898,7 @@ class MarketDataFetcher:
             self.fetch_t_note_future,
             self.fetch_fear_greed_index,
             self.fetch_calendar_data,  # Changed from fetch_economic_indicators
-            self.fetch_yahoo_finance_news,
+            self.fetch_yfinance_indices_news,
             self.fetch_heatmap_data
         ]
 
