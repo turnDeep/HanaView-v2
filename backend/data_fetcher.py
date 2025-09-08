@@ -184,7 +184,7 @@ class MarketDataFetcher:
     def fetch_vix(self):
         logger.info("Fetching VIX data...")
         try:
-            self.data['market']['vix'] = self._fetch_yfinance_data(VIX_TICKER)
+            self.data['market']['vix'] = self._fetch_yfinance_data(VIX_TICKER, period="60d")
         except MarketDataError as e:
             self.data['market']['vix'] = {"current": None, "history": [], "error": str(e)}
             logger.error(f"VIX fetch failed: {e}")
@@ -192,7 +192,7 @@ class MarketDataFetcher:
     def fetch_t_note_future(self):
         logger.info("Fetching T-note future data...")
         try:
-            self.data['market']['t_note_future'] = self._fetch_yfinance_data(T_NOTE_TICKER)
+            self.data['market']['t_note_future'] = self._fetch_yfinance_data(T_NOTE_TICKER, period="60d")
         except MarketDataError as e:
             self.data['market']['t_note_future'] = {"current": None, "history": [], "error": str(e)}
             logger.error(f"T-Note fetch failed: {e}")
