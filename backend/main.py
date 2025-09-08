@@ -58,7 +58,7 @@ def get_market_data():
         if not os.path.exists(data_file):
             raise HTTPException(status_code=404, detail="Data file not found.")
 
-        with open(data_file, 'r') as f:
+        with open(data_file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         return data
     except Exception as e:
