@@ -55,7 +55,7 @@ def get_market_data():
     """Endpoint to get the latest market data."""
     try:
         data_file = get_latest_data_file()
-        if not os.path.exists(data_file):
+        if data_file is None or not os.path.exists(data_file):
             raise HTTPException(status_code=404, detail="Data file not found.")
 
         with open(data_file, 'r', encoding='utf-8') as f:
