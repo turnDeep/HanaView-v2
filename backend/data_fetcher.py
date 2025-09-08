@@ -141,7 +141,7 @@ class MarketDataFetcher:
         
         try:
             self.driver = webdriver.Chrome(options=chrome_options)
-            self.driver.set_page_load_timeout(30)
+            self.driver.set_page_load_timeout(60)  # Increased timeout
             logger.info("Selenium Chrome driver initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Chrome driver: {e}")
@@ -282,15 +282,16 @@ class MarketDataFetcher:
             self.data['market']['fear_and_greed'] = {'now': None, 'error': f"[E004] {ERROR_CODES['E004']}: {e}"}
 
     def fetch_calendar_data(self):
-        """Fetch economic indicators and earnings calendar using Selenium."""
-        logger.info("Fetching calendar data via Selenium...")
+        """Fetch economic indicators and earnings calendar."""
+        dt_now = datetime.now()
         
+        # Fetch economic indicators using curl_cffi (no selenium)
+        self._fetch_economic_indicators(dt_now)
+
+        # Fetch earnings using Selenium
+        logger.info("Fetching earnings calendar data via Selenium...")
         try:
             self._setup_selenium_driver()
-            dt_now = datetime.now()
-            
-            # Fetch economic indicators
-            self._fetch_economic_indicators(dt_now)
             
             # Fetch US earnings
             self._fetch_us_earnings(dt_now)
@@ -299,110 +300,68 @@ class MarketDataFetcher:
             self._fetch_jp_earnings(dt_now)
             
         except Exception as e:
-            logger.error(f"Error during calendar data fetching: {e}")
-            self.data['indicators']['error'] = f"[E007] {ERROR_CODES['E007']}: {e}"
+            logger.error(f"Error during earnings data fetching: {e}")
+            # Dont wipe out the whole indicators object if only selenium fails
+            if 'error' not in self.data['indicators']:
+                 self.data['indicators']['error'] = f"[E007] {ERROR_CODES['E007']}: {e}"
         finally:
             self._close_selenium_driver()
 
     def _fetch_economic_indicators(self, dt_now):
-        """Fetch economic indicators from Monex with improved element finding."""
+        """Fetch economic indicators from Monex using curl_cffi and pandas. Timezone-aware."""
         logger.info("Fetching economic indicators from Monex...")
         try:
-            self.driver.get(MONEX_ECONOMIC_CALENDAR_URL)
-            time.sleep(3)  # Wait for page to load
+            response = self.http_session.get(MONEX_ECONOMIC_CALENDAR_URL, timeout=30)
+            response.raise_for_status()
+
+            # Decode the content using shift_jis for Japanese websites
+            html_content = response.content.decode('shift_jis', errors='replace')
+            tables = pd.read_html(html_content, flavor='lxml')
             
-            # Try to find and parse table data using multiple strategies
+            if len(tables) < 3:
+                logger.warning("Could not find the expected economic calendar table.")
+                self.data['indicators']['economic'] = []
+                return
+
+            df = tables[2]
+            df.columns = ['date', 'time', 'importance', 'country', 'name', 'previous', 'forecast', 'result', 'notes']
+            
+            jst = timezone(timedelta(hours=9))
+            dt_now_jst = datetime.now(jst)
+            
             indicators = []
-            
-            # Strategy 1: Try to find table by tag name
-            tables = self._safe_find_elements(By.TAG_NAME, "table")
-            
-            for table in tables:
+            for _, row in df.iterrows():
                 try:
-                    # Check if this table contains economic data
-                    html = table.get_attribute('outerHTML')
-                    if not html or len(html) < 100:  # Skip small tables
+                    date_str = row['date']
+                    time_str = row['time']
+
+                    if pd.isna(date_str) or pd.isna(time_str) or '発表' in str(date_str):
                         continue
-                        
-                    # Try to parse the table
-                    df = pd.read_html(html)[0]
-                    
-                    # Check if this looks like economic data
-                    if len(df.columns) < 4:
-                        continue
-                    
-                    for i in range(len(df)):
-                        try:
-                            # Try to extract date and time
-                            date_str = str(df.iloc[i, 0]) if pd.notna(df.iloc[i, 0]) else ""
-                            time_str = str(df.iloc[i, 1]) if pd.notna(df.iloc[i, 1]) else ""
-                            
-                            # Skip if no valid date
-                            if not date_str or date_str == "nan":
-                                continue
-                            
-                            # Parse datetime (adjust format as needed)
-                            if "/" in date_str and len(date_str) >= 5:
-                                # Try to parse date
-                                text0 = str(dt_now.year) + "/" + date_str[:5]
-                                if time_str and time_str != "nan" and ":" in time_str:
-                                    text0 += " " + time_str[:5]
-                                else:
-                                    text0 += " 00:00"
-                                
-                                tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
-                                
-                                # Filter by time range
-                                if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
-                                    # Try to find importance (usually with ★)
-                                    importance_col = None
-                                    for col_idx in range(len(df.columns)):
-                                        col_val = str(df.iloc[i, col_idx])
-                                        if "★" in col_val:
-                                            importance_col = col_idx
-                                            break
-                                    
-                                    if importance_col is not None:
-                                        importance_str = str(df.iloc[i, importance_col])
-                                        if "★★" in importance_str or "★★★" in importance_str:
-                                            importance = "★★★" if "★★★" in importance_str else "★★"
-                                            
-                                            # Find country and name columns
-                                            country = ""
-                                            name = ""
-                                            for col_idx in range(len(df.columns)):
-                                                if col_idx not in [0, 1, importance_col]:
-                                                    val = str(df.iloc[i, col_idx])
-                                                    if val and val != "nan":
-                                                        if not country:
-                                                            country = val[:10]
-                                                        elif not name:
-                                                            name = val[:30]
-                                            
-                                            if name:
-                                                indicator = {
-                                                    "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                                                    "country": country,
-                                                    "name": name,
-                                                    "importance": importance,
-                                                    "type": "economic"
-                                                }
-                                                indicators.append(indicator)
-                        except Exception as e:
-                            logger.debug(f"Skipping row {i}: {e}")
-                            continue
+
+                    # Reconstruct datetime and make it JST-aware
+                    full_date_str = f"{dt_now_jst.year}/{str(date_str).split('(')[0]} {str(time_str)}"
+                    tdatetime = datetime.strptime(full_date_str, '%Y/%m/%d %H:%M')
+                    tdatetime_aware = tdatetime.replace(tzinfo=jst)
+
+                    # Timezone-aware comparison with the original window
+                    if tdatetime_aware > dt_now_jst - timedelta(hours=2) and tdatetime_aware < dt_now_jst + timedelta(hours=26):
+                        importance_str = row['importance']
+                        if isinstance(importance_str, str) and "★" in importance_str:
+                            indicator = {
+                                "datetime": tdatetime_aware.strftime('%m/%d %H:%M'),
+                                "country": row['country'],
+                                "name": row['name'],
+                                "importance": importance_str,
+                                "type": "economic"
+                            }
+                            indicators.append(indicator)
                 except Exception as e:
-                    logger.debug(f"Could not parse table: {e}")
+                    logger.debug(f"Skipping row in economic indicators: {row.to_list()} due to {e}")
                     continue
             
-            # If no indicators found, try alternative approach
-            if not indicators:
-                logger.warning("No economic indicators found using table parsing, trying alternative approach")
-                # You can add alternative parsing strategies here
-            
             self.data['indicators']['economic'] = indicators
-            logger.info(f"Fetched {len(indicators)} economic indicators")
-            
+            logger.info(f"Fetched {len(indicators)} economic indicators successfully.")
+
         except Exception as e:
             logger.error(f"Error fetching economic indicators: {e}")
             self.data['indicators']['economic'] = []
