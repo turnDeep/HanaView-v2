@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 from curl_cffi.requests import Session
 import openai
 import httpx
+from io import StringIO
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -316,7 +317,7 @@ class MarketDataFetcher:
 
             # Decode the content using shift_jis for Japanese websites
             html_content = response.content.decode('shift_jis', errors='replace')
-            tables = pd.read_html(html_content, flavor='lxml')
+            tables = pd.read_html(StringIO(html_content), flavor='lxml')
             
             if len(tables) < 3:
                 logger.warning("Could not find the expected economic calendar table.")
@@ -385,7 +386,7 @@ class MarketDataFetcher:
                         continue
                     
                     # Parse the table
-                    df = pd.read_html(html)[0]
+                    df = pd.read_html(StringIO(html))[0]
                     
                     # Look for earnings data
                     for i in range(len(df)):
@@ -483,50 +484,57 @@ class MarketDataFetcher:
                         continue
                     
                     # Parse the table
-                    df = pd.read_html(html)[0]
+                    df = pd.read_html(StringIO(html))[0]
                     
                     # Look for earnings data
                     for i in range(len(df)):
                         try:
-                            # Japanese tickers are usually 4-digit numbers
                             ticker = None
                             company_name = None
-                            date_time = None
-                            
+                            date_time_str = None
+
+                            # Iterate over columns to find ticker, company name, and date
                             for col_idx in range(len(df.columns)):
                                 val = str(df.iloc[i, col_idx]) if pd.notna(df.iloc[i, col_idx]) else ""
+
+                                # 1. Check for ticker
+                                # A 4-digit number, possibly with a company name.
+                                match = re.search(r'(\d{4})', val)
+                                if not ticker and match and match.group(1) in JP_TICKER_LIST:
+                                    ticker = match.group(1)
+                                    # If the cell is not just the ticker, assume it contains the company name.
+                                    if not val.strip().isdigit():
+                                        name_match = re.search(r'^([^（\(]+)', val)
+                                        if name_match:
+                                            company_name = name_match.group(1).strip()[:20]
                                 
-                                # Extract ticker from text (often in format "Company Name (1234)")
-                                if len(val) > 4:
-                                    # Look for 4-digit number in parentheses
-                                    match = re.search(r'[（\(]?(\d{4})[）\)]?', val)
-                                    if match:
-                                        potential_ticker = match.group(1)
-                                        if potential_ticker in JP_TICKER_LIST:
-                                            ticker = potential_ticker
-                                            # Extract company name
-                                            company_match = re.search(r'^([^（\(]+)', val)
-                                            if company_match:
-                                                company_name = company_match.group(1).strip()[:20]
-                                
-                                # Check for date/time pattern
-                                if "/" in val and "日" in val:
-                                    date_time = val
-                            
-                            if ticker and ticker in JP_TICKER_LIST:
-                                if not date_time:
-                                    # Try to construct from separate columns
+                                # 2. Check for date/time string
+                                elif not date_time_str and "/" in val and "日" in val:
+                                    date_time_str = val.strip()
+
+                                # 3. Check for company name (if not already found)
+                                # Should be a non-numeric string, not a date.
+                                elif not company_name and len(val) > 2 and val != 'nan' and not val.strip().isdigit() and "/" not in val:
+                                    company_name = val.strip()[:20]
+
+                            # After checking all columns, process if we found a ticker.
+                            if ticker:
+                                # Fallback for date/time if not found in a single cell
+                                if not date_time_str:
                                     date_col = str(df.iloc[i, 0]) if pd.notna(df.iloc[i, 0]) else ""
-                                    time_col = str(df.iloc[i, 1]) if pd.notna(df.iloc[i, 1]) and len(df.columns) > 1 else ""
+                                    time_col = ""
+                                    if len(df.columns) > 1:
+                                        time_col = str(df.iloc[i, 1]) if pd.notna(df.iloc[i, 1]) else ""
                                     
                                     if date_col and "/" in date_col:
-                                        date_time = date_col
+                                        date_time_str = date_col
                                         if time_col and ":" in time_col:
-                                            date_time += " " + time_col[:5]
+                                            date_time_str += " " + time_col[:5]
                                 
-                                if date_time:
+                                # If we have a date, create the record
+                                if date_time_str:
                                     earning = {
-                                        "datetime": date_time[:16],  # Limit length
+                                        "datetime": date_time_str[:16],  # Limit length
                                         "ticker": ticker,
                                         "company": f"({company_name})" if company_name else "",
                                         "type": "jp_earnings"
