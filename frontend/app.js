@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         });
 
-        const candlestickSeries = chart.addCandlestickSeries({
+        const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
             upColor: '#26a69a',
             downColor: '#ef5350',
             borderDownColor: '#ef5350',
