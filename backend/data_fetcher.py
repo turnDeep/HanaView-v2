@@ -6,6 +6,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 import time
+import math
 import pandas as pd
 import yfinance as yf
 from bs4 import BeautifulSoup
@@ -182,6 +183,15 @@ class MarketDataFetcher:
             return self.driver.find_elements(by, value)
         except NoSuchElementException:
             return []
+
+    def _clean_non_compliant_floats(self, obj):
+        if isinstance(obj, dict):
+            return {k: self._clean_non_compliant_floats(v) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [self._clean_non_compliant_floats(elem) for elem in obj]
+        if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+            return None
+        return obj
 
     # --- Ticker List Fetching ---
     def _get_sp500_tickers(self):
@@ -920,6 +930,9 @@ class MarketDataFetcher:
             except MarketDataError as e:
                 logger.error(f"Failed to execute fetch task '{task.__name__}': {e}")
 
+        # Clean the data before writing to file
+        self.data = self._clean_non_compliant_floats(self.data)
+
         with open(RAW_DATA_PATH, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         logger.info(f"--- Raw Data Fetch Completed. Saved to {RAW_DATA_PATH} ---")
@@ -962,6 +975,10 @@ class MarketDataFetcher:
         jst = timezone(timedelta(hours=9))
         self.data['date'] = datetime.now(jst).strftime('%Y-%m-%d')
         self.data['last_updated'] = datetime.now(jst).isoformat()
+
+        # Clean the data before writing to file
+        self.data = self._clean_non_compliant_floats(self.data)
+
         final_path = f"{FINAL_DATA_PATH_PREFIX}{self.data['date']}.json"
         with open(final_path, 'w', encoding='utf-8') as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
