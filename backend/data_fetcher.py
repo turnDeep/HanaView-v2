@@ -570,19 +570,44 @@ class MarketDataFetcher:
             nasdaq100_tickers = self._get_nasdaq100_tickers()
             logger.info(f"Found {len(sp500_tickers)} S&P 500 tickers and {len(nasdaq100_tickers)} NASDAQ 100 tickers.")
 
-            self.data['sp500_heatmap'] = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
-            self.data['nasdaq_heatmap'] = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
+            # Fetch S&P 500 data
+            sp500_heatmaps = self._fetch_stock_performance_for_heatmap(sp500_tickers, batch_size=30)
+            self.data['sp500_heatmap_1d'] = sp500_heatmaps.get('1d', {"stocks": []})
+            self.data['sp500_heatmap_1w'] = sp500_heatmaps.get('1w', {"stocks": []})
+            self.data['sp500_heatmap_1m'] = sp500_heatmaps.get('1m', {"stocks": []})
+            # For backward compatibility with AI commentary
+            self.data['sp500_heatmap'] = self.data.get('sp500_heatmap_1d', {"stocks": []})
+
+            # Fetch NASDAQ 100 data
+            nasdaq_heatmaps = self._fetch_stock_performance_for_heatmap(nasdaq100_tickers, batch_size=30)
+            self.data['nasdaq_heatmap_1d'] = nasdaq_heatmaps.get('1d', {"stocks": []})
+            self.data['nasdaq_heatmap_1w'] = nasdaq_heatmaps.get('1w', {"stocks": []})
+            self.data['nasdaq_heatmap_1m'] = nasdaq_heatmaps.get('1m', {"stocks": []})
+            # For backward compatibility with AI commentary
+            self.data['nasdaq_heatmap'] = self.data.get('nasdaq_heatmap_1d', {"stocks": []})
+
         except Exception as e:
             logger.error(f"Error during heatmap data fetching: {e}")
-            self.data['sp500_heatmap'] = {"stocks": [], "error": f"[E006] {ERROR_CODES['E006']}: {e}"}
-            self.data['nasdaq_heatmap'] = {"stocks": [], "error": f"[E006] {ERROR_CODES['E006']}: {e}"}
+            error_payload = {"stocks": [], "error": f"[E006] {ERROR_CODES['E006']}: {e}"}
+            self.data['sp500_heatmap_1d'] = error_payload
+            self.data['sp500_heatmap_1w'] = error_payload
+            self.data['sp500_heatmap_1m'] = error_payload
+            self.data['nasdaq_heatmap_1d'] = error_payload
+            self.data['nasdaq_heatmap_1w'] = error_payload
+            self.data['nasdaq_heatmap_1m'] = error_payload
+            self.data['sp500_heatmap'] = error_payload
+            self.data['nasdaq_heatmap'] = error_payload
 
     def _fetch_stock_performance_for_heatmap(self, tickers, batch_size=30):
-        """改善版：レート制限対策を含むヒートマップ用データ取得（業種・フラット構造対応）"""
+        """改善版：レート制限対策を含むヒートマップ用データ取得（業種・フラット構造対応）。1日、1週間、1ヶ月のパフォーマンスを計算する。"""
         if not tickers:
-            return {"stocks": [], "error": "Ticker list is empty."}
+            return {"1d": {"stocks": []}, "1w": {"stocks": []}, "1m": {"stocks": []}}
 
-        stocks = []
+        heatmaps = {
+            "1d": {"stocks": []},
+            "1w": {"stocks": []},
+            "1m": {"stocks": []}
+        }
 
         for i in range(0, len(tickers), batch_size):
             batch = tickers[i:i+batch_size]
@@ -591,11 +616,12 @@ class MarketDataFetcher:
                 try:
                     ticker_obj = yf.Ticker(ticker_symbol, session=self.yf_session)
                     info = ticker_obj.info
-                    hist = ticker_obj.history(period="2d")
+                    # 1ヶ月分のデータを取得（約22営業日 + 余裕）
+                    hist = ticker_obj.history(period="35d")
 
-                    performance = 0.0
-                    if len(hist) >= 2 and hist['Close'].iloc[-2] != 0:
-                        performance = ((hist['Close'].iloc[-1] - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100
+                    if hist.empty:
+                        logger.warning(f"No history for {ticker_symbol}, skipping.")
+                        continue
 
                     sector = info.get('sector', 'N/A')
                     industry = info.get('industry', 'N/A')
@@ -605,13 +631,35 @@ class MarketDataFetcher:
                         logger.warning(f"Skipping {ticker_symbol} due to missing sector, industry, or market cap.")
                         continue
 
-                    stocks.append({
+                    base_stock_data = {
                         "ticker": ticker_symbol,
                         "sector": sector,
                         "industry": industry,
-                        "performance": round(performance, 2),
                         "market_cap": market_cap
-                    })
+                    }
+
+                    latest_close = hist['Close'].iloc[-1]
+
+                    # 1-Day Performance
+                    if len(hist) >= 2 and hist['Close'].iloc[-2] != 0:
+                        perf_1d = ((latest_close - hist['Close'].iloc[-2]) / hist['Close'].iloc[-2]) * 100
+                        stock_1d = base_stock_data.copy()
+                        stock_1d["performance"] = round(perf_1d, 2)
+                        heatmaps["1d"]["stocks"].append(stock_1d)
+
+                    # 1-Week Performance (5 trading days)
+                    if len(hist) >= 6 and hist['Close'].iloc[-6] != 0:
+                        perf_1w = ((latest_close - hist['Close'].iloc[-6]) / hist['Close'].iloc[-6]) * 100
+                        stock_1w = base_stock_data.copy()
+                        stock_1w["performance"] = round(perf_1w, 2)
+                        heatmaps["1w"]["stocks"].append(stock_1w)
+
+                    # 1-Month Performance (20 trading days)
+                    if len(hist) >= 21 and hist['Close'].iloc[-21] != 0:
+                        perf_1m = ((latest_close - hist['Close'].iloc[-21]) / hist['Close'].iloc[-21]) * 100
+                        stock_1m = base_stock_data.copy()
+                        stock_1m["performance"] = round(perf_1m, 2)
+                        heatmaps["1m"]["stocks"].append(stock_1m)
 
                 except Exception as e:
                     logger.error(f"Could not fetch data for {ticker_symbol}: {e}")
@@ -622,7 +670,7 @@ class MarketDataFetcher:
                 logger.info(f"Processed {min(i + batch_size, len(tickers))}/{len(tickers)} tickers, waiting...")
                 time.sleep(3)
 
-        return {"stocks": stocks}
+        return heatmaps
 
     # --- AI Generation ---
     def _call_openai_api(self, prompt, json_mode=False, max_tokens=150):

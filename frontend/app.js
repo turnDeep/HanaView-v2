@@ -316,8 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             renderMarketOverview(document.getElementById('market-content'), data.market);
             renderNews(document.getElementById('news-content'), data.news);
-            renderHeatmap(document.getElementById('nasdaq-content'), 'NASDAQ 100 Heatmap', data.nasdaq_heatmap);
-            renderHeatmap(document.getElementById('sp500-content'), 'S&P 500 Heatmap', data.sp500_heatmap);
+            renderHeatmap(document.getElementById('nasdaq-heatmap-1d'), 'NASDAQ 100 (1-Day)', data.nasdaq_heatmap_1d);
+            renderHeatmap(document.getElementById('nasdaq-heatmap-1w'), 'NASDAQ 100 (1-Week)', data.nasdaq_heatmap_1w);
+            renderHeatmap(document.getElementById('nasdaq-heatmap-1m'), 'NASDAQ 100 (1-Month)', data.nasdaq_heatmap_1m);
+            renderHeatmap(document.getElementById('sp500-heatmap-1d'), 'S&P 500 (1-Day)', data.sp500_heatmap_1d);
+            renderHeatmap(document.getElementById('sp500-heatmap-1w'), 'S&P 500 (1-Week)', data.sp500_heatmap_1w);
+            renderHeatmap(document.getElementById('sp500-heatmap-1m'), 'S&P 500 (1-Month)', data.sp500_heatmap_1m);
             renderIndicators(document.getElementById('indicators-content'), data.indicators);
             renderColumn(document.getElementById('column-content'), data.column);
 
