@@ -317,14 +317,19 @@ class MarketDataFetcher:
                     
                     # Filter by time range (past 2 hours to next 26 hours)
                     if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
-                        indicator = {
-                            "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                            "country": df.iloc[i, 2],
-                            "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
-                            "importance": "★★" if "★★" in str(df.iloc[i, 3]) else "★",
-                            "type": "economic"
-                        }
-                        indicators.append(indicator)
+                        importance_str = str(df.iloc[i, 3])
+                        # 重要度★★以上にフィルタリング
+                        if "★★" in importance_str or "★★★" in importance_str:
+                            # 元のデータ形式を維持しつつ、★★★の可能性も考慮する
+                            importance = "★★★" if "★★★" in importance_str else "★★"
+                            indicator = {
+                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                "country": df.iloc[i, 2],
+                                "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
+                                "importance": importance,
+                                "type": "economic"
+                            }
+                            indicators.append(indicator)
                 except Exception as e:
                     logger.debug(f"Skipping row {i} in economic indicators: {e}")
                     continue
@@ -346,14 +351,18 @@ class MarketDataFetcher:
                         tdatetime = datetime.strptime(text0, '%Y/%m/%d %H:%M')
                         
                         if tdatetime > dt_now - timedelta(hours=2) and tdatetime < dt_now + timedelta(hours=26):
-                            indicator = {
-                                "datetime": tdatetime.strftime('%m/%d %H:%M'),
-                                "country": df.iloc[i, 2],
-                                "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
-                                "importance": "★★★" if "★★★" in str(df.iloc[i, 3]) else "★★" if "★★" in str(df.iloc[i, 3]) else "★",
-                                "type": "economic"
-                            }
-                            indicators.append(indicator)
+                            importance_str = str(df.iloc[i, 3])
+                            # 重要度★★以上にフィルタリング
+                            if "★★" in importance_str or "★★★" in importance_str:
+                                importance = "★★★" if "★★★" in importance_str else "★★"
+                                indicator = {
+                                    "datetime": tdatetime.strftime('%m/%d %H:%M'),
+                                    "country": df.iloc[i, 2],
+                                    "name": df.iloc[i, 4][:30] if len(df.iloc[i, 4]) > 30 else df.iloc[i, 4],
+                                    "importance": importance,
+                                    "type": "economic"
+                                }
+                                indicators.append(indicator)
                     except Exception as e:
                         logger.debug(f"Skipping row {i} in next day economic indicators: {e}")
                         continue
