@@ -1658,55 +1658,13 @@
       ]
     },
     "t_note_future": {
-      "current": 113.55,
+      "current": 113.53,
       "history": [
         {
-          "time": "2025-06-30T12:00:00",
-          "open": 111.78,
-          "high": 111.86,
-          "low": 111.78,
-          "close": 111.86
-        },
-        {
-          "time": "2025-06-30T16:00:00",
-          "open": 111.95,
-          "high": 112.03,
-          "low": 111.95,
-          "close": 112.03
-        },
-        {
-          "time": "2025-06-30T20:00:00",
-          "open": 111.97,
-          "high": 111.97,
-          "low": 111.86,
-          "close": 111.86
-        },
-        {
-          "time": "2025-07-01T00:00:00",
-          "open": 111.92,
-          "high": 112.14,
-          "low": 111.92,
-          "close": 112.14
-        },
-        {
-          "time": "2025-07-01T04:00:00",
-          "open": 112.12,
-          "high": 112.12,
-          "low": 112.03,
-          "close": 112.03
-        },
-        {
-          "time": "2025-07-01T08:00:00",
-          "open": 112.06,
-          "high": 112.16,
-          "low": 112.06,
-          "close": 112.14
-        },
-        {
           "time": "2025-07-01T12:00:00",
-          "open": 112.17,
+          "open": 112.22,
           "high": 112.22,
-          "low": 112.17,
+          "low": 112.2,
           "close": 112.22
         },
         {
@@ -3678,10 +3636,10 @@
         },
         {
           "time": "2025-09-09T12:00:00",
-          "open": 113.55,
-          "high": 113.55,
-          "low": 113.55,
-          "close": 113.55
+          "open": 113.53,
+          "high": 113.53,
+          "low": 113.53,
+          "close": 113.53
         }
       ]
     },
@@ -3709,64 +3667,64 @@
   },
   "news_raw": [
     {
-      "title": "Tesla Is an AI Stock. That Matters More Than Cars.",
-      "link": "https://www.barrons.com/articles/tesla-stock-price-elon-musk-26980d17?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "Tesla  stock rose early Monday—a sign that cars simply don’t matter as much for the company as CEO Elon Musk and his artificial-intelligence ambitions—before slipping lower.  The moves came after Friday’s 3.6% gain, catalyzed by Tesla’s 2025 proxy statement that outlined a new pay package for Musk worth roughly $1 trillion if all performance incentives were met.  Tesla would also need to deliver 20 million vehicles, achieve 10 million active Full Self-Driving, or FSD, subscriptions, deliver one million Optimus humanoid robots, and have one million robo-taxis in commercial operation."
+      "title": "Stocks rise as prospect of Fed easing trumps political uncertainty",
+      "link": "https://uk.finance.yahoo.com/news/stocks-rise-prospect-fed-easing-021511529.html",
+      "publisher": "Reuters",
+      "summary": "SINGAPORE (Reuters) -Asia stocks rose on Tuesday, buoyed by expectations of a U.S. rate cut as early as next week, even as political upheavals around the world kept currency and bond investors on edge.  MSCI's broadest index of Asia-Pacific shares outside Japan rose 0.2% in early trade, taking its cue from Wall Street's positive lead overnight that saw the Nasdaq notch a record-high close.  Nasdaq futures extended the rally from the cash session and were last up 0.06%, while S&P 500 futures similarly ticked up 0.05%."
     },
     {
-      "title": "Want to Own a Piece of SpaceX? EchoStar Just Might Be the Best Way In.",
-      "link": "https://www.barrons.com/articles/spacex-echostar-stock-deal-361c59cc?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "EchoStar  has completely remade its balance sheet and its investment case.  Now, it’s a primary way to invest in Elon Musk’s privately held space-technology company, SpaceX.  Monday, EchoStar announced a deal to sell the company’s AWS-4 and H-block spectrum licenses to SpaceX."
+      "title": "Nvidia-Backed Nebius Skyrockets On AI Cloud Computing Deal With Microsoft",
+      "link": "https://www.investors.com/news/technology/nvidia-nebius-skyrockets-ai-cloud-computing-deal-microsoft/?src=A00220&yptr=yahoo",
+      "publisher": "Investor's Business Daily",
+      "summary": "Nebius stock skyrocketed after the Nvidia-backed AI cloud-computing firm struck a multiyear deal with Microsoft worth up to $19.4 billion."
     },
     {
-      "title": "QuantumScape Stock Is Super Charged. Here’s Why.",
-      "link": "https://www.barrons.com/articles/quantumscape-stock-volkswagen-ev-batteries-c83ad974?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "QuantumScape  a company that makes batteries for electric vehicles, gave a live demo Monday that clearly made investors happy.  QuantumScape and “PowerCo SE,”  Volkswagen’s  battery company, took the opportunity at Munich’s IAA Mobility auto show to show how QuantumScape’s solid-state lithium-metal batteries powered an EV.  “This demonstration represents a significant advancement in battery technology, showcasing the first anode-free solid-state batteries to move from laboratory discovery to real-world vehicle,” said QuantumScape in a statement."
+      "title": "FedEx (FDX) Stock Drops Despite Market Gains: Important Facts to Note",
+      "link": "https://finance.yahoo.com/news/fedex-fdx-stock-drops-despite-233453999.html",
+      "publisher": "Zacks",
+      "summary": "FedEx (FDX) closed at $225 in the latest trading session, marking a -1.19% move from the prior day."
     },
     {
-      "title": "EchoStar Ramps Up Wireless War With $17 Billion Deal With SpaceX. The Stock Soars.",
-      "link": "https://www.barrons.com/articles/echostar-stock-price-spacex-spectrum-sale-7bd5e0ce?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "EchoStar  and SpaceX sent shock waves through the wireless communications business Monday with an announcement of a $17 billion deal.  Shares of EchoStar popped.  In a statement, EchoStar said it reached a $17 billion cash-plus-stock agreement to sell the company’s AWS-4 and H-block spectrum licenses to SpaceX."
+      "title": "Equinix (EQIX) Stock Falls Amid Market Uptick: What Investors Need to Know",
+      "link": "https://finance.yahoo.com/news/equinix-eqix-stock-falls-amid-233453820.html",
+      "publisher": "Zacks",
+      "summary": "In the closing of the recent trading day, Equinix (EQIX) stood at $765.51, denoting a -1.06% move from the preceding trading day."
     },
     {
-      "title": "Nasdaq Notches Record In Tepid Session Ahead of Labor Market Data",
-      "link": "https://www.barrons.com/livecoverage/stock-market-news-today-090825/card/nasdaq-notches-record-in-tepid-session-ahead-of-labor-market-data-ZQYA7HIYCq6xgI3ChYXs?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "The S&P 500 was up 0.2% and within striking distance of a high of its own.  “Equities are holding onto early gains on a combination of rate cut hopes and positive S&P 500 inclusion headlines,” writes Mizuho’s Daniel O’Regan.  Wall Street will get the Bureau of Labor Statistics’ preliminary revision of jobs growth for April 2024 through March 2025 on Tuesday, followed by the producer price index on Wednesday and the consumer price index on Thursday."
+      "title": "Clearway Energy (CWEN) Stock Sinks As Market Gains: Here's Why",
+      "link": "https://finance.yahoo.com/news/clearway-energy-cwen-stock-sinks-233452064.html",
+      "publisher": "Zacks",
+      "summary": "Clearway Energy (CWEN) closed at $28.37 in the latest trading session, marking a -1.08% move from the prior day."
     },
     {
-      "title": "Stock market today: Nasdaq hits record, Dow, S&P 500 rise with inflation data set to test rate-cut trade",
-      "link": "https://finance.yahoo.com/news/live/stock-market-today-nasdaq-hits-record-dow-sp-500-rise-with-inflation-data-set-to-test-rate-cut-trade-200206869.html",
+      "title": "Nucor (NUE) Stock Drops Despite Market Gains: Important Facts to Note",
+      "link": "https://finance.yahoo.com/news/nucor-nue-stock-drops-despite-233452933.html",
+      "publisher": "Zacks",
+      "summary": "In the latest trading session, Nucor (NUE) closed at $144.02, marking a -2.2% move from the previous day."
+    },
+    {
+      "title": "Medpace (MEDP) Outpaces Stock Market Gains: What You Should Know",
+      "link": "https://finance.yahoo.com/news/medpace-medp-outpaces-stock-market-233452669.html",
+      "publisher": "Zacks",
+      "summary": "The latest trading day saw Medpace (MEDP) settling at $492.09, representing a +1.05% change from its previous close."
+    },
+    {
+      "title": "Amerigo Resources (ARREF) Stock Drops Despite Market Gains: Important Facts to Note",
+      "link": "https://finance.yahoo.com/news/amerigo-resources-arref-stock-drops-233452804.html",
+      "publisher": "Zacks",
+      "summary": "In the latest trading session, Amerigo Resources (ARREF) closed at $1.65, marking a -1.55% move from the previous day."
+    },
+    {
+      "title": "Whirlpool (WHR) Outperforms Broader Market: What You Need to Know",
+      "link": "https://finance.yahoo.com/news/whirlpool-whr-outperforms-broader-market-233452307.html",
+      "publisher": "Zacks",
+      "summary": "The latest trading day saw Whirlpool (WHR) settling at $95.54, representing a +1.16% change from its previous close."
+    },
+    {
+      "title": "Stock market today: Dow, S&P 500, Nasdaq futures edge up as Wall Street weighs Fed's next move",
+      "link": "https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-futures-edge-up-as-wall-street-weighs-feds-next-move-232914881.html",
       "publisher": "Yahoo Finance",
-      "summary": "Investors look forward to a light week of reports and earnings, with inflation data taking center stage."
-    },
-    {
-      "title": "These Stocks Should Do Well When the Economy Weakens. Now Is the Time to Buy.",
-      "link": "https://www.barrons.com/articles/walmart-costco-consumer-staples-defensive-stocks-6004a2dc?siteid=yhoof2&yptr=yahoo",
-      "publisher": "Barrons.com",
-      "summary": "Consumer staples are one of a few defensive sectors that look set to outperform. They’re also cheap."
-    },
-    {
-      "title": "Goldman Sachs chief economist: US economy is in 'stall speed'",
-      "link": "https://finance.yahoo.com/news/goldman-sachs-chief-economist-us-economy-is-in-stall-speed-174203126.html",
-      "publisher": "Yahoo Finance",
-      "summary": "Goldman Sachs' chief economist Jan Hatzius expects growth to be 'relatively slow' before beginning to improve in 2026 following the Federal Reserve's interest rate cuts."
-    },
-    {
-      "title": "Robinhood & Applovin, SpaceX & EchoStar, Summit Therapeutics",
-      "link": "https://finance.yahoo.com/video/robinhood-applovin-spacex-echostar-summit-133335577.html",
-      "publisher": "Yahoo Finance Video",
-      "summary": "Ramzan Karmali examines some of Monday's trending tickers: Robinhood (HOOD), Applovin (APP), and EMCOR's (EME) joining the S&P 500 (^GSPC), the SpaceX (SPAX.PVT) and EchoStar (SATS) deal, and Summit Therapeutics' (SMMT) stock decline. To watch more expert insights and analysis on the latest market action, check out more Morning Brief."
-    },
-    {
-      "title": "Wall Street divided on Fed, jobs data as stocks trade near highs",
-      "link": "https://finance.yahoo.com/video/wall-street-divided-fed-jobs-133201005.html",
-      "publisher": "Yahoo Finance Video",
-      "summary": "As US stock futures (ES=F, NQ=F, YM=F) tick higher Monday morning, Wall Street remains anxious over August's underwhelming jobs data reported last week — 22,000 vs. estimates of 75,000 — and the Federal Reserve's next interest rate decision. Yahoo Finance senior reporter Allie Canal outlines several sentiments shared by top Wall Street analysts on the mega-cap and small-cap stocks and Magnificent Seven tech names. To watch more expert insights and analysis on the latest market action, check out more&nbsp;Morning Brief."
+      "summary": "US stock futures edged up as Wall Street counted down to Apple's annual iPhone event ahead of the release of critical economic data later this week."
     }
   ],
   "sp500_heatmap_1d": {
@@ -3916,7 +3874,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.43
+        "performance": -0.34
       },
       {
         "ticker": "MO",
@@ -4182,7 +4140,7 @@
         "sector": "Healthcare",
         "industry": "Medical Instruments & Supplies",
         "market_cap": 54912004096,
-        "performance": -0.42
+        "performance": 0.12
       },
       {
         "ticker": "BRK-B",
@@ -5127,7 +5085,7 @@
         "sector": "Industrials",
         "industry": "Integrated Freight & Logistics",
         "market_cap": 53088301056,
-        "performance": -1.19
+        "performance": -0.56
       },
       {
         "ticker": "FIS",
@@ -6072,7 +6030,7 @@
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "market_cap": 10340174848,
-        "performance": 0.4
+        "performance": 1.09
       },
       {
         "ticker": "MSI",
@@ -7441,7 +7399,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 9.66
+        "performance": 9.76
       },
       {
         "ticker": "MO",
@@ -7707,7 +7665,7 @@
         "sector": "Healthcare",
         "industry": "Medical Instruments & Supplies",
         "market_cap": 54912004096,
-        "performance": -0.73
+        "performance": -0.19
       },
       {
         "ticker": "BRK-B",
@@ -8652,7 +8610,7 @@
         "sector": "Industrials",
         "industry": "Integrated Freight & Logistics",
         "market_cap": 53088301056,
-        "performance": -2.63
+        "performance": -2.0
       },
       {
         "ticker": "FIS",
@@ -9597,7 +9555,7 @@
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "market_cap": 10340174848,
-        "performance": -2.46
+        "performance": -1.79
       },
       {
         "ticker": "MSI",
@@ -10966,7 +10924,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 15.87
+        "performance": 15.97
       },
       {
         "ticker": "MO",
@@ -11232,7 +11190,7 @@
         "sector": "Healthcare",
         "industry": "Medical Instruments & Supplies",
         "market_cap": 54912004096,
-        "performance": -0.99
+        "performance": -0.45
       },
       {
         "ticker": "BRK-B",
@@ -12177,7 +12135,7 @@
         "sector": "Industrials",
         "industry": "Integrated Freight & Logistics",
         "market_cap": 53088301056,
-        "performance": -1.34
+        "performance": -0.71
       },
       {
         "ticker": "FIS",
@@ -13122,7 +13080,7 @@
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "market_cap": 10340174848,
-        "performance": 1.88
+        "performance": 2.57
       },
       {
         "ticker": "MSI",
@@ -14491,7 +14449,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.43
+        "performance": -0.34
       },
       {
         "ticker": "MO",
@@ -14757,7 +14715,7 @@
         "sector": "Healthcare",
         "industry": "Medical Instruments & Supplies",
         "market_cap": 54912004096,
-        "performance": -0.42
+        "performance": 0.12
       },
       {
         "ticker": "BRK-B",
@@ -15702,7 +15660,7 @@
         "sector": "Industrials",
         "industry": "Integrated Freight & Logistics",
         "market_cap": 53088301056,
-        "performance": -1.19
+        "performance": -0.56
       },
       {
         "ticker": "FIS",
@@ -16647,7 +16605,7 @@
         "sector": "Basic Materials",
         "industry": "Agricultural Inputs",
         "market_cap": 10340174848,
-        "performance": 0.4
+        "performance": 1.09
       },
       {
         "ticker": "MSI",

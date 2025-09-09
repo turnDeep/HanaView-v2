@@ -383,12 +383,42 @@ class MarketDataFetcher:
         """Fetches recent news from Yahoo Finance using the yfinance library and filters them."""
         logger.info("Fetching and filtering news from Yahoo Finance using yfinance...")
         try:
-            # Get news for a major US index, e.g., S&P 500. Fetch more to have a good pool for filtering.
-            sp500 = yf.Ticker("^GSPC", session=self.yf_session)
-            raw_news = sp500.news
+            # Define tickers for major US indices
+            indices = {"NASDAQ Composite (^IXIC)": "^IXIC", "S&P 500 (^GSPC)": "^GSPC", "Dow 30 (^DJI)": "^DJI"}
+            all_raw_news = []
+
+            for name, ticker_symbol in indices.items():
+                logger.info(f"Fetching news for {name}...")
+                try:
+                    ticker = yf.Ticker(ticker_symbol, session=self.yf_session)
+                    news = ticker.news
+                    if news:
+                        all_raw_news.extend(news)
+                    else:
+                        logger.warning(f"No news returned from yfinance for {ticker_symbol}.")
+                except Exception as e:
+                    logger.error(f"Failed to fetch news for {ticker_symbol}: {e}")
+                    continue # Continue to the next ticker
+
+            # Deduplicate news based on the article link to avoid redundancy
+            unique_news = []
+            seen_links = set()
+            for article in all_raw_news:
+                try:
+                    # The unique identifier for a news article is its URL.
+                    link = article['content']['canonicalUrl']['url']
+                    if link not in seen_links:
+                        unique_news.append(article)
+                        seen_links.add(link)
+                except KeyError:
+                    # Log if a link is not found, but continue processing other articles.
+                    logger.warning(f"Could not find link for article, skipping: {article.get('content', {}).get('title', 'No Title')}")
+                    continue
+
+            raw_news = unique_news
 
             if not raw_news:
-                logger.warning("No news returned from yfinance for ^GSPC.")
+                logger.warning("No news returned from yfinance for any of the specified indices.")
                 self.data['news_raw'] = []
                 return
 
@@ -426,7 +456,7 @@ class MarketDataFetcher:
             ]
 
             self.data['news_raw'] = formatted_news
-            logger.info(f"Fetched {len(raw_news)} raw news items, found {len(filtered_news)} within the last 24 hours, storing the top {len(formatted_news)}.")
+            logger.info(f"Fetched {len(all_raw_news)} raw news items, found {len(unique_news)} unique articles, {len(filtered_news)} within the last 24 hours, storing the top {len(formatted_news)}.")
 
         except Exception as e:
             logger.error(f"Error fetching or processing yfinance news: {e}")
