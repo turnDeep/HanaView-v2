@@ -14,6 +14,7 @@ from curl_cffi.requests import Session
 import openai
 import httpx
 from io import StringIO
+from .image_generator import generate_fear_greed_chart
 
 # --- Constants ---
 DATA_DIR = 'data'
@@ -220,10 +221,40 @@ class MarketDataFetcher:
             api_data = response.json()
             fg_data = api_data.get('fear_and_greed_historical', {}).get('data', [])
             if not fg_data: raise ValueError("No historical data found")
+
             current_value = fg_data[-1]['y']
-            self.data['market']['fear_and_greed'] = {'now': round(current_value), 'previous_close': round(self._get_historical_value(fg_data, 1)), 'prev_week': round(self._get_historical_value(fg_data, 7)), 'prev_month': round(self._get_historical_value(fg_data, 30)), 'prev_year': round(self._get_historical_value(fg_data, 365)), 'category': self._get_fear_greed_category(current_value)}
+            previous_close_val = self._get_historical_value(fg_data, 1)
+            week_ago_val = self._get_historical_value(fg_data, 7)
+            month_ago_val = self._get_historical_value(fg_data, 30)
+            year_ago_val = self._get_historical_value(fg_data, 365)
+
+            # Store the original data structure for other parts of the app
+            self.data['market']['fear_and_greed'] = {
+                'now': round(current_value),
+                'previous_close': round(previous_close_val) if previous_close_val is not None else None,
+                'prev_week': round(week_ago_val) if week_ago_val is not None else None,
+                'prev_month': round(month_ago_val) if month_ago_val is not None else None,
+                'prev_year': round(year_ago_val) if year_ago_val is not None else None,
+                'category': self._get_fear_greed_category(current_value)
+            }
+
+            # Prepare data for image generation
+            chart_data = {
+                "center_value": round(current_value),
+                "history": {
+                    "previous_close": {"label": "Previous close", "status": self._get_fear_greed_category(previous_close_val), "value": round(previous_close_val) if previous_close_val is not None else 'N/A'},
+                    "week_ago": {"label": "1 week ago", "status": self._get_fear_greed_category(week_ago_val), "value": round(week_ago_val) if week_ago_val is not None else 'N/A'},
+                    "month_ago": {"label": "1 month ago", "status": self._get_fear_greed_category(month_ago_val), "value": round(month_ago_val) if month_ago_val is not None else 'N/A'},
+                    "year_ago": {"label": "1 year ago", "status": self._get_fear_greed_category(year_ago_val), "value": round(year_ago_val) if year_ago_val is not None else 'N/A'}
+                }
+            }
+
+            # Generate the chart
+            logger.info("Generating Fear & Greed gauge chart...")
+            generate_fear_greed_chart(chart_data)
+
         except Exception as e:
-            logger.error(f"Error fetching Fear & Greed Index: {e}")
+            logger.error(f"Error fetching or generating Fear & Greed Index: {e}")
             self.data['market']['fear_and_greed'] = {'now': None, 'error': f"[E004] {ERROR_CODES['E004']}: {e}"}
 
     def fetch_calendar_data(self):

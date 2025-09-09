@@ -98,27 +98,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Fear & Greed Index
         const fgData = marketData.fear_and_greed;
-        if (fgData && fgData.now !== null) {
-            const rotation = (fgData.now / 100) * 180 - 90;
+        if (fgData) {
+            // Add a cache-busting query parameter
+            const timestamp = new Date().getTime();
             content += `
                 <div class="market-section">
                     <h3>Fear & Greed Index</h3>
-                    <div class="fg-container">
-                        <div class="fg-gauge">
-                            <div class="fg-gauge-base"></div>
-                            <div class="fg-gauge-needle" style="transform: rotate(${rotation}deg);"></div>
-                            <div class="fg-gauge-center"></div>
-                        </div>
-                        <div class="fg-value-display">
-                            <div class="fg-now-value">${fgData.now}</div>
-                            <div class="fg-now-category">${fgData.category}</div>
-                        </div>
-                    </div>
-                    <div class="fg-history">
-                        <p><strong>Previous Close:</strong> ${fgData.previous_close || 'N/A'}</p>
-                        <p><strong>1 Week Ago:</strong> ${fgData.prev_week || 'N/A'}</p>
-                        <p><strong>1 Month Ago:</strong> ${fgData.prev_month || 'N/A'}</p>
-                        <p><strong>1 Year Ago:</strong> ${fgData.prev_year || 'N/A'}</p>
+                    <div class="fg-container" style="display: flex; justify-content: center; align-items: center; min-height: 400px;">
+                        <img src="/fear_and_greed_gauge.png?v=${timestamp}" alt="Fear and Greed Index Gauge" style="max-width: 100%; height: auto;">
                     </div>
                 </div>
             `;
