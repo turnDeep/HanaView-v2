@@ -489,7 +489,7 @@ class MarketDataFetcher:
             # 2. Sort by publish time descending (latest first)
             filtered_news.sort(key=lambda x: x['publish_time_dt'], reverse=True)
 
-            # 3. Take the top 10 and format them
+            # 3. Format all filtered news
             formatted_news = [
                 {
                     "title": item['content']['title'],
@@ -497,7 +497,7 @@ class MarketDataFetcher:
                     "publisher": item['content']['provider']['displayName'],
                     "summary": item['content'].get('summary', '')
                 }
-                for item in filtered_news[:10]
+                for item in filtered_news
             ]
 
             self.data['news_raw'] = formatted_news
