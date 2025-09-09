@@ -115,11 +115,11 @@ document.addEventListener('DOMContentLoaded', () => {
         content += `
             <div class="market-grid">
                 <div class="market-section">
-                    <h3>VIX指数 (4時間足)</h3>
+                    <h3>VIX (4h足)</h3>
                     <div class="chart-container" id="vix-chart-container"></div>
                 </div>
                 <div class="market-section">
-                    <h3>米国10年債先物 (4時間足)</h3>
+                    <h3>米国10年債金利 (4h足)</h3>
                     <div class="chart-container" id="t-note-chart-container"></div>
                 </div>
             </div>
