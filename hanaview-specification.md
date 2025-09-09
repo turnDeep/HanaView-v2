@@ -210,7 +210,7 @@ GET /api/health
 #### 3.2.2 yfinance データ取得
 **ティッカーシンボル：**
 - VIX: `^VIX`
-- 10年債先物: `ZN=F`
+- 10年債利回り: `^TNX`
 - S&P500: `^GSPC`
 - NASDAQ: `^IXIC`
 - DOW: `^DJI`
@@ -232,7 +232,7 @@ hist = ticker.history(period="5d", interval="1h")
    - JSONフォーマットに変換
 
 2. **10年債先物データ取得**
-   - yfinanceからZN=Fの5日間1時間足データ取得
+   - yfinanceから^TNXの5日間1時間足データ取得
    - 4時間足にリサンプリング
    - JSONフォーマットに変換
 

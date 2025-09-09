@@ -35,7 +35,7 @@ MONEX_JP_EARNINGS_URL = "https://mst.monex.co.jp/mst/servlet/ITS/fi/FIClosingCal
 
 # Tickers
 VIX_TICKER = "^VIX"
-T_NOTE_TICKER = "ZN=F"
+T_NOTE_TICKER = "^TNX"
 
 # Important tickers from originalcalendar.py
 US_TICKER_LIST = ["AAPL", "NVDA", "MSFT", "GOOG", "META", "AMZN", "NFLX", "BRK-B", "TSLA", "AVGO", 
