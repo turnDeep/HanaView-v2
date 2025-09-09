@@ -380,38 +380,56 @@ class MarketDataFetcher:
             self.data['indicators']['jp_earnings'] = []
 
     def fetch_yahoo_finance_news(self):
-        """Fetches news from Yahoo Finance."""
-        logger.info("Fetching news from Yahoo Finance...")
+        """Fetches recent news from Yahoo Finance using the yfinance library and filters them."""
+        logger.info("Fetching and filtering news from Yahoo Finance using yfinance...")
         try:
-            response = self.http_session.get(YAHOO_FINANCE_NEWS_URL, timeout=30)
-            response.raise_for_status()
-            soup = BeautifulSoup(response.content, 'html.parser')
+            # Get news for a major US index, e.g., S&P 500. Fetch more to have a good pool for filtering.
+            sp500 = yf.Ticker("^GSPC", session=self.yf_session)
+            raw_news = sp500.news
 
-            news_items = []
-            for item in soup.find_all('li', class_='js-stream-content', limit=10):
-                title_tag = item.find('a')
-                summary_tag = item.find('p')
+            if not raw_news:
+                logger.warning("No news returned from yfinance for ^GSPC.")
+                self.data['news_raw'] = []
+                return
 
-                if title_tag and summary_tag:
-                    title = title_tag.get_text(strip=True)
-                    link = title_tag['href']
-                    if not link.startswith('http'):
-                        link = f"https://finance.yahoo.com{link}"
+            now_utc = datetime.now(timezone.utc)
+            twenty_four_hours_ago = now_utc - timedelta(hours=24)
 
-                    summary = summary_tag.get_text(strip=True)
+            # 1. Filter news within the last 24 hours
+            filtered_news = []
+            for article in raw_news:
+                try:
+                    # pubDate is a string like '2025-09-08T17:42:03Z'
+                    pub_date_str = article['content']['pubDate']
+                    # fromisoformat doesn't like the 'Z' suffix
+                    publish_time = datetime.fromisoformat(pub_date_str.replace('Z', '+00:00'))
 
-                    news_items.append({
-                        "title": title,
-                        "link": link,
-                        "summary": summary,
-                        "publisher": "Yahoo Finance"
-                    })
+                    if publish_time >= twenty_four_hours_ago:
+                        article['publish_time_dt'] = publish_time # Store for sorting
+                        filtered_news.append(article)
+                except (KeyError, TypeError) as e:
+                    logger.warning(f"Could not process article, skipping: {e} - {article}")
+                    continue
 
-            self.data['news_raw'] = news_items
-            logger.info(f"Fetched {len(news_items)} news items from Yahoo Finance.")
+            # 2. Sort by publish time descending (latest first)
+            filtered_news.sort(key=lambda x: x['publish_time_dt'], reverse=True)
+
+            # 3. Take the top 10 and format them
+            formatted_news = [
+                {
+                    "title": item['content']['title'],
+                    "link": item['content']['canonicalUrl']['url'],
+                    "publisher": item['content']['provider']['displayName'],
+                    "summary": item['content'].get('summary', '')
+                }
+                for item in filtered_news[:10]
+            ]
+
+            self.data['news_raw'] = formatted_news
+            logger.info(f"Fetched {len(raw_news)} raw news items, found {len(filtered_news)} within the last 24 hours, storing the top {len(formatted_news)}.")
 
         except Exception as e:
-            logger.error(f"Error fetching Yahoo Finance news: {e}")
+            logger.error(f"Error fetching or processing yfinance news: {e}")
             self.data['news_raw'] = []
 
     def fetch_heatmap_data(self):
@@ -571,7 +589,7 @@ class MarketDataFetcher:
 
         news_content = ""
         for i, item in enumerate(raw_news):
-            news_content += f"記事{i+1}: {item['title']}\n概要: {item['summary']}\n\n"
+            news_content += f"記事{i+1}: {item['title']}\n概要: {item.get('summary', 'N/A')}\n\n"
 
         prompt = f"""
         以下の米国市場に関するニュース記事群を分析し、日本の個人投資家向けに要約してください。
