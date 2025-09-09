@@ -49,13 +49,13 @@ HanaViewは、個人投資家が毎朝の市場チェックを効率化するた
     コンテナ内で以下のコマンドを実行すると、外部APIから最新の生データが取得され、`data/data_raw.json` に保存されます。
     **注意:** この処理は、S&P 500とNASDAQ 100の全銘柄（約600）の情報を取得するため、完了までに5〜10分程度かかる場合があります。
     ```bash
-    python backend/data_fetcher.py fetch
+    python -m backend.data_fetcher fetch
     ```
 
 3.  **レポート生成 (generate) を実行します。**
     `fetch`が完了したら、以下のコマンドを実行します。これにより、`data_raw.json` が読み込まれ、AIによる解説（設定済みの場合）が追加され、最終的なデータファイル `data/data_YYYY-MM-DD.json` および `data/data.json` が生成されます。
     ```bash
-    python backend/data_fetcher.py generate
+    python -m backend.data_fetcher generate
     ```
 
 これで、フロントエンドに表示されるデータが手動で更新されます。
