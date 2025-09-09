@@ -318,11 +318,25 @@ class MarketDataFetcher:
                     if tdatetime_aware > dt_now_jst - timedelta(hours=2) and tdatetime_aware < dt_now_jst + timedelta(hours=26):
                         importance_str = row['importance']
                         if isinstance(importance_str, str) and "★" in importance_str:
+                            # Helper to safely get values from the row
+                            def get_value(col_name, default='--'):
+                                val = row.get(col_name)
+                                # Check for pandas missing values
+                                if pd.isna(val):
+                                    return default
+                                # Check for common placeholder strings
+                                if isinstance(val, str) and val.strip() in ['-', '--', 'None', '']:
+                                    return default
+                                return val
+
                             indicator = {
                                 "datetime": tdatetime_aware.strftime('%m/%d %H:%M'),
-                                "country": row['country'],
-                                "name": row['name'],
+                                "country": get_value('country'),
+                                "name": get_value('name'),
                                 "importance": importance_str,
+                                "previous": get_value('previous'),
+                                "forecast": get_value('forecast'),
+                                "result": get_value('result'),
                                 "type": "economic"
                             }
                             indicators.append(indicator)
