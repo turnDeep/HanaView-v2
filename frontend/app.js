@@ -203,15 +203,102 @@ document.addEventListener('DOMContentLoaded', () => {
         d3.treemap().size([width, height]).paddingTop(28).paddingInner(3).round(true)(root);
         const tooltip = d3.select("body").append("div").attr("class", "heatmap-tooltip").style("opacity", 0);
         const node = svg.selectAll("g").data(root.descendants()).join("g").attr("transform", d => `translate(${d.x0},${d.y0})`);
-        node.filter(d => d.depth === 1 || d.depth === 2).append("text").attr("class", d => d.depth === 1 ? "sector-label" : "industry-label").attr("x", 4).attr("y", 20).text(d => d.data[0]);
+        
+        // Add sector and industry labels with size-based visibility
+        node.filter(d => d.depth === 1 || d.depth === 2).each(function(d) {
+            const groupWidth = d.x1 - d.x0;
+            const groupHeight = d.y1 - d.y0;
+            const groupArea = groupWidth * groupHeight;
+            
+            // Minimum area thresholds
+            const minAreaForSector = 2000;  // Minimum area to show sector label
+            const minAreaForIndustry = 1500; // Minimum area to show industry label
+            
+            if (d.depth === 1 && groupArea > minAreaForSector) {
+                // Sector label
+                const fontSize = Math.min(16, Math.max(12, groupWidth / 15));
+                d3.select(this).append("text")
+                    .attr("class", "sector-label")
+                    .attr("x", 4)
+                    .attr("y", 20)
+                    .style("font-size", `${fontSize}px`)
+                    .text(d.data[0]);
+            } else if (d.depth === 2 && groupArea > minAreaForIndustry) {
+                // Industry label - with truncation if needed
+                const fontSize = Math.min(13, Math.max(10, groupWidth / 20));
+                const maxChars = Math.floor(groupWidth / 7); // Approximate character limit based on width
+                let labelText = d.data[0];
+                
+                // Truncate text if it's too long for the available space
+                if (labelText.length > maxChars && maxChars > 3) {
+                    labelText = labelText.substring(0, maxChars - 1) + "…";
+                }
+                
+                // Only show if there's enough space
+                if (maxChars > 5) {
+                    d3.select(this).append("text")
+                        .attr("class", "industry-label")
+                        .attr("x", 4)
+                        .attr("y", 20)
+                        .style("font-size", `${fontSize}px`)
+                        .text(labelText);
+                }
+            }
+        });
+        
         const leaf = node.filter(d => d.depth === 3);
         leaf.append("rect").attr("class", "stock-rect").attr("fill", d => getPerformanceColor(d.data.performance)).attr("width", d => d.x1 - d.x0).attr("height", d => d.y1 - d.y0)
             .on("mouseover", (event, d) => {
                 tooltip.transition().duration(200).style("opacity", .9);
                 tooltip.html(`<strong>${d.data.ticker}</strong><br/>${d.data.industry}<br/>Perf: ${d.data.performance.toFixed(2)}%<br/>Mkt Cap: ${(d.data.market_cap / 1e9).toFixed(2)}B`).style("left", (event.pageX + 5) + "px").style("top", (event.pageY - 28) + "px");
             }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
-        leaf.append("clipPath").attr("id", d => `clip-${d.data.ticker}`).append("rect").attr("width", d => d.x1 - d.x0).attr("height", d => d.y1 - d.y0);
-        leaf.append("text").attr("class", "stock-label").attr("clip-path", d => `url(#clip-${d.data.ticker})`).selectAll("tspan").data(d => [d.data.ticker, `${d.data.performance.toFixed(2)}%`]).join("tspan").attr("x", 4).attr("y", (d, i) => i === 0 ? "1.1em" : "2.2em").text(d => d);
+        
+        // Calculate tile dimensions and apply dynamic text sizing
+        leaf.each(function(d) {
+            const tileWidth = d.x1 - d.x0;
+            const tileHeight = d.y1 - d.y0;
+            const tileArea = tileWidth * tileHeight;
+            const minAreaForText = 800; // Minimum area to show text
+            const minAreaForPerf = 1500; // Minimum area to show performance percentage
+            
+            if (tileArea > minAreaForText) {
+                const selection = d3.select(this);
+                
+                // Calculate font size based on tile dimensions
+                // Use the smaller dimension to ensure text fits
+                const minDimension = Math.min(tileWidth, tileHeight);
+                let fontSize = Math.max(8, Math.min(16, minDimension / 4));
+                
+                // Add clipPath for text overflow
+                selection.append("clipPath")
+                    .attr("id", `clip-${d.data.ticker}`)
+                    .append("rect")
+                    .attr("width", tileWidth)
+                    .attr("height", tileHeight);
+                
+                const textGroup = selection.append("text")
+                    .attr("class", "stock-label")
+                    .attr("clip-path", `url(#clip-${d.data.ticker})`)
+                    .style("font-size", `${fontSize}px`);
+                
+                // Add ticker symbol
+                textGroup.append("tspan")
+                    .attr("x", 4)
+                    .attr("y", fontSize + 2)
+                    .text(d.data.ticker);
+                
+                // Add performance percentage only if tile is large enough
+                if (tileArea > minAreaForPerf) {
+                    const perfFontSize = fontSize * 0.85;
+                    textGroup.append("tspan")
+                        .attr("x", 4)
+                        .attr("y", fontSize + perfFontSize + 4)
+                        .style("font-size", `${perfFontSize}px`)
+                        .text(`${d.data.performance.toFixed(1)}%`);
+                }
+            }
+        });
+        
         heatmapWrapper.appendChild(svg.node());
         card.appendChild(heatmapWrapper);
         container.appendChild(card);
