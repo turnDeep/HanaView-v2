@@ -1,36 +1,8 @@
 {
   "market": {
     "vix": {
-      "current": 15.13,
+      "current": 15.19,
       "history": [
-        {
-          "time": "2025-06-17T16:00:00",
-          "open": 20.65,
-          "high": 20.65,
-          "low": 20.47,
-          "close": 20.51
-        },
-        {
-          "time": "2025-06-17T20:00:00",
-          "open": 20.15,
-          "high": 20.23,
-          "low": 19.85,
-          "close": 20.08
-        },
-        {
-          "time": "2025-06-18T00:00:00",
-          "open": 20.02,
-          "high": 21.35,
-          "low": 20.02,
-          "close": 21.17
-        },
-        {
-          "time": "2025-06-18T04:00:00",
-          "open": 21.43,
-          "high": 21.62,
-          "low": 21.43,
-          "close": 21.62
-        },
         {
           "time": "2025-06-18T16:00:00",
           "open": 20.8,
@@ -1654,11 +1626,25 @@
           "high": 15.21,
           "low": 15.13,
           "close": 15.13
+        },
+        {
+          "time": "2025-09-09T16:00:00",
+          "open": 15.14,
+          "high": 15.29,
+          "low": 15.14,
+          "close": 15.29
+        },
+        {
+          "time": "2025-09-09T20:00:00",
+          "open": 15.19,
+          "high": 15.19,
+          "low": 15.19,
+          "close": 15.19
         }
       ]
     },
     "t_note_future": {
-      "current": 113.53,
+      "current": 113.41,
       "history": [
         {
           "time": "2025-07-01T12:00:00",
@@ -3638,8 +3624,22 @@
           "time": "2025-09-09T12:00:00",
           "open": 113.53,
           "high": 113.53,
-          "low": 113.53,
-          "close": 113.53
+          "low": 113.47,
+          "close": 113.47
+        },
+        {
+          "time": "2025-09-09T16:00:00",
+          "open": 113.38,
+          "high": 113.48,
+          "low": 113.38,
+          "close": 113.48
+        },
+        {
+          "time": "2025-09-09T20:00:00",
+          "open": 113.41,
+          "high": 113.41,
+          "low": 113.41,
+          "close": 113.41
         }
       ]
     },
@@ -3654,7 +3654,43 @@
   },
   "news": [],
   "indicators": {
-    "economic": [],
+    "economic": [
+      {
+        "datetime": "09/10 20:00",
+        "country": null,
+        "name": "MBA住宅ローン申請指数（前週比）",
+        "importance": "★",
+        "type": "economic"
+      },
+      {
+        "datetime": "09/10 21:30",
+        "country": null,
+        "name": "生産者物価指数（PPI）（食品・エネルギー除くコア）（前年比）",
+        "importance": "★★",
+        "type": "economic"
+      },
+      {
+        "datetime": "09/10 21:30",
+        "country": null,
+        "name": "生産者物価指数（PPI）（食品・エネルギー除くコア）（前月比）",
+        "importance": "★★",
+        "type": "economic"
+      },
+      {
+        "datetime": "09/10 21:30",
+        "country": null,
+        "name": "生産者物価指数（PPI）（前年比）",
+        "importance": "★★",
+        "type": "economic"
+      },
+      {
+        "datetime": "09/10 21:30",
+        "country": null,
+        "name": "生産者物価指数（PPI）（前月比）",
+        "importance": "★★",
+        "type": "economic"
+      }
+    ],
     "us_earnings": [
       {
         "datetime": "09/10 05:00",
@@ -3667,64 +3703,64 @@
   },
   "news_raw": [
     {
-      "title": "Stocks rise as prospect of Fed easing trumps political uncertainty",
-      "link": "https://uk.finance.yahoo.com/news/stocks-rise-prospect-fed-easing-021511529.html",
-      "publisher": "Reuters",
-      "summary": "SINGAPORE (Reuters) -Asia stocks rose on Tuesday, buoyed by expectations of a U.S. rate cut as early as next week, even as political upheavals around the world kept currency and bond investors on edge.  MSCI's broadest index of Asia-Pacific shares outside Japan rose 0.2% in early trade, taking its cue from Wall Street's positive lead overnight that saw the Nasdaq notch a record-high close.  Nasdaq futures extended the rally from the cash session and were last up 0.06%, while S&P 500 futures similarly ticked up 0.05%."
-    },
-    {
       "title": "Nvidia-Backed Nebius Skyrockets On AI Cloud Computing Deal With Microsoft",
       "link": "https://www.investors.com/news/technology/nvidia-nebius-skyrockets-ai-cloud-computing-deal-microsoft/?src=A00220&yptr=yahoo",
       "publisher": "Investor's Business Daily",
       "summary": "Nebius stock skyrocketed after the Nvidia-backed AI cloud-computing firm struck a multiyear deal with Microsoft worth up to $19.4 billion."
     },
     {
-      "title": "FedEx (FDX) Stock Drops Despite Market Gains: Important Facts to Note",
-      "link": "https://finance.yahoo.com/news/fedex-fdx-stock-drops-despite-233453999.html",
-      "publisher": "Zacks",
-      "summary": "FedEx (FDX) closed at $225 in the latest trading session, marking a -1.19% move from the prior day."
+      "title": "Morning Bid: Dollar slides as job worries mount",
+      "link": "https://ca.finance.yahoo.com/news/morning-bid-dollar-slides-job-103745595.html",
+      "publisher": "Reuters",
+      "summary": "Global stocks pushed higher on Tuesday as U.S. rate cut fever built and a wave of European merger activity helped offset the week's political upheavals in France and Japan.  With U.S. long-term bond yields sliding to four-month lows on Monday ahead of the week's big debt auctions, the dollar fell to a seven-week low as expectations of big downward revisions to U.S. jobs data through last March reinforced bets on deeper Federal Reserve rate cuts."
     },
     {
-      "title": "Equinix (EQIX) Stock Falls Amid Market Uptick: What Investors Need to Know",
-      "link": "https://finance.yahoo.com/news/equinix-eqix-stock-falls-amid-233453820.html",
-      "publisher": "Zacks",
-      "summary": "In the closing of the recent trading day, Equinix (EQIX) stood at $765.51, denoting a -1.06% move from the preceding trading day."
+      "title": "Morgan Stanley Says These 3 Stocks Are Top Picks for the Rest of 2025",
+      "link": "https://finance.yahoo.com/news/morgan-stanley-says-3-stocks-100907847.html",
+      "publisher": "TipRanks",
+      "summary": "We’re heading toward the final weeks of 3Q25, and while some investors have been cautious, the backdrop is far from bleak. Despite softer jobs data and September’s reputation as a difficult month for stocks, the major indexes remain near record highs. The S&P 500 has climbed 10% year-to-date, while the NASDAQ is up 12.5%. What’s fueling much of this resilience is growing confidence that the Federal Reserve will pivot back to rate cuts this month. That potential shift in policy is being seen as a"
     },
     {
-      "title": "Clearway Energy (CWEN) Stock Sinks As Market Gains: Here's Why",
-      "link": "https://finance.yahoo.com/news/clearway-energy-cwen-stock-sinks-233452064.html",
-      "publisher": "Zacks",
-      "summary": "Clearway Energy (CWEN) closed at $28.37 in the latest trading session, marking a -1.08% move from the prior day."
+      "title": "Nasdaq Builds on Record High Ahead of Key Jobs Data Revision",
+      "link": "https://www.barrons.com/livecoverage/stock-market-news-today-090925/card/nasdaq-builds-on-record-high-as-markets-focus-on-fed-rate-cuts-ahead-of-key-jobs-revisions-4zRGHtGrtv5zwJAzTadC?siteid=yhoof2&yptr=yahoo",
+      "publisher": "Barrons.com",
+      "summary": "Stock futures were rising early Tuesday as investors awaited key jobs and inflation data, and a hotly anticipated Apple product launch event.  Futures on the Dow Jones Industrial Average were broadly flat early in the day, S&P 500 futures rose 0.1% and Nasdaq futures pointed 0.2% higher as tech stocks looked set to lead the market higher again after the index closed at a record high Monday.  Apple’s annual product event starts Tuesday, which could be another catalyst for the tech sector."
     },
     {
-      "title": "Nucor (NUE) Stock Drops Despite Market Gains: Important Facts to Note",
-      "link": "https://finance.yahoo.com/news/nucor-nue-stock-drops-despite-233452933.html",
-      "publisher": "Zacks",
-      "summary": "In the latest trading session, Nucor (NUE) closed at $144.02, marking a -2.2% move from the previous day."
+      "title": "Gold price hits another record high as US rate cut expectations rise",
+      "link": "https://uk.finance.yahoo.com/news/gold-pound-oil-prices-commodities-083542537.html",
+      "publisher": "Yahoo Finance UK",
+      "summary": "Bullion extends blistering rally as investors price in a near-certain rate cut by the US Federal Reserve."
     },
     {
-      "title": "Medpace (MEDP) Outpaces Stock Market Gains: What You Should Know",
-      "link": "https://finance.yahoo.com/news/medpace-medp-outpaces-stock-market-233452669.html",
-      "publisher": "Zacks",
-      "summary": "The latest trading day saw Medpace (MEDP) settling at $492.09, representing a +1.05% change from its previous close."
+      "title": "FTSE 100 LIVE: Stocks rise as BoE rate cut and good weather boost UK retail sales in August",
+      "link": "https://uk.finance.yahoo.com/news/ftse-100-live-stock-markets-wall-street-uk-retail-sales-081455982.html",
+      "publisher": "Yahoo Finance UK",
+      "summary": "The year-on-year uptick for total sales across the UK was up on last August’s 1% and the 12-month average of 2%."
     },
     {
-      "title": "Amerigo Resources (ARREF) Stock Drops Despite Market Gains: Important Facts to Note",
-      "link": "https://finance.yahoo.com/news/amerigo-resources-arref-stock-drops-233452804.html",
-      "publisher": "Zacks",
-      "summary": "In the latest trading session, Amerigo Resources (ARREF) closed at $1.65, marking a -1.55% move from the previous day."
-    },
-    {
-      "title": "Whirlpool (WHR) Outperforms Broader Market: What You Need to Know",
-      "link": "https://finance.yahoo.com/news/whirlpool-whr-outperforms-broader-market-233452307.html",
-      "publisher": "Zacks",
-      "summary": "The latest trading day saw Whirlpool (WHR) settling at $95.54, representing a +1.16% change from its previous close."
-    },
-    {
-      "title": "Stock market today: Dow, S&P 500, Nasdaq futures edge up as Wall Street weighs Fed's next move",
-      "link": "https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-futures-edge-up-as-wall-street-weighs-feds-next-move-232914881.html",
+      "title": "Why a Fed rate cut might not help the stock market",
+      "link": "https://finance.yahoo.com/news/why-a-fed-rate-cut-might-not-help-the-stock-market-080026277.html",
       "publisher": "Yahoo Finance",
-      "summary": "US stock futures edged up as Wall Street counted down to Apple's annual iPhone event ahead of the release of critical economic data later this week."
+      "summary": "Markets are nearly certain the Fed will cut interest rates after weak jobs data, but some strategists warn that looser monetary policy could bring new risks for stocks."
+    },
+    {
+      "title": "Is Block Stock Outperforming the Dow?",
+      "link": "https://www.barchart.com/story/news/34682452/is-block-stock-outperforming-the-dow",
+      "publisher": "Barchart",
+      "summary": "Block has significantly outperformed the Dow over the past year and in recent months, and analysts remain bullish on the stock’s longer-term prospects."
+    },
+    {
+      "title": "Is Keurig Dr Pepper Stock Underperforming the Nasdaq?",
+      "link": "https://www.barchart.com/story/news/34682293/is-keurig-dr-pepper-stock-underperforming-the-nasdaq",
+      "publisher": "Barchart",
+      "summary": "Keurig Dr Pepper has significantly underperformed the Nasdaq Composite over the past year, yet analysts remain optimistic about the stock’s prospects."
+    },
+    {
+      "title": "Heard on the Street Monday Recap: Down Payment",
+      "link": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-09-09-2025/card/heard-on-the-street-monday-recap-down-payment-NWaNOuRNBvknhBKGdICj?siteid=yhoof2&yptr=yahoo",
+      "publisher": "The Wall Street Journal",
+      "summary": "The average rate for a 30-year fixed mortgage fell to 6.29% Friday, the lowest level in 11 months and down 0.16 percentage point from Thursday, according to Mortgage News Daily.  Workers’ confidence in finding a new job if they lose their current one hit a record low, according to a survey by the New York Federal Reserve.  The poll also found Americans' inflation expectations were broadly stable."
     }
   ],
   "sp500_heatmap_1d": {
@@ -3867,7 +3903,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.41
+        "performance": -0.32
       },
       {
         "ticker": "GOOG",
@@ -6645,7 +6681,7 @@
         "ticker": "SW",
         "sector": "Consumer Cyclical",
         "industry": "Packaging & Containers",
-        "market_cap": 24492871680,
+        "market_cap": 24378015744,
         "performance": -0.47
       },
       {
@@ -6792,7 +6828,7 @@
         "ticker": "TEL",
         "sector": "Technology",
         "industry": "Electronic Components",
-        "market_cap": 61678772224,
+        "market_cap": 61421838336,
         "performance": -0.42
       },
       {
@@ -7392,7 +7428,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 9.92
+        "performance": 10.02
       },
       {
         "ticker": "GOOG",
@@ -10170,7 +10206,7 @@
         "ticker": "SW",
         "sector": "Consumer Cyclical",
         "industry": "Packaging & Containers",
-        "market_cap": 24492871680,
+        "market_cap": 24378015744,
         "performance": -1.41
       },
       {
@@ -10317,7 +10353,7 @@
         "ticker": "TEL",
         "sector": "Technology",
         "industry": "Electronic Components",
-        "market_cap": 61678772224,
+        "market_cap": 61421838336,
         "performance": 0.66
       },
       {
@@ -10917,7 +10953,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 16.2
+        "performance": 16.3
       },
       {
         "ticker": "GOOG",
@@ -13695,7 +13731,7 @@
         "ticker": "SW",
         "sector": "Consumer Cyclical",
         "industry": "Packaging & Containers",
-        "market_cap": 24492871680,
+        "market_cap": 24378015744,
         "performance": 8.08
       },
       {
@@ -13842,7 +13878,7 @@
         "ticker": "TEL",
         "sector": "Technology",
         "industry": "Electronic Components",
-        "market_cap": 61678772224,
+        "market_cap": 61421838336,
         "performance": 3.28
       },
       {
@@ -14442,7 +14478,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.41
+        "performance": -0.32
       },
       {
         "ticker": "GOOG",
@@ -17220,7 +17256,7 @@
         "ticker": "SW",
         "sector": "Consumer Cyclical",
         "industry": "Packaging & Containers",
-        "market_cap": 24492871680,
+        "market_cap": 24378015744,
         "performance": -0.47
       },
       {
@@ -17367,7 +17403,7 @@
         "ticker": "TEL",
         "sector": "Technology",
         "industry": "Electronic Components",
-        "market_cap": 61678772224,
+        "market_cap": 61421838336,
         "performance": -0.42
       },
       {
@@ -17855,7 +17891,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.41
+        "performance": -0.32
       },
       {
         "ticker": "GOOG",
@@ -18566,7 +18602,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 9.92
+        "performance": 10.02
       },
       {
         "ticker": "GOOG",
@@ -19277,7 +19313,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": 16.2
+        "performance": 16.3
       },
       {
         "ticker": "GOOG",
@@ -19988,7 +20024,7 @@
         "sector": "Communication Services",
         "industry": "Internet Content & Information",
         "market_cap": 2831135014912,
-        "performance": -0.41
+        "performance": -0.32
       },
       {
         "ticker": "GOOG",

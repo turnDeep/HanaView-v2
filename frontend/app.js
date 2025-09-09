@@ -111,16 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // AI Commentary
-        if (marketData.ai_commentary) {
-            content += `
-                <div class="market-section">
-                    <h3>AI市況解説</h3>
-                    <p>${marketData.ai_commentary}</p>
-                </div>
-            `;
-        }
-
         // Lightweight Charts
         content += `
             <div class="market-grid">
@@ -134,6 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
         `;
+
+        // AI Commentary
+        if (marketData.ai_commentary) {
+            content += `
+                <div class="market-section">
+                    <h3>AI市況解説</h3>
+                    <p>${marketData.ai_commentary}</p>
+                </div>
+            `;
+        }
 
         card.innerHTML = content;
         container.appendChild(card);

@@ -845,7 +845,7 @@ class MarketDataFetcher:
             self.generate_ai_commentary()
         except MarketDataError as e:
             logger.error(f"Could not generate AI commentary: {e}")
-            self.data['market']['ai_commentary'] = f"Error: {e}"
+            self.data['market']['ai_commentary'] = "現在、AI解説に不具合が生じております。"
 
         try:
             self.generate_ai_news()
