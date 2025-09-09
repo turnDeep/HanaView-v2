@@ -322,10 +322,12 @@ document.addEventListener('DOMContentLoaded', () => {
         table.innerHTML = `
             <thead>
                 <tr>
-                    <th>時刻</th>
+                    <th>発表日</th>
+                    <th>発表時刻</th>
                     <th>国</th>
                     <th>指標名</th>
                     <th>重要度</th>
+                    <th>前回</th>
                     <th>予測</th>
                     <th>結果</th>
                 </tr>
@@ -335,12 +337,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const tbody = document.createElement('tbody');
         indicatorsData.economic.forEach(ind => {
             const row = document.createElement('tr');
-            const importanceStars = '★'.repeat(ind.importance || 0).padEnd(3, '☆');
+            // Importance stars - safely handle importance string
+            let starCount = 0;
+            if (typeof ind.importance === 'string') {
+                starCount = (ind.importance.match(/★/g) || []).length;
+            }
+            const importanceStars = '★'.repeat(starCount).padEnd(3, '☆');
+
+            // Split datetime into date and time
+            const [date, time] = (ind.datetime || ' / ').split(' ');
+
             row.innerHTML = `
-                <td>${ind.time || '--'}</td>
+                <td>${date || '--'}</td>
+                <td>${time || '--'}</td>
                 <td>${ind.country || '--'}</td>
                 <td>${ind.name || '--'}</td>
-                <td class="importance-${ind.importance || 0}">${importanceStars}</td>
+                <td class="importance-${starCount}">${importanceStars}</td>
+                <td>${ind.previous || '--'}</td>
                 <td>${ind.forecast || '--'}</td>
                 <td>${ind.result || '--'}</td>
             `;
