@@ -1,8 +1,9 @@
 :root {
     --background: #E6F3F7;
     --card-background: #FFFFFF;
-    --tab-text: #006B6B;
-    --tab-active-bg: #006B6B;
+    --tab-text: #0fb1bd;
+    --tab-bg: #FFFFFF;
+    --tab-active-bg: #0fb1bd;
     --tab-active-text: #000000;
     --text-primary: #212121;
     --text-secondary: #757575;
@@ -56,7 +57,7 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     border: none;
-    background-color: transparent;
+    background-color: var(--tab-bg);
     color: var(--tab-text);
     font-size: 1em;
     font-weight: 500;
