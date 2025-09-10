@@ -620,15 +620,15 @@ class MarketDataFetcher:
         if not self.openai_client:
             raise MarketDataError("E005", "OpenAI client is not available.")
         try:
-            logger.info(f"Calling OpenAI API (json_mode={json_mode}, max_completion_tokens={max_tokens})...")
+            logger.info(f"Calling OpenAI API (json_mode={json_mode}, max_tokens={max_tokens})...")
             messages = [{"role": "user", "content": prompt}]
             response_format = {"type": "json_object"} if json_mode else {"type": "text"}
 
             response = self.openai_client.chat.completions.create(
                 model="gpt-5-mini",
                 messages=messages,
-                max_completion_tokens=max_tokens,
-                temperature=1.0,
+                max_tokens=max_tokens,
+                temperature=0.7,
                 response_format=response_format
             )
             content = response.choices[0].message.content.strip()

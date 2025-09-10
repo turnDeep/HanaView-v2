@@ -164,10 +164,23 @@ document.addEventListener('DOMContentLoaded', () => {
             topicsContainer.className = 'main-topics-container';
             topicsContainer.innerHTML = '<h3>主要トピック</h3>';
             newsData.topics.forEach((topic, index) => {
+                let topicContent = '';
+                if (topic.fact || topic.interpretation || topic.impact) {
+                    // 新しいフォーマット（fact, interpretation, impact）
+                    topicContent = `
+                        <p><strong>事実:</strong> ${topic.fact || 'N/A'}</p>
+                        <p><strong>解釈:</strong> ${topic.interpretation || 'N/A'}</p>
+                        <p><strong>市場への影響:</strong> ${topic.impact || 'N/A'}</p>
+                    `;
+                } else if (topic.body) {
+                    // 古いフォーマット（body）との互換性
+                    topicContent = `<p>${topic.body}</p>`;
+                }
+
                 topicsContainer.innerHTML += `
                     <div class="topic-box">
                         <p class="topic-title ${index === 0 ? 'topic-title-red' : 'topic-title-blue'}">${index + 1}. ${topic.title}</p>
-                        <p>${topic.body}</p>
+                        ${topicContent}
                     </div>`;
             });
             card.appendChild(topicsContainer);
