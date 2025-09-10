@@ -324,12 +324,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
                     <th>発表日</th>
                     <th>発表時刻</th>
-                    <th>国</th>
                     <th>指標名</th>
                     <th>重要度</th>
                     <th>前回</th>
                     <th>予測</th>
-                    <th>結果</th>
                 </tr>
             </thead>
         `;
@@ -350,12 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td>${date || '--'}</td>
                 <td>${time || '--'}</td>
-                <td>${ind.country || '--'}</td>
                 <td>${ind.name || '--'}</td>
                 <td class="importance-${starCount}">${importanceStars}</td>
                 <td>${ind.previous || '--'}</td>
                 <td>${ind.forecast || '--'}</td>
-                <td>${ind.result || '--'}</td>
             `;
             tbody.appendChild(row);
         });

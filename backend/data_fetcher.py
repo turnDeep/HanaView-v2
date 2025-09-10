@@ -331,12 +331,10 @@ class MarketDataFetcher:
 
                             indicator = {
                                 "datetime": tdatetime_aware.strftime('%m/%d %H:%M'),
-                                "country": get_value('country'),
                                 "name": get_value('name'),
                                 "importance": importance_str,
                                 "previous": get_value('previous'),
                                 "forecast": get_value('forecast'),
-                                "result": get_value('result'),
                                 "type": "economic"
                             }
                             indicators.append(indicator)
