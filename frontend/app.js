@@ -306,48 +306,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderIndicators(container, indicatorsData) {
         if (!container) return;
-        container.innerHTML = '';
-        if (!indicatorsData || !indicatorsData.economic || indicatorsData.economic.length === 0) {
-            container.innerHTML = '<div class="card"><p>表示する経済指標はありません。</p></div>';
-            return;
-        }
+        container.innerHTML = ''; // Clear previous content
 
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = '<h3>経済指標カレンダー</h3>';
+        const indicators = indicatorsData || {};
+        const economicIndicators = indicators.economic || [];
+        const usEarnings = indicators.us_earnings || [];
+        const jpEarnings = indicators.jp_earnings || [];
 
-        const table = document.createElement('table');
-        table.className = 'indicators-table';
+        // --- Part 1: Economic Calendar (High Importance) ---
+        const economicCard = document.createElement('div');
+        economicCard.className = 'card';
+        economicCard.innerHTML = '<h3>経済指標カレンダー (重要度★★以上)</h3>';
 
-        table.innerHTML = `
-            <thead>
-                <tr>
-                    <th>発表日</th>
-                    <th>発表時刻</th>
-                    <th>指標名</th>
-                    <th>重要度</th>
-                    <th>前回</th>
-                    <th>予測</th>
-                </tr>
-            </thead>
-        `;
-
-        const tbody = document.createElement('tbody');
-        indicatorsData.economic.forEach(ind => {
-            // Importance stars - safely handle importance string
-            let starCount = 0;
+        const filteredIndicators = economicIndicators.filter(ind => {
             if (typeof ind.importance === 'string') {
-                starCount = (ind.importance.match(/★/g) || []).length;
+                const starCount = (ind.importance.match(/★/g) || []).length;
+                return starCount >= 2;
             }
+            return false;
+        });
 
-            // Only display indicators with 2 or more stars
-            if (starCount >= 2) {
+        if (filteredIndicators.length > 0) {
+            const table = document.createElement('table');
+            table.className = 'indicators-table';
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>発表日</th>
+                        <th>発表時刻</th>
+                        <th>指標名</th>
+                        <th>重要度</th>
+                        <th>前回</th>
+                        <th>予測</th>
+                    </tr>
+                </thead>
+            `;
+            const tbody = document.createElement('tbody');
+            filteredIndicators.forEach(ind => {
                 const row = document.createElement('tr');
+                const starCount = (ind.importance.match(/★/g) || []).length;
                 const importanceStars = '★'.repeat(starCount);
-
-                // Split datetime into date and time
                 const [date, time] = (ind.datetime || ' / ').split(' ');
-
                 row.innerHTML = `
                     <td>${date || '--'}</td>
                     <td>${time || '--'}</td>
@@ -357,12 +356,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${ind.forecast || '--'}</td>
                 `;
                 tbody.appendChild(row);
-            }
-        });
+            });
+            table.appendChild(tbody);
+            economicCard.appendChild(table);
+        } else {
+            economicCard.innerHTML += '<p>今週発表予定の重要度★★以上の経済指標はありません。</p>';
+        }
+        container.appendChild(economicCard);
 
-        table.appendChild(tbody);
-        card.appendChild(table);
-        container.appendChild(card);
+        // --- Part 2: Earnings Announcements ---
+        const allEarnings = [...usEarnings, ...jpEarnings];
+        // Sort by datetime. Assuming 'MM/DD HH:MM' format.
+        allEarnings.sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
+
+        const earningsCard = document.createElement('div');
+        earningsCard.className = 'card';
+        earningsCard.innerHTML = '<h3>注目決算</h3>';
+
+        if (allEarnings.length > 0) {
+            const earningsTable = document.createElement('table');
+            earningsTable.className = 'indicators-table'; // reuse style
+            earningsTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>発表日時</th>
+                        <th>ティッカー</th>
+                        <th>企業名</th>
+                    </tr>
+                </thead>
+            `;
+            const tbody = document.createElement('tbody');
+            allEarnings.forEach(earning => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${earning.datetime || '--'}</td>
+                    <td>${earning.ticker || '--'}</td>
+                    <td>${earning.company || ''}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            earningsTable.appendChild(tbody);
+            earningsCard.appendChild(earningsTable);
+        } else {
+            earningsCard.innerHTML += '<p>今週予定されている注目決算はありません。</p>';
+        }
+        container.appendChild(earningsCard);
     }
 
     function renderColumn(container, columnData) {
