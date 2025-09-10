@@ -334,26 +334,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tbody = document.createElement('tbody');
         indicatorsData.economic.forEach(ind => {
-            const row = document.createElement('tr');
             // Importance stars - safely handle importance string
             let starCount = 0;
             if (typeof ind.importance === 'string') {
                 starCount = (ind.importance.match(/★/g) || []).length;
             }
-        const importanceStars = '★'.repeat(starCount);
 
-            // Split datetime into date and time
-            const [date, time] = (ind.datetime || ' / ').split(' ');
+            // Only display indicators with 2 or more stars
+            if (starCount >= 2) {
+                const row = document.createElement('tr');
+                const importanceStars = '★'.repeat(starCount);
 
-            row.innerHTML = `
-                <td>${date || '--'}</td>
-                <td>${time || '--'}</td>
-                <td>${ind.name || '--'}</td>
-                <td class="importance-${starCount}">${importanceStars}</td>
-                <td>${ind.previous || '--'}</td>
-                <td>${ind.forecast || '--'}</td>
-            `;
-            tbody.appendChild(row);
+                // Split datetime into date and time
+                const [date, time] = (ind.datetime || ' / ').split(' ');
+
+                row.innerHTML = `
+                    <td>${date || '--'}</td>
+                    <td>${time || '--'}</td>
+                    <td>${ind.name || '--'}</td>
+                    <td class="importance-${starCount}">${importanceStars}</td>
+                    <td>${ind.previous || '--'}</td>
+                    <td>${ind.forecast || '--'}</td>
+                `;
+                tbody.appendChild(row);
+            }
         });
 
         table.appendChild(tbody);
