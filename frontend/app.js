@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(card);
     }
 
-    function renderIndicators(container, indicatorsData) {
+    function renderIndicators(container, indicatorsData, lastUpdated) {
         if (!container) return;
         container.innerHTML = ''; // Clear previous content
 
@@ -313,20 +313,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const usEarnings = indicators.us_earnings || [];
         const jpEarnings = indicators.jp_earnings || [];
 
+        // --- Time-based filtering logic ---
+        // lastUpdated is expected to be a JST string like "2025-09-10T07:59:24.957729+09:00"
+        const now = lastUpdated ? new Date(lastUpdated) : new Date();
+        const year = now.getFullYear();
+
+        let startTime = new Date(now);
+        startTime.setHours(7, 0, 0, 0); // Set to 07:00:00.000 JST today
+
+        // If current time is before 7 AM JST, the window is from yesterday 7 AM to today 7 AM.
+        if (now.getHours() < 7) {
+            startTime.setDate(startTime.getDate() - 1);
+        }
+
+        let endTime = new Date(startTime);
+        endTime.setDate(endTime.getDate() + 1); // This correctly sets it to the next day at 07:00 JST
+
+        const parseDateTime = (dateTimeStr) => {
+            if (!dateTimeStr || !/^\d{2}\/\d{2} \d{2}:\d{2}$/.test(dateTimeStr)) {
+                return null; // Invalid format
+            }
+            const [datePart, timePart] = dateTimeStr.split(' ');
+            const [month, day] = datePart.split('/');
+            const [hour, minute] = timePart.split(':');
+            // Note: month is 0-indexed in JS Date
+            return new Date(year, parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute));
+        };
+
         // --- Part 1: Economic Calendar (High Importance) ---
         const economicCard = document.createElement('div');
         economicCard.className = 'card';
         economicCard.innerHTML = '<h3>経済指標カレンダー (重要度★★以上)</h3>';
 
-        const filteredIndicators = economicIndicators.filter(ind => {
-            if (typeof ind.importance === 'string') {
-                const starCount = (ind.importance.match(/★/g) || []).length;
-                return starCount >= 2;
+        const todaysIndicators = economicIndicators.filter(ind => {
+            const importanceOk = typeof ind.importance === 'string' && (ind.importance.match(/★/g) || []).length >= 2;
+            if (!importanceOk) return false;
+
+            const eventTime = parseDateTime(ind.datetime);
+            if (!eventTime) return false;
+
+            // Handle year change for events in early January when 'now' is in late December
+            if (now.getMonth() === 11 && eventTime.getMonth() === 0) {
+              eventTime.setFullYear(year + 1);
             }
-            return false;
+            // Handle year change for events in late December when 'now' is in early January
+            else if (now.getMonth() === 0 && eventTime.getMonth() === 11) {
+              eventTime.setFullYear(year - 1);
+            }
+
+            return eventTime >= startTime && eventTime < endTime;
         });
 
-        if (filteredIndicators.length > 0) {
+        if (todaysIndicators.length > 0) {
             const table = document.createElement('table');
             table.className = 'indicators-table';
             table.innerHTML = `
@@ -342,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </thead>
             `;
             const tbody = document.createElement('tbody');
-            filteredIndicators.forEach(ind => {
+            todaysIndicators.forEach(ind => {
                 const row = document.createElement('tr');
                 const starCount = (ind.importance.match(/★/g) || []).length;
                 const importanceStars = '★'.repeat(starCount);
@@ -360,20 +398,43 @@ document.addEventListener('DOMContentLoaded', () => {
             table.appendChild(tbody);
             economicCard.appendChild(table);
         } else {
-            economicCard.innerHTML += '<p>今週発表予定の重要度★★以上の経済指標はありません。</p>';
+            economicCard.innerHTML += '<p>本日予定されている重要経済指標はありません。</p>';
         }
         container.appendChild(economicCard);
 
         // --- Part 2: Earnings Announcements ---
         const allEarnings = [...usEarnings, ...jpEarnings];
-        // Sort by datetime. Assuming 'MM/DD HH:MM' format.
-        allEarnings.sort((a, b) => (a.datetime || '').localeCompare(b.datetime || ''));
+
+        const todaysEarnings = allEarnings.filter(earning => {
+            const eventTime = parseDateTime(earning.datetime);
+             if (!eventTime) return false;
+
+            // Handle year change for events in early January when 'now' is in late December
+            if (now.getMonth() === 11 && eventTime.getMonth() === 0) {
+              eventTime.setFullYear(year + 1);
+            }
+            // Handle year change for events in late December when 'now' is in early January
+            else if (now.getMonth() === 0 && eventTime.getMonth() === 11) {
+              eventTime.setFullYear(year - 1);
+            }
+
+            return eventTime && eventTime >= startTime && eventTime < endTime;
+        });
+
+        // Sort by datetime.
+        todaysEarnings.sort((a, b) => {
+            const timeA = parseDateTime(a.datetime);
+            const timeB = parseDateTime(b.datetime);
+            if (!timeA) return 1;
+            if (!timeB) return -1;
+            return timeA - timeB;
+        });
 
         const earningsCard = document.createElement('div');
         earningsCard.className = 'card';
         earningsCard.innerHTML = '<h3>注目決算</h3>';
 
-        if (allEarnings.length > 0) {
+        if (todaysEarnings.length > 0) {
             const earningsTable = document.createElement('table');
             earningsTable.className = 'indicators-table'; // reuse style
             earningsTable.innerHTML = `
@@ -386,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </thead>
             `;
             const tbody = document.createElement('tbody');
-            allEarnings.forEach(earning => {
+            todaysEarnings.forEach(earning => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${earning.datetime || '--'}</td>
@@ -398,7 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
             earningsTable.appendChild(tbody);
             earningsCard.appendChild(earningsTable);
         } else {
-            earningsCard.innerHTML += '<p>今週予定されている注目決算はありません。</p>';
+            earningsCard.innerHTML += '<p>今日予定されている注目決算はありません。</p>';
         }
         container.appendChild(earningsCard);
     }
@@ -447,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderHeatmap(document.getElementById('sp500-heatmap-1d'), 'S&P 500 (1-Day)', data.sp500_heatmap_1d);
             renderHeatmap(document.getElementById('sp500-heatmap-1w'), 'S&P 500 (1-Week)', data.sp500_heatmap_1w);
             renderHeatmap(document.getElementById('sp500-heatmap-1m'), 'S&P 500 (1-Month)', data.sp500_heatmap_1m);
-            renderIndicators(document.getElementById('indicators-content'), data.indicators);
+            renderIndicators(document.getElementById('indicators-content'), data.indicators, data.last_updated);
             renderColumn(document.getElementById('column-content'), data.column);
 
         } catch (error) {
