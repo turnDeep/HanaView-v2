@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof ind.importance === 'string') {
                 starCount = (ind.importance.match(/★/g) || []).length;
             }
-            const importanceStars = '★'.repeat(starCount).padEnd(3, '☆');
+        const importanceStars = '★'.repeat(starCount);
 
             // Split datetime into date and time
             const [date, time] = (ind.datetime || ' / ').split(' ');
