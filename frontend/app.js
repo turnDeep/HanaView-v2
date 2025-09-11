@@ -56,6 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeVisible: true,
                 secondsVisible: false,
             },
+            handleScroll: {
+                mouseWheel: false,
+                pressedMouseMove: false,
+                horzTouchDrag: false,
+                vertTouchDrag: false,
+            },
+            handleScale: {
+                mouseWheel: false,
+                pinch: false,
+                axisPressedMouseMove: false,
+                axisDoubleClickReset: false,
+            },
         });
 
         const candlestickSeries = chart.addSeries(LightweightCharts.CandlestickSeries, {
