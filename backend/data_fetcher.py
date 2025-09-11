@@ -637,7 +637,7 @@ class MarketDataFetcher:
             logger.error(f"Error calling OpenAI API: {e}")
             raise MarketDataError("E005", str(e)) from e
 
-    def generate_ai_commentary(self):
+    def generate_market_commentary(self):
         logger.info("Generating AI commentary...")
         vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
         t_note = self.data.get('market', {}).get('t_note_future', {}).get('current', 'N/A')
@@ -652,7 +652,7 @@ class MarketDataFetcher:
             logger.error(f"Failed to generate and parse AI commentary: {e}")
             self.data['market']['ai_commentary'] = "AI解説の生成中にエラーが発生しました。"
 
-    def generate_ai_news(self):
+    def generate_news_analysis(self):
         """Generates AI news summary and topics based on fetched Yahoo Finance news."""
         logger.info("Generating AI news analysis...")
 
@@ -721,7 +721,7 @@ class MarketDataFetcher:
         else:
             self.data['news'] = news_data
 
-    def generate_weekly_column(self):
+    def generate_column(self):
         if datetime.now(timezone(timedelta(hours=9))).weekday() != 0:
             self.data['column'] = {}
             return
@@ -738,7 +738,7 @@ class MarketDataFetcher:
             logger.error(f"Failed to generate and parse weekly column: {e}")
             self.data['column'] = {}
 
-    def generate_heatmap_ai_commentary(self):
+    def generate_heatmap_commentary(self):
         """Generates AI commentary for heatmaps based on 1-day, 1-week, and 1-month performance."""
         logger.info("Generating heatmap AI commentary...")
 
@@ -871,26 +871,26 @@ class MarketDataFetcher:
 
         # AI Generation Steps
         try:
-            self.generate_ai_commentary()
+            self.generate_market_commentary()
         except MarketDataError as e:
             logger.error(f"Could not generate AI commentary: {e}")
             self.data['market']['ai_commentary'] = "現在、AI解説に不具合が生じております。"
 
         try:
-            self.generate_ai_news()
+            self.generate_news_analysis()
         except MarketDataError as e:
             logger.error(f"Could not generate AI news: {e}")
             self.data['news'] = {"summary": f"Error: {e}", "topics": []}
 
         try:
-            self.generate_heatmap_ai_commentary()
+            self.generate_heatmap_commentary()
         except MarketDataError as e:
             logger.error(f"Could not generate heatmap AI commentary: {e}")
             self.data['sp500_heatmap']['ai_commentary'] = f"Error: {e}"
             self.data['nasdaq_heatmap']['ai_commentary'] = f"Error: {e}"
 
         try:
-            self.generate_weekly_column()
+            self.generate_column()
         except MarketDataError as e:
             logger.error(f"Could not generate weekly column: {e}")
             self.data['column'] = {}
