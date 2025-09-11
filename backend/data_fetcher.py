@@ -644,8 +644,13 @@ class MarketDataFetcher:
         fear_greed_data = self.data.get('market', {}).get('fear_and_greed', {})
         fear_greed_value = fear_greed_data.get('now', 'N/A')
         fear_greed_category = fear_greed_data.get('category', 'N/A')
-        prompt = f"以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: {fear_greed_value} ({fear_greed_category})"
-        self.data['market']['ai_commentary'] = self._call_openai_api(prompt, max_tokens=200)
+        prompt = f"以下の市場データを基に、日本の個人投資家向けに本日の米国市場の状況を150字程度で簡潔に解説してください。\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: {fear_greed_value} ({fear_greed_category})\n\n以下のJSON形式で出力してください:\n{{\"response\": \"ここに解説を記述\"}}"
+        try:
+            response_json = self._call_openai_api(prompt, json_mode=True, max_tokens=250)
+            self.data['market']['ai_commentary'] = response_json.get('response', 'AI解説の生成に失敗しました。')
+        except Exception as e:
+            logger.error(f"Failed to generate and parse AI commentary: {e}")
+            self.data['market']['ai_commentary'] = "AI解説の生成中にエラーが発生しました。"
 
     def generate_ai_news(self):
         """Generates AI news summary and topics based on fetched Yahoo Finance news."""
@@ -724,9 +729,14 @@ class MarketDataFetcher:
         vix = self.data.get('market', {}).get('vix', {}).get('current', 'N/A')
         t_note = self.data.get('market', {}).get('t_note_future', {}).get('current', 'N/A')
         fear_greed = self.data.get('market', {}).get('fear_and_greed', {})
-        prompt = f"今週の米国市場の展望について、日本の個人投資家向けに300字程度のコラムを執筆してください。\n先週の市場を振り返り、今週の注目点を盛り込んでください。\n\n参考データ:\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: 現在値 {fear_greed.get('now', 'N/A')}, 1週間前 {fear_greed.get('prev_week', 'N/A')}\n- 今週の主な経済指標: {self.data.get('indicators', {}).get('economic', [])[:5]}"
-        content = self._call_openai_api(prompt, max_tokens=400)
-        self.data['column'] = {"weekly_report": {"title": "今週の注目ポイント (AIコラム)", "content": content, "date": datetime.now().strftime('%Y-%m-%d')}}
+        prompt = f"今週の米国市場の展望について、日本の個人投資家向けに300字程度のコラムを執筆してください。\n先週の市場を振り返り、今週の注目点を盛り込んでください。\n\n参考データ:\n- VIX指数: {vix}\n- 米国10年債先物: {t_note}\n- Fear & Greed Index: 現在値 {fear_greed.get('now', 'N/A')}, 1週間前 {fear_greed.get('prev_week', 'N/A')}\n- 今週の主な経済指標: {self.data.get('indicators', {}).get('economic', [])[:5]}\n\n以下のJSON形式で出力してください:\n{{\"response\": \"ここにコラムを記述\"}}"
+        try:
+            response_json = self._call_openai_api(prompt, json_mode=True, max_tokens=500)
+            content = response_json.get('response', '週次コラムの生成に失敗しました。')
+            self.data['column'] = {"weekly_report": {"title": "今週の注目ポイント (AIコラム)", "content": content, "date": datetime.now().strftime('%Y-%m-%d')}}
+        except Exception as e:
+            logger.error(f"Failed to generate and parse weekly column: {e}")
+            self.data['column'] = {}
 
     def generate_heatmap_ai_commentary(self):
         """Generates AI commentary for heatmaps based on 1-day, 1-week, and 1-month performance."""
@@ -787,11 +797,18 @@ class MarketDataFetcher:
                 3.  **長期(1ヶ月)のトレンドとの比較**: 短期・中期のトレンドは、過去1ヶ月の長期的なトレンドを継続しているか、それとも転換点を示しているか。特に注目すべきセクターの動向を指摘してください。
 
                 全体の解説は200字程度にまとめてください。
-                """
 
-                commentary = self._call_openai_api(prompt, max_tokens=400)
-                # Save commentary to the original heatmap key for backward compatibility
-                self.data[f'{index_base_name}_heatmap']['ai_commentary'] = commentary
+                以下のJSON形式で出力してください:
+                {{\"response\": \"ここに解説を記述\"}}
+                """
+                try:
+                    response_json = self._call_openai_api(prompt, json_mode=True, max_tokens=500)
+                    commentary = response_json.get('response', 'AI解説の生成に失敗しました。')
+                    # Save commentary to the original heatmap key for backward compatibility
+                    self.data[f'{index_base_name}_heatmap']['ai_commentary'] = commentary
+                except Exception as e:
+                     logger.error(f"Failed to generate and parse AI commentary for {index_base_name}: {e}")
+                     self.data[f'{index_base_name}_heatmap']['ai_commentary'] = "AI解説の生成中にエラーが発生しました。"
 
             except Exception as e:
                 logger.error(f"Failed to generate AI commentary for {index_base_name}: {e}")
