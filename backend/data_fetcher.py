@@ -627,7 +627,7 @@ class MarketDataFetcher:
             response = self.openai_client.chat.completions.create(
                 model="gpt-5-mini",
                 messages=messages,
-                max_tokens=max_tokens,
+                max_completion_tokens=max_tokens,
                 temperature=0.7,
                 response_format=response_format
             )
